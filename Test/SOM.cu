@@ -24,9 +24,11 @@ compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distanc
 	}
 }
 
+
 int
 main(int argc, char **argv)
 {
+    bool debug = false;
 	// number of features in each neuron
     int nElements = 14;
     // number of rows in the martix
@@ -36,14 +38,19 @@ main(int argc, char **argv)
 
     //command line parsing
     int c;
-    while ((c = getopt (argc, argv, "i:n:x:y:")) != -1)
+    while ((c = getopt (argc, argv, "f:i:n:x:y:hd")) != -1)
     switch (c) {
+        case 'f':
+            nElements = atoi(optarg);
+            break;
         case 'i':
             //filepath = 0;
             break;
         case 'n':
-            if (int (sqrt(atoi(optarg))) * int (sqrt(atoi(optarg))) != atoi(optarg) )
+            if (int (sqrt(atoi(optarg))) * int (sqrt(atoi(optarg))) != atoi(optarg)){
+                std::cout << "L'opzione -x supporta solo matrici quadrate. Per creare matrici generiche, utilizzare i parametri x e y" << std::endl;
                 return(-1);
+            }
             nRows = sqrt(atoi(optarg));
             nColumns = sqrt(atoi(optarg));
             break;
@@ -52,7 +59,20 @@ main(int argc, char **argv)
             break;
         case 'y':
             nColumns = atoi(optarg);
-      }
+            break;
+        case 'd':
+            debug = true;
+            break;
+        case 'h':
+            std::cout << "-i permette di fornire la PATH del file di input" << std::endl;
+            std::cout << "-n permette di specificare il numero di neuroni della rete (solo numeri la cui radice quadrata è un intero)" << std::endl;
+            std::cout << "-x permette di specificare il numero di righe della matrice di neuroni" << std::endl;
+            std::cout << "-y permette di specificare il numero di colonne della matrice di neuroni" << std::endl;
+            std::cout << "-f permette di specificare il numero di features presenti in ogni sample" << std::endl;
+            std::cout << "-d attiva le stampe di debug" << std::endl;
+            std::cout << "-h mostra l'help del tool" << std::endl;
+            return 0;
+    }
 
     // total number of neurons in the SOM
     int nNeurons = nRows * nColumns;
@@ -65,6 +85,10 @@ main(int argc, char **argv)
     float *h_Sample = (float *)malloc(sizeof(float) * nElements);
     // host distance array, used to find BMU
     float *h_Distance = (float *) malloc(sizeof(float) * nNeurons);
+
+    if(debug){
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features." << std::endl;
+    }
 
     //random SOM initialization
     for(int i = 0; i < totalLength; i++){
@@ -120,7 +144,8 @@ main(int argc, char **argv)
 	unsigned int BMU_index = iter - d_vec_Distance.begin();
 	float BMU_value = *iter;
 
-	std::cout << "The minimum value is " << BMU_value << " at position " << BMU_index << std::endl;
+    if(debug)
+	   std::cout << "The minimum value is " << BMU_value << " at position " << BMU_index << std::endl;
 	//TODO: update BMU and neighbors
  
     cudaFree(d_Matrix);
