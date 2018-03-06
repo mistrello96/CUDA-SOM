@@ -6,9 +6,12 @@
 #include <thrust/extrema.h>
 #include <unistd.h>
 #include <cmath>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
 
-__global__ void
-compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distance, int sampleLength)
+__global__ void compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distance, int sampleLength)
 {
 	int index = (threadIdx.x + blockIdx.x * blockDim.x);
 	if (index < nNeuron)
@@ -24,13 +27,31 @@ compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distanc
 	}
 }
 
+void readSamplesfromFile(std::vector<float>& samples, std::string filePath){
+	std::string line;
+	std::ifstream file (filePath.c_str());
+	if (file.is_open()) {
+		while (std::getline (file, line) ) {
+			std::istringstream iss(line);
+    		std::string element;
+    		while(std::getline(iss, element, '\t'))
+				samples.push_back(strtof((element).c_str(),0));
+		}
+		file.close();
+	}
+	else{
+		std::cout << "Unable to open file";
+		exit(-1);
+	}
+}
 
-int
-main(int argc, char **argv)
+
+int main(int argc, char **argv)
 {
+	std::string filePath = "./";
     bool debug = false;
 	// number of features in each neuron
-    int nElements = 14;
+    int nElements = 0;
     // number of rows in the martix
     int nRows = 1000;
     // number of column in the martix
@@ -38,17 +59,15 @@ main(int argc, char **argv)
 
     //command line parsing
     int c;
-    while ((c = getopt (argc, argv, "f:i:n:x:y:hd")) != -1)
-    switch (c) {
-        case 'f':
-            nElements = atoi(optarg);
-            break;
+    while ((c = getopt (argc, argv, "i:n:x:y:hv")) != -1)
+    switch (c)
+	{
         case 'i':
-            //filepath = 0;
+            filePath = optarg;
             break;
         case 'n':
             if (int (sqrt(atoi(optarg))) * int (sqrt(atoi(optarg))) != atoi(optarg)){
-                std::cout << "L'opzione -x supporta solo matrici quadrate. Per creare matrici generiche, utilizzare i parametri x e y" << std::endl;
+                std::cout << "The -x option only support square matrix. To create a generic matrix, use -x and -y parameters" << std::endl;
                 return(-1);
             }
             nRows = sqrt(atoi(optarg));
@@ -60,17 +79,16 @@ main(int argc, char **argv)
         case 'y':
             nColumns = atoi(optarg);
             break;
-        case 'd':
+        case 'v':
             debug = true;
             break;
         case 'h':
-            std::cout << "-i permette di fornire la PATH del file di input" << std::endl;
-            std::cout << "-n permette di specificare il numero di neuroni della rete (solo numeri la cui radice quadrata è un intero)" << std::endl;
-            std::cout << "-x permette di specificare il numero di righe della matrice di neuroni" << std::endl;
-            std::cout << "-y permette di specificare il numero di colonne della matrice di neuroni" << std::endl;
-            std::cout << "-f permette di specificare il numero di features presenti in ogni sample" << std::endl;
-            std::cout << "-d attiva le stampe di debug" << std::endl;
-            std::cout << "-h mostra l'help del tool" << std::endl;
+            std::cout << "-i allows to provide the PATH of an input file" << std::endl;
+            std::cout << "-n allows to provide the neurons's number in the SOM(only for square matrix)" << std::endl;
+            std::cout << "-x allows to provide the number of rows in the neuron's matrix" << std::endl;
+            std::cout << "-y allows to provide the numbers of columns in the neuron's matrix" << std::endl;
+            std::cout << "-d enables debug prints" << std::endl;
+            std::cout << "-h shows help menu of the tool" << std::endl;
             return 0;
     }
 
@@ -78,11 +96,17 @@ main(int argc, char **argv)
     int nNeurons = nRows * nColumns;
     // total length of the serialized matrix
     int totalLength = nRows * nColumns * nElements;
+    //vector of samples to be analized from the SOM
+    std::vector <float> Sample;
+    for (int i = 0; i < Sample.size(); i++){
+    	std::cout << Sample[i] << std::endl;
+    }
+    readSamplesfromFile(Sample, filePath);
 
     // host SOM
     float *h_Matrix = (float *)malloc(sizeof(float) * totalLength);
     // host sample array
-    float *h_Sample = (float *)malloc(sizeof(float) * nElements);
+    float *h_ActualSample = (float *)malloc(sizeof(float) * nElements);
     // host distance array, used to find BMU
     float *h_Distance = (float *) malloc(sizeof(float) * nNeurons);
 
@@ -101,7 +125,7 @@ main(int argc, char **argv)
 
     //random sample inizialization, used for TEST
     for(int i = 0; i < nElements; i++){
-    	h_Sample[i] = i+1;
+    	h_ActualSample[i] = i+1;
     }
 
     // device SOM
@@ -118,7 +142,7 @@ main(int argc, char **argv)
 
 	//copy from host to device matrix, sample and distance
 	cudaMemcpy(d_Matrix, h_Matrix, sizeof(float) * totalLength, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_Sample, h_Sample, sizeof(float) * nElements, cudaMemcpyHostToDevice);
+	cudaMemcpy(d_Sample, h_ActualSample, sizeof(float) * nElements, cudaMemcpyHostToDevice);
 	cudaMemcpy(d_Distance, h_Distance, sizeof(float) * nNeurons, cudaMemcpyHostToDevice);	
 	
     //peparing param to launch kernel
