@@ -10,34 +10,65 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
-__global__ void compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distance, int sampleLength)
-{
-	int index = (threadIdx.x + blockIdx.x * blockDim.x);
+
+#define CUDA_CHECK_RETURN(value) {											\
+		cudaError_t _m_cudaStat = value;										\
+		if (_m_cudaStat != cudaSuccess) {										\
+			fprintf(stderr, "Error %s at line %d in file %s\n",					\
+					cudaGetErrorString(_m_cudaStat), __LINE__, __FILE__);		\
+					exit(-13);															\
+} }
+
+__global__ void compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distance, int sampleLength){
+	int index = threadIdx.x + blockDim.x * blockIdx.x;
+	
 	if (index < nNeuron)
 	{
-		int matrixindex = index * 14;
-		float tmp = 0;
-		for(int i = 0; i < sampleLength; i++)
-		{
-			tmp = tmp + abs(k_matrix[matrixindex+i] - k_sample[i]);
-		}
+		// int matrixindex = index * sampleLength;
+		// float tmp = 0;
+		// for(int i = 0; i < sampleLength; i++)
+		// {
+		// 	tmp = tmp + abs(k_matrix[matrixindex+i] - k_sample[i]);
+		// }
 
-		k_distance[index] = k_distance[index] + tmp;
+		// k_distance[index] = k_distance[index] + tmp;
+		k_distance[index] = index;
+
+
+		if(index == 0)
+			printf("%.f\n", k_distance[index]);
+
 	}
 }
 
-void readSamplesfromFile(std::vector<float>& samples, std::string filePath){
+float checkFreeGpuMem(){
+	float free_m;
+	size_t free_t,total_t;
+	cudaMemGetInfo(&free_t,&total_t);
+	free_m =(uint)free_t;
+	return free_m;
+}
+
+// returns the number of features per line
+int readSamplesfromFile(std::vector<float>& samples, std::string filePath){
+	int counter = 0;
 	std::string line;
 	std::ifstream file (filePath.c_str());
 	if (file.is_open()) {
-		while (std::getline (file, line) ) {
+		while (std::getline (file, line)) {
 			std::istringstream iss(line);
     		std::string element;
-    		while(std::getline(iss, element, '\t'))
+    		int tmp = 0;
+    		while(std::getline(iss, element, '\t')){
+    			tmp ++;
 				samples.push_back(strtof((element).c_str(),0));
+			}
+			counter = tmp;
 		}
 		file.close();
+		return counter;
 	}
 	else{
 		std::cout << "Unable to open file";
@@ -48,16 +79,17 @@ void readSamplesfromFile(std::vector<float>& samples, std::string filePath){
 
 int main(int argc, char **argv)
 {
+	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
+	// path of the input file
 	std::string filePath = "./";
+	//debuf flag
     bool debug = false;
-	// number of features in each neuron
-    int nElements = 0;
     // number of rows in the martix
-    int nRows = 1000;
+    int nRows = 100;
     // number of column in the martix
-    int nColumns = 1000;
+    int nColumns = 100;
 
-    //command line parsing
+    // COMMAND LINE PARSING
     int c;
     while ((c = getopt (argc, argv, "i:n:x:y:hv")) != -1)
     switch (c)
@@ -92,88 +124,128 @@ int main(int argc, char **argv)
             return 0;
     }
 
+    // READ THE INPUT FILE
+    // vector of samples to be analized from the SOM
+    std::vector <float> Samples;
+    // use the number of features readed from the file
+    int nElements = readSamplesfromFile(Samples, filePath);
+
+    // COMPUTE USEFULL VALUES
     // total number of neurons in the SOM
     int nNeurons = nRows * nColumns;
     // total length of the serialized matrix
     int totalLength = nRows * nColumns * nElements;
-    //vector of samples to be analized from the SOM
-    std::vector <float> Sample;
-    for (int i = 0; i < Sample.size(); i++){
-    	std::cout << Sample[i] << std::endl;
+    // number of block used in the computation
+    int nblocks = (nNeurons / 1024) + 1;
+    if (nblocks => 65535){
+    	std::cout << "Too many bocks to launch. Try to reduce the number of neurons" << std::endl;
+    	exit(-1);
     }
-    readSamplesfromFile(Sample, filePath);
+    // retrive the number of samples
+    int nSamples = Samples.size() / nElements;
 
+    // CHECK AVAILABLE MEMORY
+    if (sizeof(float) * nNeurons * nElements >= checkFreeGpuMem()){
+	    	std::cout << "Not enougth memory for so many neurons" << std::endl;
+	    	exit(-1);
+	}
+
+    // debug print
+    if(debug){
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features." << std::endl;
+    }
+
+    // ALLOCATION OF THE STRUCTURES
     // host SOM
     float *h_Matrix = (float *)malloc(sizeof(float) * totalLength);
     // host sample array
     float *h_ActualSample = (float *)malloc(sizeof(float) * nElements);
     // host distance array, used to find BMU
     float *h_Distance = (float *) malloc(sizeof(float) * nNeurons);
-
-    if(debug){
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features." << std::endl;
-    }
-
-    //random SOM initialization
-    for(int i = 0; i < totalLength; i++){
-    	h_Matrix[i] = i;
-    }
-    // distance array inizialization
-    for(int i = 0; i < nNeurons; i++){
-    	h_Distance[i] = 0;
-    }
-
-    //random sample inizialization, used for TEST
-    for(int i = 0; i < nElements; i++){
-    	h_ActualSample[i] = i+1;
-    }
-
     // device SOM
     float *d_Matrix;
     // device sample array
     float *d_Sample;
     // device distance array, 
     float *d_Distance;
+    // device malloc
+    CUDA_CHECK_RETURN(cudaMalloc((void **)&d_Matrix, sizeof(float) * totalLength));
+    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Sample, sizeof(float) * nElements));
+    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Distance, sizeof(float) * nNeurons));
 
-    //device malloc
-    cudaMalloc((void **)&d_Matrix, sizeof(float) * totalLength);
-    cudaMalloc((void**)&d_Sample, sizeof(float) * nElements);
-    cudaMalloc((void**)&d_Distance, sizeof(float) * nNeurons);
-
-	//copy from host to device matrix, sample and distance
-	cudaMemcpy(d_Matrix, h_Matrix, sizeof(float) * totalLength, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_Sample, h_ActualSample, sizeof(float) * nElements, cudaMemcpyHostToDevice);
-	cudaMemcpy(d_Distance, h_Distance, sizeof(float) * nNeurons, cudaMemcpyHostToDevice);	
-	
-    //peparing param to launch kernel
-    int nblocks = (nNeurons / 1024) + 1; 
-    compute_distance<<<nblocks,1024>>>(d_Matrix, nNeurons, d_Sample, d_Distance, nElements);
-
-	//wait for all block to be completed
-    cudaDeviceSynchronize();
-
-    /*
-    cudaMemcpy(h_Distance, d_Distance, sizeof(float) * nNeurons, cudaMemcpyDeviceToHost);
-    
-    for(int i = 0; i < nNeurons; i++){
-        std::cout << h_Distance[i] << std::endl;
+    // SOM INIZIALIZATION
+    // generating random seed
+    srand(time(NULL));
+    // random values SOM initialization
+    for(int i = 0; i < totalLength; i++){
+    	h_Matrix[i] = rand() % 10;
     }
-    */
 
-	//create thrust vector to find BMU
-	thrust::device_vector<float> d_vec_Distance(d_Distance, d_Distance + nNeurons);
-	//extract the first element
-	thrust::device_vector<float>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
-	// find index of BMU
-	unsigned int BMU_index = iter - d_vec_Distance.begin();
-	float BMU_value = *iter;
+    // ITERATE ON EACH SAMPLE TO FIND BMU
+    for(int s=0; s < nSamples ; s++){
 
-    if(debug)
-	   std::cout << "The minimum value is " << BMU_value << " at position " << BMU_index << std::endl;
-	//TODO: update BMU and neighbors
- 
+	    // distance array inizialization
+	    for(int i = 0; i < nNeurons; i++){
+	    	h_Distance[i] = 0;
+	    }
+
+	    // copy the s sample in the actual sample vector
+	    for(int i = s*nElements, j = 0; i < s*nElements+nElements; i++, j++){
+	    	h_ActualSample[j] = Samples[i];
+	    }; 
+
+		// copy from host to device matrix, actual sample and distance
+		CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(float) * totalLength, cudaMemcpyHostToDevice));
+		CUDA_CHECK_RETURN(cudaMemcpy(d_Sample, h_ActualSample, sizeof(float) * nElements, cudaMemcpyHostToDevice));
+		CUDA_CHECK_RETURN(cudaMemcpy(d_Distance, h_Distance, sizeof(float) * nNeurons, cudaMemcpyHostToDevice));	
+		
+	    // parallel search launch
+	    compute_distance<<<nblocks,1024>>>(d_Matrix, nNeurons, d_Sample, d_Distance, nElements);
+
+		//wait for all block to complete the computation
+	    cudaDeviceSynchronize();
+
+	    /*
+	    cudaMemcpy(h_Distance, d_Distance, sizeof(float) * nNeurons, cudaMemcpyDeviceToHost);
+	    
+	    for(int i = 0; i < nNeurons; i++){
+	        std::cout << h_Distance[i] << std::endl;
+	    }
+	    */
+	    /*
+	    if (sizeof(float) * nNeurons >= checkFreeGpuMem()){
+	    	std::cout << "Out of memory" << sizeof(float) * nNeurons << "    " << checkFreeGpuMem() << std::endl;
+	    	exit(-1);
+	    }
+	    */
+
+	    // CHECK AVAILABLE MEMORY
+    	if (sizeof(float) * nNeurons * nElements >= checkFreeGpuMem()){
+	    	std::cout << "Out of memory, try to reduce the neurons number" << std::endl;
+	    	exit(-1);
+		}
+			
+		// create thrust vector to find BMU  in parallel
+		thrust::device_vector<float> d_vec_Distance(d_Distance, d_Distance + nNeurons);
+		// extract the first matching BMU
+		thrust::device_vector<float>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
+		// extract index and value of BMU
+		unsigned int BMU_index = iter - d_vec_Distance.begin();
+		float BMU_value = *iter;
+
+		// debug print
+	    if(debug)
+		   std::cout << "The minimum value is " << BMU_value << " at position " << BMU_index << std::endl;
+		//TODO: update BMU and neighbors
+	}
+
+	//freeing all allocated memory
     cudaFree(d_Matrix);
+    cudaFree(d_Sample);
+    cudaFree(d_Distance);
     free(h_Matrix);
+    free(h_Distance);
+    free(h_ActualSample);
 
 }
 
