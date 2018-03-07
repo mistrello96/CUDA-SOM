@@ -1,17 +1,15 @@
-#include <stdio.h>
-#include <iostream>
-#include <cuda_runtime.h>
+//#include <stdio.h>
+//#include <iostream>
+//#include <cuda_runtime.h>
+//#include <string>
+//#include <cmath>
+#include <ctime>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/extrema.h>
 #include <unistd.h>
-#include <cmath>
-#include <iostream>
 #include <fstream>
-#include <string>
 #include <sstream>
-#include <ctime>
-
 
 #define CUDA_CHECK_RETURN(value) {											\
 		cudaError_t _m_cudaStat = value;										\
@@ -21,27 +19,22 @@
 					exit(-13);															\
 } }
 
-__global__ void compute_distance(float* k_matrix, int nNeuron, float* k_sample, float* k_distance, int sampleLength){
+
+__global__ void compute_distance(float* k_matrix, float* k_ActualSample, float* k_distance, int nNeuron, int nElements){
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
-	
 	if (index < nNeuron)
 	{
-		// int matrixindex = index * sampleLength;
-		// float tmp = 0;
-		// for(int i = 0; i < sampleLength; i++)
-		// {
-		// 	tmp = tmp + abs(k_matrix[matrixindex+i] - k_sample[i]);
-		// }
+		int matrixindex = index * nElements;
+		float tmp = 0;
+		for(int i = 0; i < nElements; i++)
+		{
+			tmp = tmp + powf(k_matrix[matrixindex+i] - k_ActualSample[i], 2.0);
+		}
 
-		// k_distance[index] = k_distance[index] + tmp;
-		k_distance[index] = index;
-
-
-		if(index == 0)
-			printf("%.f\n", k_distance[index]);
-
+		k_distance[index] = sqrtf(tmp);
 	}
 }
+
 
 float checkFreeGpuMem(){
 	float free_m;
@@ -50,6 +43,7 @@ float checkFreeGpuMem(){
 	free_m =(uint)free_t;
 	return free_m;
 }
+
 
 // returns the number of features per line
 int readSamplesfromFile(std::vector<float>& samples, std::string filePath){
@@ -85,9 +79,9 @@ int main(int argc, char **argv)
 	//debuf flag
     bool debug = false;
     // number of rows in the martix
-    int nRows = 100;
+    int nRows = 50;
     // number of column in the martix
-    int nColumns = 100;
+    int nColumns = 50;
 
     // COMMAND LINE PARSING
     int c;
@@ -127,7 +121,7 @@ int main(int argc, char **argv)
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
     std::vector <float> Samples;
-    // use the number of features readed from the file
+    // retrive the number of features readed from the file
     int nElements = readSamplesfromFile(Samples, filePath);
 
     // COMPUTE USEFULL VALUES
@@ -137,8 +131,9 @@ int main(int argc, char **argv)
     int totalLength = nRows * nColumns * nElements;
     // number of block used in the computation
     int nblocks = (nNeurons / 1024) + 1;
-    if (nblocks => 65535){
-    	std::cout << "Too many bocks to launch. Try to reduce the number of neurons" << std::endl;
+    // checking the computability on CUDA
+    if (nblocks >= 65535){
+    	std::cout << "Too many bocks generated, cannot run a kernel with so many blocks. Try to reduce the number of neurons" << std::endl;
     	exit(-1);
     }
     // retrive the number of samples
@@ -146,7 +141,7 @@ int main(int argc, char **argv)
 
     // CHECK AVAILABLE MEMORY
     if (sizeof(float) * nNeurons * nElements >= checkFreeGpuMem()){
-	    	std::cout << "Not enougth memory for so many neurons" << std::endl;
+	    	std::cout << "Not enougth memory on the GPU, try to reduce neurons' number" << std::endl;
 	    	exit(-1);
 	}
 
@@ -178,7 +173,7 @@ int main(int argc, char **argv)
     srand(time(NULL));
     // random values SOM initialization
     for(int i = 0; i < totalLength; i++){
-    	h_Matrix[i] = rand() % 10;
+    	h_Matrix[i] = rand() % 100;
     }
 
     // ITERATE ON EACH SAMPLE TO FIND BMU
@@ -200,7 +195,7 @@ int main(int argc, char **argv)
 		CUDA_CHECK_RETURN(cudaMemcpy(d_Distance, h_Distance, sizeof(float) * nNeurons, cudaMemcpyHostToDevice));	
 		
 	    // parallel search launch
-	    compute_distance<<<nblocks,1024>>>(d_Matrix, nNeurons, d_Sample, d_Distance, nElements);
+	    compute_distance<<<nblocks,1024>>>(d_Matrix, d_Sample, d_Distance, nNeurons, nElements);
 
 		//wait for all block to complete the computation
 	    cudaDeviceSynchronize();
