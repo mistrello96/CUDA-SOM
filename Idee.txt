@@ -1,0 +1,14 @@
+Creo i neuroni e li inizializzo(parallelamente) -> (matrice linearizzata) * numero di features
+Inizializzazione random
+Per ogni vettorore in input detto t:
+Cerco parallelamente la bmu scrivendo in un vettore ausiliario lungo numeroNeuroni
+Sincronizzo.
+Cerco parallelamente(thrust) il minimo nel vettore.
+Aggiorno il valore della bmu e dei dintorni(parallelamente, attenzione alla linearizzazione). 
+	CON CHE FORMULA LO AGGIORNO? QUANTO DISTANTE?
+	QUANDO FINISCE IL PROCESSO DI LEARNING? E' VERO CHE HO PRIMA LEARNING COOPERATIVO E POI SOLO COMPETITIVO?
+
+Quanti vettori saranno in input? Devi somministtarli piu volte?
+Concetto di learning rate decrescente(anche la distanza della gaussiana)??
+Possibilità di salvare su file la matrice??
+
