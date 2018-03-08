@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <fstream>
 #include <sstream>
+#include <float.h>
 
 #define CUDA_CHECK_RETURN(value) {											\
 		cudaError_t _m_cudaStat = value;										\
@@ -91,7 +92,9 @@ int main(int argc, char **argv)
     // max number of iteration
     int maxnIter = 0;
     // accuracy threshold
-    double requiredAccuracy;
+    double requiredAccuracy = 0;
+    // learning iteration counter
+    int nIter = 0;
 
     // COMMAND LINE PARSING
     int c;
@@ -148,7 +151,7 @@ int main(int argc, char **argv)
     }
 
     // checking the required params
-    if (nRows == 0 | nColumns == 0){
+    if (nRows == 0 | nColumns == 0 | ilr == 0 | maxnIter == 0){
         std::cout << "Required params are missing, program will abort" << std::endl;
         exit(-1);        
     }
@@ -158,13 +161,16 @@ int main(int argc, char **argv)
     std::vector <double> Samples;
     // retrive the number of features readed from the file
     int nElements = readSamplesfromFile(Samples, filePath);
+
+    // EXTRACTING THE MIN/MAX FROM SAMPLES
+    // creating the thrust vector
     thrust::device_vector<double> t_Samples(Samples);
-    // extract the minimum in Samples
+    // extract the minimum
     thrust::device_vector<double>::iterator it = thrust::min_element(t_Samples.begin(), t_Samples.end());
-    double min_Samples = *it;
-    // extract maximum in Samples
+    double min_neuronValue = *it;
+    // extract maximum
     thrust::device_vector<double>::iterator it2 = thrust::max_element(t_Samples.begin(), t_Samples.end());
-    double max_Samples = *it2;
+    double max_neuronValue = *it2;
 
     // COMPUTE USEFULL VALUES
     // total number of neurons in the SOM
@@ -175,13 +181,14 @@ int main(int argc, char **argv)
     int nblocks = (nNeurons / 1024) + 1;
     // inizializing the learnig rate
     double lr = ilr;
-    // checking the computability on CUDA
+    // retrive the number of samples
+    int nSamples = Samples.size() / nElements;
+
+    // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535){
     	std::cout << "Too many bocks generated, cannot run a kernel with so many blocks. Try to reduce the number of neurons" << std::endl;
     	exit(-1);
     }
-    // retrive the number of samples
-    int nSamples = Samples.size() / nElements;
 
     // CHECK AVAILABLE MEMORY
     if (sizeof(double) * nNeurons * nElements >= checkFreeGpuMem()){
@@ -219,19 +226,12 @@ int main(int argc, char **argv)
     srand(time(NULL));
     // random values SOM initialization
     for(int i = 0; i < totalLength; i++){
-    	double tmp = rand() % ((int)max_Samples * 1000) - (min_Samples * 1000);
+    	double tmp = rand() % ((int)max_neuronValue * 1000) - (min_neuronValue * 1000);
         h_Matrix[i] = abs(tmp) / 1000;
     }
 
-  	/* 
-    // inizializing the distance array
-    for(int i = 0; i < nSamples; i++){
-    	distanceHistory[i] = 0;
-    }
-    */
-    int nIter = 0;
     //TOFIX
-    double accuracy = 10000000.0;
+    double accuracy = DBL_MAX;
     while((accuracy > requiredAccuracy) && (lr > flr) && (nIter < maxnIter)){
 	    // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++){
@@ -279,18 +279,19 @@ int main(int argc, char **argv)
 			
 	        //TODO: update BMU and neighbors
 		}
-		// updating learning rate e iteration counter
+
 		if (debug){
 			std::cout << "Learn rate of this iteration is " << lr << std::endl;
 		}
-
+		// updating the counter iteration
 		nIter ++;
-		lr = lr - 0.01*lr;
+		// updating the learning rate
+		lr = lr - 0.01;
 		// updating accuracy
 		thrust::device_vector<double> d_DistanceHistory(h_DistanceHistory, h_DistanceHistory + nSamples);
 		double meansum = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
 		accuracy = meansum / ((double)nSamples);
-		// TODO: se la media dei valori nell'array h_DistanceHistory è minore del valore soglia, interrompo il learning
+
 		if (debug){
 			std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
 		}
