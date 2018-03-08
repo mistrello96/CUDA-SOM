@@ -1,14 +1,16 @@
-Creo i neuroni e li inizializzo(parallelamente) -> (matrice linearizzata) * numero di features
-Inizializzazione random
-Per ogni vettorore in input detto t:
-Cerco parallelamente la bmu scrivendo in un vettore ausiliario lungo numeroNeuroni
-Sincronizzo.
-Cerco parallelamente(thrust) il minimo nel vettore.
+Il mio file lo do in input alla som fino a che il valore medio delle distanze della som non è sotto una certa soglia. Li fermo il mio learning e la matrice è pronta.
+
+
 Aggiorno il valore della bmu e dei dintorni(parallelamente, attenzione alla linearizzazione). 
 	CON CHE FORMULA LO AGGIORNO? QUANTO DISTANTE?
-	QUANDO FINISCE IL PROCESSO DI LEARNING? E' VERO CHE HO PRIMA LEARNING COOPERATIVO E POI SOLO COMPETITIVO?
+	QUANDO FINISCE IL PROCESSO DI LEARNING?
 
-Quanti vettori saranno in input? Devi somministtarli piu volte?
+
 Concetto di learning rate decrescente(anche la distanza della gaussiana)??
-Possibilità di salvare su file la matrice??
+Possibilità di salvare su file la matrice
 
+traCCIO RETTA
+
+A oni iterazione di tutti isample, li mischio
+
+Questione uso thread e blocchi dinamico
