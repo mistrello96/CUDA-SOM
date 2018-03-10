@@ -33,6 +33,7 @@ __global__ void compute_distance(double* k_matrix, double* k_ActualSample, doubl
 		}
 
 		k_distance[index] = sqrtf(tmp);
+		//printf("%f\n", k_distance[index]);
 	}
 }
 
@@ -226,13 +227,14 @@ int main(int argc, char **argv)
     srand(time(NULL));
     // random values SOM initialization
     for(int i = 0; i < totalLength; i++){
-    	double tmp = rand() % ((int)max_neuronValue * 1000) - (min_neuronValue * 1000);
-        h_Matrix[i] = abs(tmp) / 1000;
+    	double tmp = rand() / (float) RAND_MAX;
+    	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
+    	h_Matrix[i] = tmp; 
     }
 
-    //TOFIX
     double accuracy = DBL_MAX;
     while((accuracy > requiredAccuracy) && (lr > flr) && (nIter < maxnIter)){
+    	// TODO Randomize sample vector
 	    // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++){
 
@@ -276,17 +278,23 @@ int main(int argc, char **argv)
 			// debug print
 		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
-			
+
 	        //TODO: update BMU and neighbors
+	        
+	        for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
+	        	h_Matrix[i] = h_Matrix[i] + lr*(h_ActualSample[j] - h_Matrix[i]);
+	        }
+	         
 		}
 
 		if (debug){
 			std::cout << "Learn rate of this iteration is " << lr << std::endl;
 		}
+	
 		// updating the counter iteration
 		nIter ++;
 		// updating the learning rate
-		lr = lr - 0.01;
+		lr = ilr - 0.01*nIter;
 		// updating accuracy
 		thrust::device_vector<double> d_DistanceHistory(h_DistanceHistory, h_DistanceHistory + nSamples);
 		double meansum = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
