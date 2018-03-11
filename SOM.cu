@@ -33,7 +33,15 @@ __global__ void compute_distance(double* k_matrix, double* k_ActualSample, doubl
 		}
 
 		k_distance[index] = sqrtf(tmp);
-		//printf("%f\n", k_distance[index]);
+	}
+}
+
+__global__ void update_neurons(double* k_Matrix, double* k_ActualSample, int k_BMU_index, int k_radius ,double k_lr, int nNeuron, int nElements, int nRows, int nColumns){
+	int index = threadIdx.x + blockDim.x * blockIdx.x;
+	if (index < nNeuron)
+	{
+		int matrixindex = index * nElements;
+
 	}
 }
 
@@ -89,7 +97,7 @@ int main(int argc, char **argv)
     // final learning rate
     double flr = 0;
     // lambda of the gaussian
-    double lambda = 0;
+    double gaussianLambda = 0;
     // max number of iteration
     int maxnIter = 0;
     // accuracy threshold
@@ -129,7 +137,7 @@ int main(int argc, char **argv)
             requiredAccuracy = strtof(optarg,0);
             break;
         case 'l':
-            lambda = strtof(optarg,0);
+            gaussianLambda = strtof(optarg,0);
             break;
         case 'm':
             maxnIter = atoi(optarg);
@@ -184,6 +192,9 @@ int main(int argc, char **argv)
     double lr = ilr;
     // retrive the number of samples
     int nSamples = Samples.size() / nElements;
+    int initialRadius = max(nRows, nColumns) / 2;
+    int radius = initialRadius;
+    double radiusLambda;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535){
@@ -214,12 +225,12 @@ int main(int argc, char **argv)
     // device SOM
     double *d_Matrix;
     // device sample array
-    double *d_Sample;
+    double *d_ActualSample;
     // device distance array, 
     double *d_Distance;
     // device malloc
     CUDA_CHECK_RETURN(cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength));
-    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Sample, sizeof(double) * nElements));
+    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_ActualSample, sizeof(double) * nElements));
     CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons));
 
     // SOM INIZIALIZATION
@@ -232,6 +243,8 @@ int main(int argc, char **argv)
     	h_Matrix[i] = tmp; 
     }
 
+    // controllare funzione lamda!!
+    radiusLambda = (double) nSamples / log((double)initialRadius);
     double accuracy = DBL_MAX;
     while((accuracy > requiredAccuracy) && (lr > flr) && (nIter < maxnIter)){
     	// TODO Randomize sample vector
@@ -250,11 +263,11 @@ int main(int argc, char **argv)
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
-			CUDA_CHECK_RETURN(cudaMemcpy(d_Sample, h_ActualSample, sizeof(double) * nElements, cudaMemcpyHostToDevice));
+			CUDA_CHECK_RETURN(cudaMemcpy(d_ActualSample, h_ActualSample, sizeof(double) * nElements, cudaMemcpyHostToDevice));
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Distance, h_Distance, sizeof(double) * nNeurons, cudaMemcpyHostToDevice));	
 			
 		    // parallel search launch
-		    compute_distance<<<nblocks,1024>>>(d_Matrix, d_Sample, d_Distance, nNeurons, nElements);
+		    compute_distance<<<nblocks,1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements);
 
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
@@ -280,10 +293,12 @@ int main(int argc, char **argv)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
 	        //TODO: update BMU and neighbors
-	        
+	        /*
 	        for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
 	        	h_Matrix[i] = h_Matrix[i] + lr*(h_ActualSample[j] - h_Matrix[i]);
 	        }
+	        */
+	        update_neurons<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, BMU_index, radius, lr, nNeurons, nElements, nRows, nColumns);
 	         
 		}
 
@@ -303,12 +318,15 @@ int main(int argc, char **argv)
 		if (debug){
 			std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
 		}
+		// Si ocnsiderano iterazioni per i samples correnti oppure in assoluto?
+		radius = initialRadius * exp(-(double) nIter/radiusLambda);
+		std::cout << radius << std::endl;
 
 	}
 
 	//freeing all allocated memory
     cudaFree(d_Matrix);
-    cudaFree(d_Sample);
+    cudaFree(d_ActualSample);
     cudaFree(d_Distance);
     free(h_Matrix);
     free(h_Distance);

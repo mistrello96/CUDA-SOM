@@ -3,3 +3,5 @@ Aggiotnamento dei neuroni secondo gaussiana
 Possibilità di salvare su file la matrice
 
 Questione uso thread e blocchi dinamico
+
+Learning rate con decrescenza lineare, esponenziale
