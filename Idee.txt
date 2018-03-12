@@ -1,7 +1,12 @@
+Problems:
+Poca convergenza con pochi neuroni, servono molte iterazioni
+
 TODO:
-Aggiotnamento dei neuroni secondo gaussiana
+
+Distanza esagonale
+
 Possibilità di salvare su file la matrice
 
 Questione uso thread e blocchi dinamico
 
-Learning rate con decrescenza lineare, esponenziale
+Lambda stimate e non passate da riga di comando

@@ -36,15 +36,6 @@ __global__ void compute_distance(double* k_matrix, double* k_ActualSample, doubl
 	}
 }
 
-__global__ void update_neurons(double* k_Matrix, double* k_ActualSample, int k_BMU_index, int k_radius ,double k_lr, int nNeuron, int nElements, int nRows, int nColumns){
-	int index = threadIdx.x + blockDim.x * blockIdx.x;
-	if (index < nNeuron)
-	{
-		int matrixindex = index * nElements;
-
-	}
-}
-
 
 double checkFreeGpuMem(){
 	double free_m;
@@ -88,6 +79,8 @@ int main(int argc, char **argv)
 	std::string filePath = "./";
 	// debuf flag
     bool debug = false;
+    // represent the decreasing function of lr and radius
+    bool exp_flag = false;
     // number of rows in the martix
     int nRows = 0;
     // number of column in the martix
@@ -96,8 +89,6 @@ int main(int argc, char **argv)
     double ilr = 0;
     // final learning rate
     double flr = 0;
-    // lambda of the gaussian
-    double gaussianLambda = 0;
     // max number of iteration
     int maxnIter = 0;
     // accuracy threshold
@@ -105,21 +96,15 @@ int main(int argc, char **argv)
     // learning iteration counter
     int nIter = 0;
 
+    double initialRadius = 0;
+
     // COMMAND LINE PARSING
     int c;
-    while ((c = getopt (argc, argv, "i:x:y:hvs:f:m:a:l:")) != -1)
+    while ((c = getopt (argc, argv, "i:x:y:hvs:n:a:er:f:")) != -1)
     switch (c)
 	{
         case 'i':
             filePath = optarg;
-            break;
-        case 'n':
-            if (int (sqrt(atoi(optarg))) * int (sqrt(atoi(optarg))) != atoi(optarg)){
-                std::cout << "The -x option only support square matrix. To create a generic matrix, use -x and -y parameters" << std::endl;
-                return(-1);
-            }
-            nRows = sqrt(atoi(optarg));
-            nColumns = sqrt(atoi(optarg));
             break;
         case 'x':
             nRows = atoi(optarg);
@@ -136,31 +121,37 @@ int main(int argc, char **argv)
         case 'a':
             requiredAccuracy = strtof(optarg,0);
             break;
-        case 'l':
-            gaussianLambda = strtof(optarg,0);
-            break;
-        case 'm':
+//        case 'l':
+//            gaussianLambda = strtof(optarg,0);
+//            break;
+        case 'n':
             maxnIter = atoi(optarg);
             break;
         case 'v':
             debug = true;
             break;
+        case 'e':
+        	exp_flag = true;
+        	break;
+        case 'r':
+        	initialRadius = atoi(optarg);
+        	break;
         case 'h':
             std::cout << "-i allows to provide the PATH of an input file. If not specified, ./ is assumed" << std::endl;
             std::cout << "-x allows to provide the number of rows in the neuron's matrix. REQUESTED" << std::endl;
             std::cout << "-y allows to provide the numbers of columns in the neuron's matrix. REQUESTED" << std::endl;
             std::cout << "-s initial learning rate" << std::endl;
             std::cout << "-f final learning rate" << std::endl;
-            std::cout << "-l lambda of the gaussian" << std::endl;
+            //std::cout << "-l lambda of the gaussian" << std::endl;
             std::cout << "-a accuracy threshold" << std::endl;
-            std::cout << "-m maximum number of iteration before stopping the learning process" << std::endl;
+            std::cout << "-n number of iteration before stopping the learning process" << std::endl;
             std::cout << "-v enables debug prints" << std::endl;
             std::cout << "-h shows help menu of the tool" << std::endl;
             return 0;
     }
 
     // checking the required params
-    if (nRows == 0 | nColumns == 0 | ilr == 0 | maxnIter == 0){
+    if (ilr == 0 | maxnIter == 0){
         std::cout << "Required params are missing, program will abort" << std::endl;
         exit(-1);        
     }
@@ -182,6 +173,14 @@ int main(int argc, char **argv)
     double max_neuronValue = *it2;
 
     // COMPUTE USEFULL VALUES
+    // retrive the number of samples
+    int nSamples = Samples.size() / nElements;
+    // estimate the neurons number
+    if (nRows==0 | nColumns == 0){
+    	int tmp = 5 * sqrt(nSamples);
+    	nRows = sqrt(tmp) + 1;
+    	nColumns = sqrt(tmp) + 1;
+    }
     // total number of neurons in the SOM
     int nNeurons = nRows * nColumns;
     // total length of the serialized matrix
@@ -190,11 +189,11 @@ int main(int argc, char **argv)
     int nblocks = (nNeurons / 1024) + 1;
     // inizializing the learnig rate
     double lr = ilr;
-    // retrive the number of samples
-    int nSamples = Samples.size() / nElements;
-    int initialRadius = max(nRows, nColumns) / 2;
-    int radius = initialRadius;
-    double radiusLambda;
+
+    if (initialRadius == 0)
+    	initialRadius = max(nRows, nColumns) / 2;
+
+    double radius = initialRadius;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535){
@@ -210,7 +209,7 @@ int main(int argc, char **argv)
 
     // debug print
     if(debug){
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features." << std::endl;
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features" << ilr << " Initial learning rate " << flr << " final learning rate " << requiredAccuracy<< " required requiredAccuracy"  << std::endl;
     }
 
     // ALLOCATION OF THE STRUCTURES
@@ -244,7 +243,10 @@ int main(int argc, char **argv)
     }
 
     // controllare funzione lamda!!
-    radiusLambda = (double) nSamples / log((double)initialRadius);
+    double radiusLambda = (double) maxnIter / log((double)initialRadius);
+    double radiusStep = initialRadius / maxnIter;
+    double lrstep = (ilr - flr) / maxnIter;
+
     double accuracy = DBL_MAX;
     while((accuracy > requiredAccuracy) && (lr > flr) && (nIter < maxnIter)){
     	// TODO Randomize sample vector
@@ -259,7 +261,7 @@ int main(int argc, char **argv)
 		    // copy the s sample in the actual sample vector
 		    for(int i = s*nElements, j = 0; i < s*nElements+nElements; i++, j++){
 		    	h_ActualSample[j] = Samples[i];
-		    }; 
+		    } 
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
@@ -284,6 +286,8 @@ int main(int argc, char **argv)
 			thrust::device_vector<double>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
 			// extract index and value of BMU
 			unsigned int BMU_index = iter - d_vec_Distance.begin();
+            unsigned int BMU_y = BMU_index / nColumns;
+            unsigned int BMU_x = BMU_index % nColumns;
 			double BMU_distance = *iter;
 			// adding the found value in the distance history array
 			h_DistanceHistory[s] = BMU_distance;
@@ -292,37 +296,60 @@ int main(int argc, char **argv)
 		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
-	        //TODO: update BMU and neighbors
-	        /*
-	        for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
-	        	h_Matrix[i] = h_Matrix[i] + lr*(h_ActualSample[j] - h_Matrix[i]);
-	        }
-	        */
-	        update_neurons<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, BMU_index, radius, lr, nNeurons, nElements, nRows, nColumns);
-	         
-		}
+	        if ((int) radius == 0)
+	        {
+	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
+	        		h_Matrix[i] = h_Matrix[i] + lr * (h_ActualSample[j] - h_Matrix[i]);
+	        	}
+	        }else{
+	            for (int i = 0; i < nNeurons; i++){
+	                int y = i / nColumns;
+	                int x = i % nColumns;
+	                int distance = sqrt((x - BMU_x)*(x - BMU_x) + (y - BMU_y)*(y - BMU_y));
+	                //std::cout << distance << std::endl;
+	                if (distance <= (int)radius){
+	                    double gaussian = exp(- (double)(distance * distance)/(2 * (int)radius * (int)radius));
+	                    //std::cout << (double)(distance * distance)/(2 * (int)radius * (int)radius) << std::endl;
+	                    //std::cout << (double)(distance * distance) << std::endl;
+	                    //std::cout << (2 * (int)radius * (int)radius) << std::endl;
+	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++){
+	                        h_Matrix[k] = h_Matrix[k] + gaussian * lr * (h_ActualSample[j] - h_Matrix[k]);
+	                    }
+	                }
+	            }
+        	}
+            
 
-		if (debug){
-			std::cout << "Learn rate of this iteration is " << lr << std::endl;
-		}
-	
+            
+	         
+		
+        }
+        // updating accuracy
+        thrust::device_vector<double> d_DistanceHistory(h_DistanceHistory, h_DistanceHistory + nSamples);
+        double meansum = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
+        accuracy = meansum / ((double)nSamples);
+        if (debug){
+            std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
+        }
+
 		// updating the counter iteration
 		nIter ++;
-		// updating the learning rate
-		lr = ilr - 0.01*nIter;
-		// updating accuracy
-		thrust::device_vector<double> d_DistanceHistory(h_DistanceHistory, h_DistanceHistory + nSamples);
-		double meansum = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
-		accuracy = meansum / ((double)nSamples);
 
-		if (debug){
-			std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
+		if(exp_flag){
+			// updating the learning rate
+			lr = ilr * (exp(-(double) nIter));
+	        std::cout << "Learning rate of the next iteration is " << lr << std::endl;
+
+			// Si ocnsiderano iterazioni per i samples correnti oppure in assoluto?
+	        radius = initialRadius * exp(-(double) nIter/radiusLambda);
+			std::cout << "Radius of the next iteration is " << radius << std::endl;
+		}else{
+			lr = lr - lrstep;
+			std::cout << "Learning rate of the next iteration is " << lr << std::endl;
+			radius = radius - radiusStep;
+			std::cout << "Radius of the next iteration is " << radius << std::endl;
 		}
-		// Si ocnsiderano iterazioni per i samples correnti oppure in assoluto?
-		radius = initialRadius * exp(-(double) nIter/radiusLambda);
-		std::cout << radius << std::endl;
-
-	}
+    }
 
 	//freeing all allocated memory
     cudaFree(d_Matrix);
