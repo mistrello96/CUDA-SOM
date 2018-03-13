@@ -1,0 +1,3001 @@
+Running the program with 100 rows, 100 columns, 10000 neurons, 25 features fot each read, 0.2 initial learning rate, 0.01 final learning rate, 0.00019019 learning rate spep, 0 required accuracyTreshold, 50 initial radius, 0.05 radiusStep 
+Mean distance of this iteration is 31.4008
+Learning rate of the next iteration is 0.19981
+Radius of the next iteration is 49.95
+Mean distance of this iteration is 23.786
+Learning rate of the next iteration is 0.19962
+Radius of the next iteration is 49.9
+Mean distance of this iteration is 24.4901
+Learning rate of the next iteration is 0.199429
+Radius of the next iteration is 49.85
+Mean distance of this iteration is 24.6405
+Learning rate of the next iteration is 0.199239
+Radius of the next iteration is 49.8
+Mean distance of this iteration is 24.0884
+Learning rate of the next iteration is 0.199049
+Radius of the next iteration is 49.75
+Mean distance of this iteration is 24.775
+Learning rate of the next iteration is 0.198859
+Radius of the next iteration is 49.7
+Mean distance of this iteration is 24.7291
+Learning rate of the next iteration is 0.198669
+Radius of the next iteration is 49.65
+Mean distance of this iteration is 23.3954
+Learning rate of the next iteration is 0.198478
+Radius of the next iteration is 49.6
+Mean distance of this iteration is 23.4029
+Learning rate of the next iteration is 0.198288
+Radius of the next iteration is 49.55
+Mean distance of this iteration is 24.2612
+Learning rate of the next iteration is 0.198098
+Radius of the next iteration is 49.5
+Mean distance of this iteration is 24.325
+Learning rate of the next iteration is 0.197908
+Radius of the next iteration is 49.45
+Mean distance of this iteration is 25.3682
+Learning rate of the next iteration is 0.197718
+Radius of the next iteration is 49.4
+Mean distance of this iteration is 24.6605
+Learning rate of the next iteration is 0.197528
+Radius of the next iteration is 49.35
+Mean distance of this iteration is 24.5159
+Learning rate of the next iteration is 0.197337
+Radius of the next iteration is 49.3
+Mean distance of this iteration is 24.6712
+Learning rate of the next iteration is 0.197147
+Radius of the next iteration is 49.25
+Mean distance of this iteration is 23.6547
+Learning rate of the next iteration is 0.196957
+Radius of the next iteration is 49.2
+Mean distance of this iteration is 25.9479
+Learning rate of the next iteration is 0.196767
+Radius of the next iteration is 49.15
+Mean distance of this iteration is 24.2599
+Learning rate of the next iteration is 0.196577
+Radius of the next iteration is 49.1
+Mean distance of this iteration is 25.3545
+Learning rate of the next iteration is 0.196386
+Radius of the next iteration is 49.05
+Mean distance of this iteration is 25.3532
+Learning rate of the next iteration is 0.196196
+Radius of the next iteration is 49
+Mean distance of this iteration is 25.432
+Learning rate of the next iteration is 0.196006
+Radius of the next iteration is 48.95
+Mean distance of this iteration is 24.0733
+Learning rate of the next iteration is 0.195816
+Radius of the next iteration is 48.9
+Mean distance of this iteration is 22.6175
+Learning rate of the next iteration is 0.195626
+Radius of the next iteration is 48.85
+Mean distance of this iteration is 23.2704
+Learning rate of the next iteration is 0.195435
+Radius of the next iteration is 48.8
+Mean distance of this iteration is 21.2998
+Learning rate of the next iteration is 0.195245
+Radius of the next iteration is 48.75
+Mean distance of this iteration is 23.8826
+Learning rate of the next iteration is 0.195055
+Radius of the next iteration is 48.7
+Mean distance of this iteration is 23.6999
+Learning rate of the next iteration is 0.194865
+Radius of the next iteration is 48.65
+Mean distance of this iteration is 22.2085
+Learning rate of the next iteration is 0.194675
+Radius of the next iteration is 48.6
+Mean distance of this iteration is 22.7991
+Learning rate of the next iteration is 0.194484
+Radius of the next iteration is 48.55
+Mean distance of this iteration is 22.8407
+Learning rate of the next iteration is 0.194294
+Radius of the next iteration is 48.5
+Mean distance of this iteration is 22.4706
+Learning rate of the next iteration is 0.194104
+Radius of the next iteration is 48.45
+Mean distance of this iteration is 22.329
+Learning rate of the next iteration is 0.193914
+Radius of the next iteration is 48.4
+Mean distance of this iteration is 22.9954
+Learning rate of the next iteration is 0.193724
+Radius of the next iteration is 48.35
+Mean distance of this iteration is 21.9205
+Learning rate of the next iteration is 0.193534
+Radius of the next iteration is 48.3
+Mean distance of this iteration is 23.881
+Learning rate of the next iteration is 0.193343
+Radius of the next iteration is 48.25
+Mean distance of this iteration is 22.5365
+Learning rate of the next iteration is 0.193153
+Radius of the next iteration is 48.2
+Mean distance of this iteration is 22.4086
+Learning rate of the next iteration is 0.192963
+Radius of the next iteration is 48.15
+Mean distance of this iteration is 21.9792
+Learning rate of the next iteration is 0.192773
+Radius of the next iteration is 48.1
+Mean distance of this iteration is 21.9426
+Learning rate of the next iteration is 0.192583
+Radius of the next iteration is 48.05
+Mean distance of this iteration is 22.7581
+Learning rate of the next iteration is 0.192392
+Radius of the next iteration is 48
+Mean distance of this iteration is 22.3837
+Learning rate of the next iteration is 0.192202
+Radius of the next iteration is 47.95
+Mean distance of this iteration is 23.8775
+Learning rate of the next iteration is 0.192012
+Radius of the next iteration is 47.9
+Mean distance of this iteration is 22.8152
+Learning rate of the next iteration is 0.191822
+Radius of the next iteration is 47.85
+Mean distance of this iteration is 22.9199
+Learning rate of the next iteration is 0.191632
+Radius of the next iteration is 47.8
+Mean distance of this iteration is 22.7613
+Learning rate of the next iteration is 0.191441
+Radius of the next iteration is 47.75
+Mean distance of this iteration is 23.3387
+Learning rate of the next iteration is 0.191251
+Radius of the next iteration is 47.7
+Mean distance of this iteration is 22.2675
+Learning rate of the next iteration is 0.191061
+Radius of the next iteration is 47.65
+Mean distance of this iteration is 22.5009
+Learning rate of the next iteration is 0.190871
+Radius of the next iteration is 47.6
+Mean distance of this iteration is 22.8321
+Learning rate of the next iteration is 0.190681
+Radius of the next iteration is 47.55
+Mean distance of this iteration is 22.8132
+Learning rate of the next iteration is 0.19049
+Radius of the next iteration is 47.5
+Mean distance of this iteration is 22.2181
+Learning rate of the next iteration is 0.1903
+Radius of the next iteration is 47.45
+Mean distance of this iteration is 20.9576
+Learning rate of the next iteration is 0.19011
+Radius of the next iteration is 47.4
+Mean distance of this iteration is 21.792
+Learning rate of the next iteration is 0.18992
+Radius of the next iteration is 47.35
+Mean distance of this iteration is 21.4877
+Learning rate of the next iteration is 0.18973
+Radius of the next iteration is 47.3
+Mean distance of this iteration is 21.6511
+Learning rate of the next iteration is 0.18954
+Radius of the next iteration is 47.25
+Mean distance of this iteration is 22.4539
+Learning rate of the next iteration is 0.189349
+Radius of the next iteration is 47.2
+Mean distance of this iteration is 22.2227
+Learning rate of the next iteration is 0.189159
+Radius of the next iteration is 47.15
+Mean distance of this iteration is 23.0039
+Learning rate of the next iteration is 0.188969
+Radius of the next iteration is 47.1
+Mean distance of this iteration is 21.9867
+Learning rate of the next iteration is 0.188779
+Radius of the next iteration is 47.05
+Mean distance of this iteration is 22.4412
+Learning rate of the next iteration is 0.188589
+Radius of the next iteration is 47
+Mean distance of this iteration is 21.0452
+Learning rate of the next iteration is 0.188398
+Radius of the next iteration is 46.95
+Mean distance of this iteration is 21.3434
+Learning rate of the next iteration is 0.188208
+Radius of the next iteration is 46.9
+Mean distance of this iteration is 21.8312
+Learning rate of the next iteration is 0.188018
+Radius of the next iteration is 46.85
+Mean distance of this iteration is 22.2959
+Learning rate of the next iteration is 0.187828
+Radius of the next iteration is 46.8
+Mean distance of this iteration is 21.7271
+Learning rate of the next iteration is 0.187638
+Radius of the next iteration is 46.75
+Mean distance of this iteration is 22.4169
+Learning rate of the next iteration is 0.187447
+Radius of the next iteration is 46.7
+Mean distance of this iteration is 22.2366
+Learning rate of the next iteration is 0.187257
+Radius of the next iteration is 46.65
+Mean distance of this iteration is 21.5636
+Learning rate of the next iteration is 0.187067
+Radius of the next iteration is 46.6
+Mean distance of this iteration is 21.2364
+Learning rate of the next iteration is 0.186877
+Radius of the next iteration is 46.55
+Mean distance of this iteration is 21.2283
+Learning rate of the next iteration is 0.186687
+Radius of the next iteration is 46.5
+Mean distance of this iteration is 21.9721
+Learning rate of the next iteration is 0.186496
+Radius of the next iteration is 46.45
+Mean distance of this iteration is 21.8859
+Learning rate of the next iteration is 0.186306
+Radius of the next iteration is 46.4
+Mean distance of this iteration is 21.6637
+Learning rate of the next iteration is 0.186116
+Radius of the next iteration is 46.35
+Mean distance of this iteration is 21.7784
+Learning rate of the next iteration is 0.185926
+Radius of the next iteration is 46.3
+Mean distance of this iteration is 21.1208
+Learning rate of the next iteration is 0.185736
+Radius of the next iteration is 46.25
+Mean distance of this iteration is 21.5686
+Learning rate of the next iteration is 0.185546
+Radius of the next iteration is 46.2
+Mean distance of this iteration is 20.5035
+Learning rate of the next iteration is 0.185355
+Radius of the next iteration is 46.15
+Mean distance of this iteration is 22.8965
+Learning rate of the next iteration is 0.185165
+Radius of the next iteration is 46.1
+Mean distance of this iteration is 22.5164
+Learning rate of the next iteration is 0.184975
+Radius of the next iteration is 46.05
+Mean distance of this iteration is 20.924
+Learning rate of the next iteration is 0.184785
+Radius of the next iteration is 46
+Mean distance of this iteration is 20.571
+Learning rate of the next iteration is 0.184595
+Radius of the next iteration is 45.95
+Mean distance of this iteration is 20.448
+Learning rate of the next iteration is 0.184404
+Radius of the next iteration is 45.9
+Mean distance of this iteration is 22.422
+Learning rate of the next iteration is 0.184214
+Radius of the next iteration is 45.85
+Mean distance of this iteration is 21.7847
+Learning rate of the next iteration is 0.184024
+Radius of the next iteration is 45.8
+Mean distance of this iteration is 20.9298
+Learning rate of the next iteration is 0.183834
+Radius of the next iteration is 45.75
+Mean distance of this iteration is 21.9856
+Learning rate of the next iteration is 0.183644
+Radius of the next iteration is 45.7
+Mean distance of this iteration is 23.1834
+Learning rate of the next iteration is 0.183453
+Radius of the next iteration is 45.65
+Mean distance of this iteration is 22.3484
+Learning rate of the next iteration is 0.183263
+Radius of the next iteration is 45.6
+Mean distance of this iteration is 23.3601
+Learning rate of the next iteration is 0.183073
+Radius of the next iteration is 45.55
+Mean distance of this iteration is 23.1181
+Learning rate of the next iteration is 0.182883
+Radius of the next iteration is 45.5
+Mean distance of this iteration is 22.0394
+Learning rate of the next iteration is 0.182693
+Radius of the next iteration is 45.45
+Mean distance of this iteration is 21.5753
+Learning rate of the next iteration is 0.182503
+Radius of the next iteration is 45.4
+Mean distance of this iteration is 22.5751
+Learning rate of the next iteration is 0.182312
+Radius of the next iteration is 45.35
+Mean distance of this iteration is 21.6171
+Learning rate of the next iteration is 0.182122
+Radius of the next iteration is 45.3
+Mean distance of this iteration is 22.3308
+Learning rate of the next iteration is 0.181932
+Radius of the next iteration is 45.25
+Mean distance of this iteration is 22.5645
+Learning rate of the next iteration is 0.181742
+Radius of the next iteration is 45.2
+Mean distance of this iteration is 22.3971
+Learning rate of the next iteration is 0.181552
+Radius of the next iteration is 45.15
+Mean distance of this iteration is 22.565
+Learning rate of the next iteration is 0.181361
+Radius of the next iteration is 45.1
+Mean distance of this iteration is 22.3538
+Learning rate of the next iteration is 0.181171
+Radius of the next iteration is 45.05
+Mean distance of this iteration is 21.0874
+Learning rate of the next iteration is 0.180981
+Radius of the next iteration is 45
+Mean distance of this iteration is 22.9117
+Learning rate of the next iteration is 0.180791
+Radius of the next iteration is 44.95
+Mean distance of this iteration is 21.5916
+Learning rate of the next iteration is 0.180601
+Radius of the next iteration is 44.9
+Mean distance of this iteration is 20.4727
+Learning rate of the next iteration is 0.18041
+Radius of the next iteration is 44.85
+Mean distance of this iteration is 22.7175
+Learning rate of the next iteration is 0.18022
+Radius of the next iteration is 44.8
+Mean distance of this iteration is 22.6876
+Learning rate of the next iteration is 0.18003
+Radius of the next iteration is 44.75
+Mean distance of this iteration is 21.1676
+Learning rate of the next iteration is 0.17984
+Radius of the next iteration is 44.7
+Mean distance of this iteration is 21.3275
+Learning rate of the next iteration is 0.17965
+Radius of the next iteration is 44.65
+Mean distance of this iteration is 21.6408
+Learning rate of the next iteration is 0.179459
+Radius of the next iteration is 44.6
+Mean distance of this iteration is 22.914
+Learning rate of the next iteration is 0.179269
+Radius of the next iteration is 44.55
+Mean distance of this iteration is 22.0848
+Learning rate of the next iteration is 0.179079
+Radius of the next iteration is 44.5
+Mean distance of this iteration is 21.8045
+Learning rate of the next iteration is 0.178889
+Radius of the next iteration is 44.45
+Mean distance of this iteration is 22.1899
+Learning rate of the next iteration is 0.178699
+Radius of the next iteration is 44.4
+Mean distance of this iteration is 21.9413
+Learning rate of the next iteration is 0.178509
+Radius of the next iteration is 44.35
+Mean distance of this iteration is 22.1584
+Learning rate of the next iteration is 0.178318
+Radius of the next iteration is 44.3
+Mean distance of this iteration is 22.2868
+Learning rate of the next iteration is 0.178128
+Radius of the next iteration is 44.25
+Mean distance of this iteration is 21.8227
+Learning rate of the next iteration is 0.177938
+Radius of the next iteration is 44.2
+Mean distance of this iteration is 21.9556
+Learning rate of the next iteration is 0.177748
+Radius of the next iteration is 44.15
+Mean distance of this iteration is 24.089
+Learning rate of the next iteration is 0.177558
+Radius of the next iteration is 44.1
+Mean distance of this iteration is 22.0711
+Learning rate of the next iteration is 0.177367
+Radius of the next iteration is 44.05
+Mean distance of this iteration is 20.6221
+Learning rate of the next iteration is 0.177177
+Radius of the next iteration is 44
+Mean distance of this iteration is 22.9233
+Learning rate of the next iteration is 0.176987
+Radius of the next iteration is 43.95
+Mean distance of this iteration is 21.0027
+Learning rate of the next iteration is 0.176797
+Radius of the next iteration is 43.9
+Mean distance of this iteration is 21.2953
+Learning rate of the next iteration is 0.176607
+Radius of the next iteration is 43.85
+Mean distance of this iteration is 21.7043
+Learning rate of the next iteration is 0.176416
+Radius of the next iteration is 43.8
+Mean distance of this iteration is 22.199
+Learning rate of the next iteration is 0.176226
+Radius of the next iteration is 43.75
+Mean distance of this iteration is 21.947
+Learning rate of the next iteration is 0.176036
+Radius of the next iteration is 43.7
+Mean distance of this iteration is 21.4098
+Learning rate of the next iteration is 0.175846
+Radius of the next iteration is 43.65
+Mean distance of this iteration is 21.8531
+Learning rate of the next iteration is 0.175656
+Radius of the next iteration is 43.6
+Mean distance of this iteration is 22.3235
+Learning rate of the next iteration is 0.175465
+Radius of the next iteration is 43.55
+Mean distance of this iteration is 21.891
+Learning rate of the next iteration is 0.175275
+Radius of the next iteration is 43.5
+Mean distance of this iteration is 21.7008
+Learning rate of the next iteration is 0.175085
+Radius of the next iteration is 43.45
+Mean distance of this iteration is 21.1269
+Learning rate of the next iteration is 0.174895
+Radius of the next iteration is 43.4
+Mean distance of this iteration is 21.9453
+Learning rate of the next iteration is 0.174705
+Radius of the next iteration is 43.35
+Mean distance of this iteration is 21.7997
+Learning rate of the next iteration is 0.174515
+Radius of the next iteration is 43.3
+Mean distance of this iteration is 20.7935
+Learning rate of the next iteration is 0.174324
+Radius of the next iteration is 43.25
+Mean distance of this iteration is 23.8969
+Learning rate of the next iteration is 0.174134
+Radius of the next iteration is 43.2
+Mean distance of this iteration is 21.7805
+Learning rate of the next iteration is 0.173944
+Radius of the next iteration is 43.15
+Mean distance of this iteration is 23.7936
+Learning rate of the next iteration is 0.173754
+Radius of the next iteration is 43.1
+Mean distance of this iteration is 22.2665
+Learning rate of the next iteration is 0.173564
+Radius of the next iteration is 43.05
+Mean distance of this iteration is 20.9411
+Learning rate of the next iteration is 0.173373
+Radius of the next iteration is 43
+Mean distance of this iteration is 21.8871
+Learning rate of the next iteration is 0.173183
+Radius of the next iteration is 42.95
+Mean distance of this iteration is 21.2888
+Learning rate of the next iteration is 0.172993
+Radius of the next iteration is 42.9
+Mean distance of this iteration is 20.0709
+Learning rate of the next iteration is 0.172803
+Radius of the next iteration is 42.85
+Mean distance of this iteration is 21.2663
+Learning rate of the next iteration is 0.172613
+Radius of the next iteration is 42.8
+Mean distance of this iteration is 21.6762
+Learning rate of the next iteration is 0.172422
+Radius of the next iteration is 42.75
+Mean distance of this iteration is 21.0181
+Learning rate of the next iteration is 0.172232
+Radius of the next iteration is 42.7
+Mean distance of this iteration is 20.6843
+Learning rate of the next iteration is 0.172042
+Radius of the next iteration is 42.65
+Mean distance of this iteration is 21.9592
+Learning rate of the next iteration is 0.171852
+Radius of the next iteration is 42.6
+Mean distance of this iteration is 21.1115
+Learning rate of the next iteration is 0.171662
+Radius of the next iteration is 42.55
+Mean distance of this iteration is 20.6873
+Learning rate of the next iteration is 0.171471
+Radius of the next iteration is 42.5
+Mean distance of this iteration is 21.8317
+Learning rate of the next iteration is 0.171281
+Radius of the next iteration is 42.45
+Mean distance of this iteration is 20.4539
+Learning rate of the next iteration is 0.171091
+Radius of the next iteration is 42.4
+Mean distance of this iteration is 20.5989
+Learning rate of the next iteration is 0.170901
+Radius of the next iteration is 42.35
+Mean distance of this iteration is 21.6847
+Learning rate of the next iteration is 0.170711
+Radius of the next iteration is 42.3
+Mean distance of this iteration is 21.0481
+Learning rate of the next iteration is 0.170521
+Radius of the next iteration is 42.25
+Mean distance of this iteration is 22.2663
+Learning rate of the next iteration is 0.17033
+Radius of the next iteration is 42.2
+Mean distance of this iteration is 20.4771
+Learning rate of the next iteration is 0.17014
+Radius of the next iteration is 42.15
+Mean distance of this iteration is 21.1265
+Learning rate of the next iteration is 0.16995
+Radius of the next iteration is 42.1
+Mean distance of this iteration is 21.412
+Learning rate of the next iteration is 0.16976
+Radius of the next iteration is 42.05
+Mean distance of this iteration is 21.0232
+Learning rate of the next iteration is 0.16957
+Radius of the next iteration is 42
+Mean distance of this iteration is 21.3285
+Learning rate of the next iteration is 0.169379
+Radius of the next iteration is 41.95
+Mean distance of this iteration is 20.198
+Learning rate of the next iteration is 0.169189
+Radius of the next iteration is 41.9
+Mean distance of this iteration is 20.4803
+Learning rate of the next iteration is 0.168999
+Radius of the next iteration is 41.85
+Mean distance of this iteration is 20.505
+Learning rate of the next iteration is 0.168809
+Radius of the next iteration is 41.8
+Mean distance of this iteration is 22.1834
+Learning rate of the next iteration is 0.168619
+Radius of the next iteration is 41.75
+Mean distance of this iteration is 21.3513
+Learning rate of the next iteration is 0.168428
+Radius of the next iteration is 41.7
+Mean distance of this iteration is 20.2083
+Learning rate of the next iteration is 0.168238
+Radius of the next iteration is 41.65
+Mean distance of this iteration is 21.1529
+Learning rate of the next iteration is 0.168048
+Radius of the next iteration is 41.6
+Mean distance of this iteration is 21.0869
+Learning rate of the next iteration is 0.167858
+Radius of the next iteration is 41.55
+Mean distance of this iteration is 21.0262
+Learning rate of the next iteration is 0.167668
+Radius of the next iteration is 41.5
+Mean distance of this iteration is 21.8425
+Learning rate of the next iteration is 0.167477
+Radius of the next iteration is 41.45
+Mean distance of this iteration is 21.0351
+Learning rate of the next iteration is 0.167287
+Radius of the next iteration is 41.4
+Mean distance of this iteration is 21.0467
+Learning rate of the next iteration is 0.167097
+Radius of the next iteration is 41.35
+Mean distance of this iteration is 20.6586
+Learning rate of the next iteration is 0.166907
+Radius of the next iteration is 41.3
+Mean distance of this iteration is 21.168
+Learning rate of the next iteration is 0.166717
+Radius of the next iteration is 41.25
+Mean distance of this iteration is 21.5985
+Learning rate of the next iteration is 0.166527
+Radius of the next iteration is 41.2
+Mean distance of this iteration is 20.4855
+Learning rate of the next iteration is 0.166336
+Radius of the next iteration is 41.15
+Mean distance of this iteration is 21.2077
+Learning rate of the next iteration is 0.166146
+Radius of the next iteration is 41.1
+Mean distance of this iteration is 21.8634
+Learning rate of the next iteration is 0.165956
+Radius of the next iteration is 41.05
+Mean distance of this iteration is 21.648
+Learning rate of the next iteration is 0.165766
+Radius of the next iteration is 41
+Mean distance of this iteration is 21.654
+Learning rate of the next iteration is 0.165576
+Radius of the next iteration is 40.95
+Mean distance of this iteration is 20.7534
+Learning rate of the next iteration is 0.165385
+Radius of the next iteration is 40.9
+Mean distance of this iteration is 19.9621
+Learning rate of the next iteration is 0.165195
+Radius of the next iteration is 40.85
+Mean distance of this iteration is 20.1494
+Learning rate of the next iteration is 0.165005
+Radius of the next iteration is 40.8
+Mean distance of this iteration is 20.9416
+Learning rate of the next iteration is 0.164815
+Radius of the next iteration is 40.75
+Mean distance of this iteration is 19.9728
+Learning rate of the next iteration is 0.164625
+Radius of the next iteration is 40.7
+Mean distance of this iteration is 20.4871
+Learning rate of the next iteration is 0.164434
+Radius of the next iteration is 40.65
+Mean distance of this iteration is 21.11
+Learning rate of the next iteration is 0.164244
+Radius of the next iteration is 40.6
+Mean distance of this iteration is 21.3458
+Learning rate of the next iteration is 0.164054
+Radius of the next iteration is 40.55
+Mean distance of this iteration is 20.8478
+Learning rate of the next iteration is 0.163864
+Radius of the next iteration is 40.5
+Mean distance of this iteration is 20.5633
+Learning rate of the next iteration is 0.163674
+Radius of the next iteration is 40.45
+Mean distance of this iteration is 20.2806
+Learning rate of the next iteration is 0.163483
+Radius of the next iteration is 40.4
+Mean distance of this iteration is 21.0207
+Learning rate of the next iteration is 0.163293
+Radius of the next iteration is 40.35
+Mean distance of this iteration is 20.89
+Learning rate of the next iteration is 0.163103
+Radius of the next iteration is 40.3
+Mean distance of this iteration is 20.1736
+Learning rate of the next iteration is 0.162913
+Radius of the next iteration is 40.25
+Mean distance of this iteration is 20.3183
+Learning rate of the next iteration is 0.162723
+Radius of the next iteration is 40.2
+Mean distance of this iteration is 20.394
+Learning rate of the next iteration is 0.162533
+Radius of the next iteration is 40.15
+Mean distance of this iteration is 20.8762
+Learning rate of the next iteration is 0.162342
+Radius of the next iteration is 40.1
+Mean distance of this iteration is 21.746
+Learning rate of the next iteration is 0.162152
+Radius of the next iteration is 40.05
+Mean distance of this iteration is 21.107
+Learning rate of the next iteration is 0.161962
+Radius of the next iteration is 40
+Mean distance of this iteration is 20.9766
+Learning rate of the next iteration is 0.161772
+Radius of the next iteration is 39.95
+Mean distance of this iteration is 20.4942
+Learning rate of the next iteration is 0.161582
+Radius of the next iteration is 39.9
+Mean distance of this iteration is 19.8889
+Learning rate of the next iteration is 0.161391
+Radius of the next iteration is 39.85
+Mean distance of this iteration is 20.2512
+Learning rate of the next iteration is 0.161201
+Radius of the next iteration is 39.8
+Mean distance of this iteration is 20.244
+Learning rate of the next iteration is 0.161011
+Radius of the next iteration is 39.75
+Mean distance of this iteration is 19.5178
+Learning rate of the next iteration is 0.160821
+Radius of the next iteration is 39.7
+Mean distance of this iteration is 20.4554
+Learning rate of the next iteration is 0.160631
+Radius of the next iteration is 39.65
+Mean distance of this iteration is 19.7396
+Learning rate of the next iteration is 0.16044
+Radius of the next iteration is 39.6
+Mean distance of this iteration is 19.5792
+Learning rate of the next iteration is 0.16025
+Radius of the next iteration is 39.55
+Mean distance of this iteration is 21.3395
+Learning rate of the next iteration is 0.16006
+Radius of the next iteration is 39.5
+Mean distance of this iteration is 21.0005
+Learning rate of the next iteration is 0.15987
+Radius of the next iteration is 39.45
+Mean distance of this iteration is 20.9844
+Learning rate of the next iteration is 0.15968
+Radius of the next iteration is 39.4
+Mean distance of this iteration is 20.1444
+Learning rate of the next iteration is 0.159489
+Radius of the next iteration is 39.35
+Mean distance of this iteration is 20.059
+Learning rate of the next iteration is 0.159299
+Radius of the next iteration is 39.3
+Mean distance of this iteration is 20.1505
+Learning rate of the next iteration is 0.159109
+Radius of the next iteration is 39.25
+Mean distance of this iteration is 20.1096
+Learning rate of the next iteration is 0.158919
+Radius of the next iteration is 39.2
+Mean distance of this iteration is 20.4016
+Learning rate of the next iteration is 0.158729
+Radius of the next iteration is 39.15
+Mean distance of this iteration is 20.515
+Learning rate of the next iteration is 0.158539
+Radius of the next iteration is 39.1
+Mean distance of this iteration is 19.7824
+Learning rate of the next iteration is 0.158348
+Radius of the next iteration is 39.05
+Mean distance of this iteration is 20.7332
+Learning rate of the next iteration is 0.158158
+Radius of the next iteration is 39
+Mean distance of this iteration is 20.1496
+Learning rate of the next iteration is 0.157968
+Radius of the next iteration is 38.95
+Mean distance of this iteration is 20.009
+Learning rate of the next iteration is 0.157778
+Radius of the next iteration is 38.9
+Mean distance of this iteration is 19.8047
+Learning rate of the next iteration is 0.157588
+Radius of the next iteration is 38.85
+Mean distance of this iteration is 19.731
+Learning rate of the next iteration is 0.157397
+Radius of the next iteration is 38.8
+Mean distance of this iteration is 20.5367
+Learning rate of the next iteration is 0.157207
+Radius of the next iteration is 38.75
+Mean distance of this iteration is 19.3575
+Learning rate of the next iteration is 0.157017
+Radius of the next iteration is 38.7
+Mean distance of this iteration is 19.7462
+Learning rate of the next iteration is 0.156827
+Radius of the next iteration is 38.65
+Mean distance of this iteration is 20.327
+Learning rate of the next iteration is 0.156637
+Radius of the next iteration is 38.6
+Mean distance of this iteration is 19.8945
+Learning rate of the next iteration is 0.156446
+Radius of the next iteration is 38.55
+Mean distance of this iteration is 20.0973
+Learning rate of the next iteration is 0.156256
+Radius of the next iteration is 38.5
+Mean distance of this iteration is 19.8512
+Learning rate of the next iteration is 0.156066
+Radius of the next iteration is 38.45
+Mean distance of this iteration is 20.5736
+Learning rate of the next iteration is 0.155876
+Radius of the next iteration is 38.4
+Mean distance of this iteration is 19.5438
+Learning rate of the next iteration is 0.155686
+Radius of the next iteration is 38.35
+Mean distance of this iteration is 20.075
+Learning rate of the next iteration is 0.155495
+Radius of the next iteration is 38.3
+Mean distance of this iteration is 19.9186
+Learning rate of the next iteration is 0.155305
+Radius of the next iteration is 38.25
+Mean distance of this iteration is 19.7756
+Learning rate of the next iteration is 0.155115
+Radius of the next iteration is 38.2
+Mean distance of this iteration is 20.7635
+Learning rate of the next iteration is 0.154925
+Radius of the next iteration is 38.15
+Mean distance of this iteration is 20.3774
+Learning rate of the next iteration is 0.154735
+Radius of the next iteration is 38.1
+Mean distance of this iteration is 19.6279
+Learning rate of the next iteration is 0.154545
+Radius of the next iteration is 38.05
+Mean distance of this iteration is 20.1429
+Learning rate of the next iteration is 0.154354
+Radius of the next iteration is 38
+Mean distance of this iteration is 19.3344
+Learning rate of the next iteration is 0.154164
+Radius of the next iteration is 37.95
+Mean distance of this iteration is 19.3105
+Learning rate of the next iteration is 0.153974
+Radius of the next iteration is 37.9
+Mean distance of this iteration is 19.6918
+Learning rate of the next iteration is 0.153784
+Radius of the next iteration is 37.85
+Mean distance of this iteration is 20.1029
+Learning rate of the next iteration is 0.153594
+Radius of the next iteration is 37.8
+Mean distance of this iteration is 20.8946
+Learning rate of the next iteration is 0.153403
+Radius of the next iteration is 37.75
+Mean distance of this iteration is 19.7458
+Learning rate of the next iteration is 0.153213
+Radius of the next iteration is 37.7
+Mean distance of this iteration is 19.15
+Learning rate of the next iteration is 0.153023
+Radius of the next iteration is 37.65
+Mean distance of this iteration is 19.1006
+Learning rate of the next iteration is 0.152833
+Radius of the next iteration is 37.6
+Mean distance of this iteration is 19.6746
+Learning rate of the next iteration is 0.152643
+Radius of the next iteration is 37.55
+Mean distance of this iteration is 20.0912
+Learning rate of the next iteration is 0.152452
+Radius of the next iteration is 37.5
+Mean distance of this iteration is 20.1036
+Learning rate of the next iteration is 0.152262
+Radius of the next iteration is 37.45
+Mean distance of this iteration is 20.0005
+Learning rate of the next iteration is 0.152072
+Radius of the next iteration is 37.4
+Mean distance of this iteration is 19.0206
+Learning rate of the next iteration is 0.151882
+Radius of the next iteration is 37.35
+Mean distance of this iteration is 19.2181
+Learning rate of the next iteration is 0.151692
+Radius of the next iteration is 37.3
+Mean distance of this iteration is 19.7466
+Learning rate of the next iteration is 0.151502
+Radius of the next iteration is 37.25
+Mean distance of this iteration is 19.278
+Learning rate of the next iteration is 0.151311
+Radius of the next iteration is 37.2
+Mean distance of this iteration is 19.4441
+Learning rate of the next iteration is 0.151121
+Radius of the next iteration is 37.15
+Mean distance of this iteration is 20.6446
+Learning rate of the next iteration is 0.150931
+Radius of the next iteration is 37.1
+Mean distance of this iteration is 20.332
+Learning rate of the next iteration is 0.150741
+Radius of the next iteration is 37.05
+Mean distance of this iteration is 19.8935
+Learning rate of the next iteration is 0.150551
+Radius of the next iteration is 37
+Mean distance of this iteration is 19.8855
+Learning rate of the next iteration is 0.15036
+Radius of the next iteration is 36.95
+Mean distance of this iteration is 19.055
+Learning rate of the next iteration is 0.15017
+Radius of the next iteration is 36.9
+Mean distance of this iteration is 18.655
+Learning rate of the next iteration is 0.14998
+Radius of the next iteration is 36.85
+Mean distance of this iteration is 18.9503
+Learning rate of the next iteration is 0.14979
+Radius of the next iteration is 36.8
+Mean distance of this iteration is 19.6655
+Learning rate of the next iteration is 0.1496
+Radius of the next iteration is 36.75
+Mean distance of this iteration is 19.8986
+Learning rate of the next iteration is 0.149409
+Radius of the next iteration is 36.7
+Mean distance of this iteration is 19.4302
+Learning rate of the next iteration is 0.149219
+Radius of the next iteration is 36.65
+Mean distance of this iteration is 19.2904
+Learning rate of the next iteration is 0.149029
+Radius of the next iteration is 36.6
+Mean distance of this iteration is 19.4781
+Learning rate of the next iteration is 0.148839
+Radius of the next iteration is 36.55
+Mean distance of this iteration is 20.338
+Learning rate of the next iteration is 0.148649
+Radius of the next iteration is 36.5
+Mean distance of this iteration is 19.4401
+Learning rate of the next iteration is 0.148458
+Radius of the next iteration is 36.45
+Mean distance of this iteration is 19.0329
+Learning rate of the next iteration is 0.148268
+Radius of the next iteration is 36.4
+Mean distance of this iteration is 19.8288
+Learning rate of the next iteration is 0.148078
+Radius of the next iteration is 36.35
+Mean distance of this iteration is 19.6657
+Learning rate of the next iteration is 0.147888
+Radius of the next iteration is 36.3
+Mean distance of this iteration is 19.1198
+Learning rate of the next iteration is 0.147698
+Radius of the next iteration is 36.25
+Mean distance of this iteration is 18.5161
+Learning rate of the next iteration is 0.147508
+Radius of the next iteration is 36.2
+Mean distance of this iteration is 19.3146
+Learning rate of the next iteration is 0.147317
+Radius of the next iteration is 36.15
+Mean distance of this iteration is 18.9506
+Learning rate of the next iteration is 0.147127
+Radius of the next iteration is 36.1
+Mean distance of this iteration is 19.2379
+Learning rate of the next iteration is 0.146937
+Radius of the next iteration is 36.05
+Mean distance of this iteration is 18.7273
+Learning rate of the next iteration is 0.146747
+Radius of the next iteration is 36
+Mean distance of this iteration is 18.4877
+Learning rate of the next iteration is 0.146557
+Radius of the next iteration is 35.95
+Mean distance of this iteration is 18.4602
+Learning rate of the next iteration is 0.146366
+Radius of the next iteration is 35.9
+Mean distance of this iteration is 18.217
+Learning rate of the next iteration is 0.146176
+Radius of the next iteration is 35.85
+Mean distance of this iteration is 19.1027
+Learning rate of the next iteration is 0.145986
+Radius of the next iteration is 35.8
+Mean distance of this iteration is 18.5522
+Learning rate of the next iteration is 0.145796
+Radius of the next iteration is 35.75
+Mean distance of this iteration is 19.0517
+Learning rate of the next iteration is 0.145606
+Radius of the next iteration is 35.7
+Mean distance of this iteration is 18.5873
+Learning rate of the next iteration is 0.145415
+Radius of the next iteration is 35.65
+Mean distance of this iteration is 18.8184
+Learning rate of the next iteration is 0.145225
+Radius of the next iteration is 35.6
+Mean distance of this iteration is 19.221
+Learning rate of the next iteration is 0.145035
+Radius of the next iteration is 35.55
+Mean distance of this iteration is 19.6237
+Learning rate of the next iteration is 0.144845
+Radius of the next iteration is 35.5
+Mean distance of this iteration is 19.2051
+Learning rate of the next iteration is 0.144655
+Radius of the next iteration is 35.45
+Mean distance of this iteration is 18.8111
+Learning rate of the next iteration is 0.144464
+Radius of the next iteration is 35.4
+Mean distance of this iteration is 19.0742
+Learning rate of the next iteration is 0.144274
+Radius of the next iteration is 35.35
+Mean distance of this iteration is 18.7775
+Learning rate of the next iteration is 0.144084
+Radius of the next iteration is 35.3
+Mean distance of this iteration is 18.3193
+Learning rate of the next iteration is 0.143894
+Radius of the next iteration is 35.25
+Mean distance of this iteration is 18.4328
+Learning rate of the next iteration is 0.143704
+Radius of the next iteration is 35.2
+Mean distance of this iteration is 18.6866
+Learning rate of the next iteration is 0.143514
+Radius of the next iteration is 35.15
+Mean distance of this iteration is 19.3119
+Learning rate of the next iteration is 0.143323
+Radius of the next iteration is 35.1
+Mean distance of this iteration is 18.8639
+Learning rate of the next iteration is 0.143133
+Radius of the next iteration is 35.05
+Mean distance of this iteration is 19.5789
+Learning rate of the next iteration is 0.142943
+Radius of the next iteration is 35
+Mean distance of this iteration is 19.0099
+Learning rate of the next iteration is 0.142753
+Radius of the next iteration is 34.95
+Mean distance of this iteration is 18.6664
+Learning rate of the next iteration is 0.142563
+Radius of the next iteration is 34.9
+Mean distance of this iteration is 18.0695
+Learning rate of the next iteration is 0.142372
+Radius of the next iteration is 34.85
+Mean distance of this iteration is 18.7097
+Learning rate of the next iteration is 0.142182
+Radius of the next iteration is 34.8
+Mean distance of this iteration is 18.1701
+Learning rate of the next iteration is 0.141992
+Radius of the next iteration is 34.75
+Mean distance of this iteration is 18.2662
+Learning rate of the next iteration is 0.141802
+Radius of the next iteration is 34.7
+Mean distance of this iteration is 18.4956
+Learning rate of the next iteration is 0.141612
+Radius of the next iteration is 34.65
+Mean distance of this iteration is 18.3609
+Learning rate of the next iteration is 0.141421
+Radius of the next iteration is 34.6
+Mean distance of this iteration is 18.2298
+Learning rate of the next iteration is 0.141231
+Radius of the next iteration is 34.55
+Mean distance of this iteration is 18.6703
+Learning rate of the next iteration is 0.141041
+Radius of the next iteration is 34.5
+Mean distance of this iteration is 18.4144
+Learning rate of the next iteration is 0.140851
+Radius of the next iteration is 34.45
+Mean distance of this iteration is 18.5022
+Learning rate of the next iteration is 0.140661
+Radius of the next iteration is 34.4
+Mean distance of this iteration is 18.7684
+Learning rate of the next iteration is 0.14047
+Radius of the next iteration is 34.35
+Mean distance of this iteration is 18.5108
+Learning rate of the next iteration is 0.14028
+Radius of the next iteration is 34.3
+Mean distance of this iteration is 18.4141
+Learning rate of the next iteration is 0.14009
+Radius of the next iteration is 34.25
+Mean distance of this iteration is 18.492
+Learning rate of the next iteration is 0.1399
+Radius of the next iteration is 34.2
+Mean distance of this iteration is 18.3975
+Learning rate of the next iteration is 0.13971
+Radius of the next iteration is 34.15
+Mean distance of this iteration is 18.4868
+Learning rate of the next iteration is 0.13952
+Radius of the next iteration is 34.1
+Mean distance of this iteration is 18.1793
+Learning rate of the next iteration is 0.139329
+Radius of the next iteration is 34.05
+Mean distance of this iteration is 18.4582
+Learning rate of the next iteration is 0.139139
+Radius of the next iteration is 34
+Mean distance of this iteration is 18.4562
+Learning rate of the next iteration is 0.138949
+Radius of the next iteration is 33.95
+Mean distance of this iteration is 18.2155
+Learning rate of the next iteration is 0.138759
+Radius of the next iteration is 33.9
+Mean distance of this iteration is 18.1404
+Learning rate of the next iteration is 0.138569
+Radius of the next iteration is 33.85
+Mean distance of this iteration is 17.9029
+Learning rate of the next iteration is 0.138378
+Radius of the next iteration is 33.8
+Mean distance of this iteration is 18.2341
+Learning rate of the next iteration is 0.138188
+Radius of the next iteration is 33.75
+Mean distance of this iteration is 18.0544
+Learning rate of the next iteration is 0.137998
+Radius of the next iteration is 33.7
+Mean distance of this iteration is 18.052
+Learning rate of the next iteration is 0.137808
+Radius of the next iteration is 33.65
+Mean distance of this iteration is 18.3609
+Learning rate of the next iteration is 0.137618
+Radius of the next iteration is 33.6
+Mean distance of this iteration is 18.058
+Learning rate of the next iteration is 0.137427
+Radius of the next iteration is 33.55
+Mean distance of this iteration is 18.237
+Learning rate of the next iteration is 0.137237
+Radius of the next iteration is 33.5
+Mean distance of this iteration is 18.1851
+Learning rate of the next iteration is 0.137047
+Radius of the next iteration is 33.45
+Mean distance of this iteration is 17.9454
+Learning rate of the next iteration is 0.136857
+Radius of the next iteration is 33.4
+Mean distance of this iteration is 17.8642
+Learning rate of the next iteration is 0.136667
+Radius of the next iteration is 33.35
+Mean distance of this iteration is 18.8182
+Learning rate of the next iteration is 0.136476
+Radius of the next iteration is 33.3
+Mean distance of this iteration is 18.2788
+Learning rate of the next iteration is 0.136286
+Radius of the next iteration is 33.25
+Mean distance of this iteration is 18.0053
+Learning rate of the next iteration is 0.136096
+Radius of the next iteration is 33.2
+Mean distance of this iteration is 17.7545
+Learning rate of the next iteration is 0.135906
+Radius of the next iteration is 33.15
+Mean distance of this iteration is 17.7208
+Learning rate of the next iteration is 0.135716
+Radius of the next iteration is 33.1
+Mean distance of this iteration is 17.7497
+Learning rate of the next iteration is 0.135526
+Radius of the next iteration is 33.05
+Mean distance of this iteration is 17.7568
+Learning rate of the next iteration is 0.135335
+Radius of the next iteration is 33
+Mean distance of this iteration is 17.8704
+Learning rate of the next iteration is 0.135145
+Radius of the next iteration is 32.95
+Mean distance of this iteration is 17.7519
+Learning rate of the next iteration is 0.134955
+Radius of the next iteration is 32.9
+Mean distance of this iteration is 17.4573
+Learning rate of the next iteration is 0.134765
+Radius of the next iteration is 32.85
+Mean distance of this iteration is 17.0627
+Learning rate of the next iteration is 0.134575
+Radius of the next iteration is 32.8
+Mean distance of this iteration is 16.9663
+Learning rate of the next iteration is 0.134384
+Radius of the next iteration is 32.75
+Mean distance of this iteration is 17.0681
+Learning rate of the next iteration is 0.134194
+Radius of the next iteration is 32.7
+Mean distance of this iteration is 17.2694
+Learning rate of the next iteration is 0.134004
+Radius of the next iteration is 32.65
+Mean distance of this iteration is 17.335
+Learning rate of the next iteration is 0.133814
+Radius of the next iteration is 32.6
+Mean distance of this iteration is 17.1147
+Learning rate of the next iteration is 0.133624
+Radius of the next iteration is 32.55
+Mean distance of this iteration is 17.0458
+Learning rate of the next iteration is 0.133433
+Radius of the next iteration is 32.5
+Mean distance of this iteration is 17.0365
+Learning rate of the next iteration is 0.133243
+Radius of the next iteration is 32.45
+Mean distance of this iteration is 17.3568
+Learning rate of the next iteration is 0.133053
+Radius of the next iteration is 32.4
+Mean distance of this iteration is 16.9658
+Learning rate of the next iteration is 0.132863
+Radius of the next iteration is 32.35
+Mean distance of this iteration is 16.9108
+Learning rate of the next iteration is 0.132673
+Radius of the next iteration is 32.3
+Mean distance of this iteration is 17.0027
+Learning rate of the next iteration is 0.132482
+Radius of the next iteration is 32.25
+Mean distance of this iteration is 17.1289
+Learning rate of the next iteration is 0.132292
+Radius of the next iteration is 32.2
+Mean distance of this iteration is 17.0903
+Learning rate of the next iteration is 0.132102
+Radius of the next iteration is 32.15
+Mean distance of this iteration is 17.3314
+Learning rate of the next iteration is 0.131912
+Radius of the next iteration is 32.1
+Mean distance of this iteration is 17.1368
+Learning rate of the next iteration is 0.131722
+Radius of the next iteration is 32.05
+Mean distance of this iteration is 16.889
+Learning rate of the next iteration is 0.131532
+Radius of the next iteration is 32
+Mean distance of this iteration is 16.6731
+Learning rate of the next iteration is 0.131341
+Radius of the next iteration is 31.95
+Mean distance of this iteration is 16.5019
+Learning rate of the next iteration is 0.131151
+Radius of the next iteration is 31.9
+Mean distance of this iteration is 16.591
+Learning rate of the next iteration is 0.130961
+Radius of the next iteration is 31.85
+Mean distance of this iteration is 16.3703
+Learning rate of the next iteration is 0.130771
+Radius of the next iteration is 31.8
+Mean distance of this iteration is 16.7507
+Learning rate of the next iteration is 0.130581
+Radius of the next iteration is 31.75
+Mean distance of this iteration is 16.7963
+Learning rate of the next iteration is 0.13039
+Radius of the next iteration is 31.7
+Mean distance of this iteration is 16.6594
+Learning rate of the next iteration is 0.1302
+Radius of the next iteration is 31.65
+Mean distance of this iteration is 16.7192
+Learning rate of the next iteration is 0.13001
+Radius of the next iteration is 31.6
+Mean distance of this iteration is 16.3808
+Learning rate of the next iteration is 0.12982
+Radius of the next iteration is 31.55
+Mean distance of this iteration is 16.3625
+Learning rate of the next iteration is 0.12963
+Radius of the next iteration is 31.5
+Mean distance of this iteration is 16.5763
+Learning rate of the next iteration is 0.129439
+Radius of the next iteration is 31.45
+Mean distance of this iteration is 16.4578
+Learning rate of the next iteration is 0.129249
+Radius of the next iteration is 31.4
+Mean distance of this iteration is 16.4649
+Learning rate of the next iteration is 0.129059
+Radius of the next iteration is 31.35
+Mean distance of this iteration is 16.3482
+Learning rate of the next iteration is 0.128869
+Radius of the next iteration is 31.3
+Mean distance of this iteration is 16.4534
+Learning rate of the next iteration is 0.128679
+Radius of the next iteration is 31.25
+Mean distance of this iteration is 16.4762
+Learning rate of the next iteration is 0.128488
+Radius of the next iteration is 31.2
+Mean distance of this iteration is 16.5909
+Learning rate of the next iteration is 0.128298
+Radius of the next iteration is 31.15
+Mean distance of this iteration is 16.6933
+Learning rate of the next iteration is 0.128108
+Radius of the next iteration is 31.1
+Mean distance of this iteration is 16.5576
+Learning rate of the next iteration is 0.127918
+Radius of the next iteration is 31.05
+Mean distance of this iteration is 16.6254
+Learning rate of the next iteration is 0.127728
+Radius of the next iteration is 31
+Mean distance of this iteration is 16.6782
+Learning rate of the next iteration is 0.127538
+Radius of the next iteration is 30.95
+Mean distance of this iteration is 16.5212
+Learning rate of the next iteration is 0.127347
+Radius of the next iteration is 30.9
+Mean distance of this iteration is 16.4309
+Learning rate of the next iteration is 0.127157
+Radius of the next iteration is 30.85
+Mean distance of this iteration is 16.4134
+Learning rate of the next iteration is 0.126967
+Radius of the next iteration is 30.8
+Mean distance of this iteration is 16.5168
+Learning rate of the next iteration is 0.126777
+Radius of the next iteration is 30.75
+Mean distance of this iteration is 16.1502
+Learning rate of the next iteration is 0.126587
+Radius of the next iteration is 30.7
+Mean distance of this iteration is 16.2965
+Learning rate of the next iteration is 0.126396
+Radius of the next iteration is 30.65
+Mean distance of this iteration is 16.2385
+Learning rate of the next iteration is 0.126206
+Radius of the next iteration is 30.6
+Mean distance of this iteration is 16.4708
+Learning rate of the next iteration is 0.126016
+Radius of the next iteration is 30.55
+Mean distance of this iteration is 16.3781
+Learning rate of the next iteration is 0.125826
+Radius of the next iteration is 30.5
+Mean distance of this iteration is 16.4231
+Learning rate of the next iteration is 0.125636
+Radius of the next iteration is 30.45
+Mean distance of this iteration is 16.511
+Learning rate of the next iteration is 0.125445
+Radius of the next iteration is 30.4
+Mean distance of this iteration is 16.5136
+Learning rate of the next iteration is 0.125255
+Radius of the next iteration is 30.35
+Mean distance of this iteration is 16.3423
+Learning rate of the next iteration is 0.125065
+Radius of the next iteration is 30.3
+Mean distance of this iteration is 16.3064
+Learning rate of the next iteration is 0.124875
+Radius of the next iteration is 30.25
+Mean distance of this iteration is 16.3046
+Learning rate of the next iteration is 0.124685
+Radius of the next iteration is 30.2
+Mean distance of this iteration is 16.8703
+Learning rate of the next iteration is 0.124494
+Radius of the next iteration is 30.15
+Mean distance of this iteration is 16.5009
+Learning rate of the next iteration is 0.124304
+Radius of the next iteration is 30.1
+Mean distance of this iteration is 16.3439
+Learning rate of the next iteration is 0.124114
+Radius of the next iteration is 30.05
+Mean distance of this iteration is 16.2736
+Learning rate of the next iteration is 0.123924
+Radius of the next iteration is 30
+Mean distance of this iteration is 16.2408
+Learning rate of the next iteration is 0.123734
+Radius of the next iteration is 29.95
+Mean distance of this iteration is 16.1348
+Learning rate of the next iteration is 0.123544
+Radius of the next iteration is 29.9
+Mean distance of this iteration is 15.8939
+Learning rate of the next iteration is 0.123353
+Radius of the next iteration is 29.85
+Mean distance of this iteration is 16.0171
+Learning rate of the next iteration is 0.123163
+Radius of the next iteration is 29.8
+Mean distance of this iteration is 16.0446
+Learning rate of the next iteration is 0.122973
+Radius of the next iteration is 29.75
+Mean distance of this iteration is 16.2188
+Learning rate of the next iteration is 0.122783
+Radius of the next iteration is 29.7
+Mean distance of this iteration is 16.2778
+Learning rate of the next iteration is 0.122593
+Radius of the next iteration is 29.65
+Mean distance of this iteration is 16.2487
+Learning rate of the next iteration is 0.122402
+Radius of the next iteration is 29.6
+Mean distance of this iteration is 16.3801
+Learning rate of the next iteration is 0.122212
+Radius of the next iteration is 29.55
+Mean distance of this iteration is 16.3222
+Learning rate of the next iteration is 0.122022
+Radius of the next iteration is 29.5
+Mean distance of this iteration is 16.2434
+Learning rate of the next iteration is 0.121832
+Radius of the next iteration is 29.45
+Mean distance of this iteration is 16.2294
+Learning rate of the next iteration is 0.121642
+Radius of the next iteration is 29.4
+Mean distance of this iteration is 16.0978
+Learning rate of the next iteration is 0.121451
+Radius of the next iteration is 29.35
+Mean distance of this iteration is 16.3098
+Learning rate of the next iteration is 0.121261
+Radius of the next iteration is 29.3
+Mean distance of this iteration is 16.4043
+Learning rate of the next iteration is 0.121071
+Radius of the next iteration is 29.25
+Mean distance of this iteration is 16.3254
+Learning rate of the next iteration is 0.120881
+Radius of the next iteration is 29.2
+Mean distance of this iteration is 16.1847
+Learning rate of the next iteration is 0.120691
+Radius of the next iteration is 29.15
+Mean distance of this iteration is 16.2111
+Learning rate of the next iteration is 0.120501
+Radius of the next iteration is 29.1
+Mean distance of this iteration is 16.2853
+Learning rate of the next iteration is 0.12031
+Radius of the next iteration is 29.05
+Mean distance of this iteration is 16.5389
+Learning rate of the next iteration is 0.12012
+Radius of the next iteration is 29
+Mean distance of this iteration is 16.6927
+Learning rate of the next iteration is 0.11993
+Radius of the next iteration is 28.95
+Mean distance of this iteration is 16.1907
+Learning rate of the next iteration is 0.11974
+Radius of the next iteration is 28.9
+Mean distance of this iteration is 16.052
+Learning rate of the next iteration is 0.11955
+Radius of the next iteration is 28.85
+Mean distance of this iteration is 16.0103
+Learning rate of the next iteration is 0.119359
+Radius of the next iteration is 28.8
+Mean distance of this iteration is 15.9552
+Learning rate of the next iteration is 0.119169
+Radius of the next iteration is 28.75
+Mean distance of this iteration is 15.6719
+Learning rate of the next iteration is 0.118979
+Radius of the next iteration is 28.7
+Mean distance of this iteration is 16.1265
+Learning rate of the next iteration is 0.118789
+Radius of the next iteration is 28.65
+Mean distance of this iteration is 15.995
+Learning rate of the next iteration is 0.118599
+Radius of the next iteration is 28.6
+Mean distance of this iteration is 16.0096
+Learning rate of the next iteration is 0.118408
+Radius of the next iteration is 28.55
+Mean distance of this iteration is 16.2101
+Learning rate of the next iteration is 0.118218
+Radius of the next iteration is 28.5
+Mean distance of this iteration is 16.0507
+Learning rate of the next iteration is 0.118028
+Radius of the next iteration is 28.45
+Mean distance of this iteration is 15.9843
+Learning rate of the next iteration is 0.117838
+Radius of the next iteration is 28.4
+Mean distance of this iteration is 15.9665
+Learning rate of the next iteration is 0.117648
+Radius of the next iteration is 28.35
+Mean distance of this iteration is 16.0944
+Learning rate of the next iteration is 0.117457
+Radius of the next iteration is 28.3
+Mean distance of this iteration is 15.9762
+Learning rate of the next iteration is 0.117267
+Radius of the next iteration is 28.25
+Mean distance of this iteration is 16.0945
+Learning rate of the next iteration is 0.117077
+Radius of the next iteration is 28.2
+Mean distance of this iteration is 16.2713
+Learning rate of the next iteration is 0.116887
+Radius of the next iteration is 28.15
+Mean distance of this iteration is 16.0204
+Learning rate of the next iteration is 0.116697
+Radius of the next iteration is 28.1
+Mean distance of this iteration is 16.2365
+Learning rate of the next iteration is 0.116507
+Radius of the next iteration is 28.05
+Mean distance of this iteration is 16.17
+Learning rate of the next iteration is 0.116316
+Radius of the next iteration is 28
+Mean distance of this iteration is 16.0571
+Learning rate of the next iteration is 0.116126
+Radius of the next iteration is 27.95
+Mean distance of this iteration is 15.868
+Learning rate of the next iteration is 0.115936
+Radius of the next iteration is 27.9
+Mean distance of this iteration is 15.7429
+Learning rate of the next iteration is 0.115746
+Radius of the next iteration is 27.85
+Mean distance of this iteration is 15.6011
+Learning rate of the next iteration is 0.115556
+Radius of the next iteration is 27.8
+Mean distance of this iteration is 15.5332
+Learning rate of the next iteration is 0.115365
+Radius of the next iteration is 27.75
+Mean distance of this iteration is 15.4469
+Learning rate of the next iteration is 0.115175
+Radius of the next iteration is 27.7
+Mean distance of this iteration is 15.5973
+Learning rate of the next iteration is 0.114985
+Radius of the next iteration is 27.65
+Mean distance of this iteration is 15.6086
+Learning rate of the next iteration is 0.114795
+Radius of the next iteration is 27.6
+Mean distance of this iteration is 15.5851
+Learning rate of the next iteration is 0.114605
+Radius of the next iteration is 27.55
+Mean distance of this iteration is 15.6055
+Learning rate of the next iteration is 0.114414
+Radius of the next iteration is 27.5
+Mean distance of this iteration is 15.7537
+Learning rate of the next iteration is 0.114224
+Radius of the next iteration is 27.45
+Mean distance of this iteration is 15.7229
+Learning rate of the next iteration is 0.114034
+Radius of the next iteration is 27.4
+Mean distance of this iteration is 15.7829
+Learning rate of the next iteration is 0.113844
+Radius of the next iteration is 27.35
+Mean distance of this iteration is 15.8429
+Learning rate of the next iteration is 0.113654
+Radius of the next iteration is 27.3
+Mean distance of this iteration is 15.6909
+Learning rate of the next iteration is 0.113463
+Radius of the next iteration is 27.25
+Mean distance of this iteration is 15.9174
+Learning rate of the next iteration is 0.113273
+Radius of the next iteration is 27.2
+Mean distance of this iteration is 15.6277
+Learning rate of the next iteration is 0.113083
+Radius of the next iteration is 27.15
+Mean distance of this iteration is 15.6885
+Learning rate of the next iteration is 0.112893
+Radius of the next iteration is 27.1
+Mean distance of this iteration is 15.6718
+Learning rate of the next iteration is 0.112703
+Radius of the next iteration is 27.05
+Mean distance of this iteration is 15.8086
+Learning rate of the next iteration is 0.112513
+Radius of the next iteration is 27
+Mean distance of this iteration is 15.8174
+Learning rate of the next iteration is 0.112322
+Radius of the next iteration is 26.95
+Mean distance of this iteration is 15.6453
+Learning rate of the next iteration is 0.112132
+Radius of the next iteration is 26.9
+Mean distance of this iteration is 15.467
+Learning rate of the next iteration is 0.111942
+Radius of the next iteration is 26.85
+Mean distance of this iteration is 15.367
+Learning rate of the next iteration is 0.111752
+Radius of the next iteration is 26.8
+Mean distance of this iteration is 15.3784
+Learning rate of the next iteration is 0.111562
+Radius of the next iteration is 26.75
+Mean distance of this iteration is 15.4812
+Learning rate of the next iteration is 0.111371
+Radius of the next iteration is 26.7
+Mean distance of this iteration is 15.4286
+Learning rate of the next iteration is 0.111181
+Radius of the next iteration is 26.65
+Mean distance of this iteration is 15.562
+Learning rate of the next iteration is 0.110991
+Radius of the next iteration is 26.6
+Mean distance of this iteration is 15.543
+Learning rate of the next iteration is 0.110801
+Radius of the next iteration is 26.55
+Mean distance of this iteration is 15.4683
+Learning rate of the next iteration is 0.110611
+Radius of the next iteration is 26.5
+Mean distance of this iteration is 15.3742
+Learning rate of the next iteration is 0.11042
+Radius of the next iteration is 26.45
+Mean distance of this iteration is 15.4582
+Learning rate of the next iteration is 0.11023
+Radius of the next iteration is 26.4
+Mean distance of this iteration is 15.3755
+Learning rate of the next iteration is 0.11004
+Radius of the next iteration is 26.35
+Mean distance of this iteration is 15.3043
+Learning rate of the next iteration is 0.10985
+Radius of the next iteration is 26.3
+Mean distance of this iteration is 15.4245
+Learning rate of the next iteration is 0.10966
+Radius of the next iteration is 26.25
+Mean distance of this iteration is 15.677
+Learning rate of the next iteration is 0.109469
+Radius of the next iteration is 26.2
+Mean distance of this iteration is 15.5502
+Learning rate of the next iteration is 0.109279
+Radius of the next iteration is 26.15
+Mean distance of this iteration is 15.3604
+Learning rate of the next iteration is 0.109089
+Radius of the next iteration is 26.1
+Mean distance of this iteration is 15.3869
+Learning rate of the next iteration is 0.108899
+Radius of the next iteration is 26.05
+Mean distance of this iteration is 15.3681
+Learning rate of the next iteration is 0.108709
+Radius of the next iteration is 26
+Mean distance of this iteration is 15.466
+Learning rate of the next iteration is 0.108519
+Radius of the next iteration is 25.95
+Mean distance of this iteration is 15.1391
+Learning rate of the next iteration is 0.108328
+Radius of the next iteration is 25.9
+Mean distance of this iteration is 14.976
+Learning rate of the next iteration is 0.108138
+Radius of the next iteration is 25.85
+Mean distance of this iteration is 14.9211
+Learning rate of the next iteration is 0.107948
+Radius of the next iteration is 25.8
+Mean distance of this iteration is 15.0298
+Learning rate of the next iteration is 0.107758
+Radius of the next iteration is 25.75
+Mean distance of this iteration is 14.9139
+Learning rate of the next iteration is 0.107568
+Radius of the next iteration is 25.7
+Mean distance of this iteration is 14.8561
+Learning rate of the next iteration is 0.107377
+Radius of the next iteration is 25.65
+Mean distance of this iteration is 15.0163
+Learning rate of the next iteration is 0.107187
+Radius of the next iteration is 25.6
+Mean distance of this iteration is 14.9599
+Learning rate of the next iteration is 0.106997
+Radius of the next iteration is 25.55
+Mean distance of this iteration is 14.9419
+Learning rate of the next iteration is 0.106807
+Radius of the next iteration is 25.5
+Mean distance of this iteration is 14.8887
+Learning rate of the next iteration is 0.106617
+Radius of the next iteration is 25.45
+Mean distance of this iteration is 14.9916
+Learning rate of the next iteration is 0.106426
+Radius of the next iteration is 25.4
+Mean distance of this iteration is 14.9778
+Learning rate of the next iteration is 0.106236
+Radius of the next iteration is 25.35
+Mean distance of this iteration is 15.0137
+Learning rate of the next iteration is 0.106046
+Radius of the next iteration is 25.3
+Mean distance of this iteration is 14.9651
+Learning rate of the next iteration is 0.105856
+Radius of the next iteration is 25.25
+Mean distance of this iteration is 15.0983
+Learning rate of the next iteration is 0.105666
+Radius of the next iteration is 25.2
+Mean distance of this iteration is 15.1702
+Learning rate of the next iteration is 0.105475
+Radius of the next iteration is 25.15
+Mean distance of this iteration is 15.0762
+Learning rate of the next iteration is 0.105285
+Radius of the next iteration is 25.1
+Mean distance of this iteration is 15.126
+Learning rate of the next iteration is 0.105095
+Radius of the next iteration is 25.05
+Mean distance of this iteration is 15.0423
+Learning rate of the next iteration is 0.104905
+Radius of the next iteration is 25
+Mean distance of this iteration is 14.985
+Learning rate of the next iteration is 0.104715
+Radius of the next iteration is 24.95
+Mean distance of this iteration is 14.9142
+Learning rate of the next iteration is 0.104525
+Radius of the next iteration is 24.9
+Mean distance of this iteration is 14.7165
+Learning rate of the next iteration is 0.104334
+Radius of the next iteration is 24.85
+Mean distance of this iteration is 14.621
+Learning rate of the next iteration is 0.104144
+Radius of the next iteration is 24.8
+Mean distance of this iteration is 14.7046
+Learning rate of the next iteration is 0.103954
+Radius of the next iteration is 24.75
+Mean distance of this iteration is 14.5864
+Learning rate of the next iteration is 0.103764
+Radius of the next iteration is 24.7
+Mean distance of this iteration is 14.5156
+Learning rate of the next iteration is 0.103574
+Radius of the next iteration is 24.65
+Mean distance of this iteration is 14.577
+Learning rate of the next iteration is 0.103383
+Radius of the next iteration is 24.6
+Mean distance of this iteration is 14.5065
+Learning rate of the next iteration is 0.103193
+Radius of the next iteration is 24.55
+Mean distance of this iteration is 14.6312
+Learning rate of the next iteration is 0.103003
+Radius of the next iteration is 24.5
+Mean distance of this iteration is 14.4959
+Learning rate of the next iteration is 0.102813
+Radius of the next iteration is 24.45
+Mean distance of this iteration is 14.5447
+Learning rate of the next iteration is 0.102623
+Radius of the next iteration is 24.4
+Mean distance of this iteration is 14.5552
+Learning rate of the next iteration is 0.102432
+Radius of the next iteration is 24.35
+Mean distance of this iteration is 14.5803
+Learning rate of the next iteration is 0.102242
+Radius of the next iteration is 24.3
+Mean distance of this iteration is 14.6397
+Learning rate of the next iteration is 0.102052
+Radius of the next iteration is 24.25
+Mean distance of this iteration is 14.5907
+Learning rate of the next iteration is 0.101862
+Radius of the next iteration is 24.2
+Mean distance of this iteration is 14.6724
+Learning rate of the next iteration is 0.101672
+Radius of the next iteration is 24.15
+Mean distance of this iteration is 14.5761
+Learning rate of the next iteration is 0.101481
+Radius of the next iteration is 24.1
+Mean distance of this iteration is 14.653
+Learning rate of the next iteration is 0.101291
+Radius of the next iteration is 24.05
+Mean distance of this iteration is 14.6472
+Learning rate of the next iteration is 0.101101
+Radius of the next iteration is 24
+Mean distance of this iteration is 14.6426
+Learning rate of the next iteration is 0.100911
+Radius of the next iteration is 23.95
+Mean distance of this iteration is 14.5967
+Learning rate of the next iteration is 0.100721
+Radius of the next iteration is 23.9
+Mean distance of this iteration is 14.3551
+Learning rate of the next iteration is 0.100531
+Radius of the next iteration is 23.85
+Mean distance of this iteration is 14.1834
+Learning rate of the next iteration is 0.10034
+Radius of the next iteration is 23.8
+Mean distance of this iteration is 14.1574
+Learning rate of the next iteration is 0.10015
+Radius of the next iteration is 23.75
+Mean distance of this iteration is 14.2479
+Learning rate of the next iteration is 0.09996
+Radius of the next iteration is 23.7
+Mean distance of this iteration is 14.1774
+Learning rate of the next iteration is 0.0997698
+Radius of the next iteration is 23.65
+Mean distance of this iteration is 14.1979
+Learning rate of the next iteration is 0.0995796
+Radius of the next iteration is 23.6
+Mean distance of this iteration is 14.0752
+Learning rate of the next iteration is 0.0993894
+Radius of the next iteration is 23.55
+Mean distance of this iteration is 14.1497
+Learning rate of the next iteration is 0.0991992
+Radius of the next iteration is 23.5
+Mean distance of this iteration is 14.1474
+Learning rate of the next iteration is 0.099009
+Radius of the next iteration is 23.45
+Mean distance of this iteration is 14.2217
+Learning rate of the next iteration is 0.0988188
+Radius of the next iteration is 23.4
+Mean distance of this iteration is 14.203
+Learning rate of the next iteration is 0.0986286
+Radius of the next iteration is 23.35
+Mean distance of this iteration is 14.1906
+Learning rate of the next iteration is 0.0984384
+Radius of the next iteration is 23.3
+Mean distance of this iteration is 14.1751
+Learning rate of the next iteration is 0.0982482
+Radius of the next iteration is 23.25
+Mean distance of this iteration is 14.0974
+Learning rate of the next iteration is 0.0980581
+Radius of the next iteration is 23.2
+Mean distance of this iteration is 14.1619
+Learning rate of the next iteration is 0.0978679
+Radius of the next iteration is 23.15
+Mean distance of this iteration is 14.1415
+Learning rate of the next iteration is 0.0976777
+Radius of the next iteration is 23.1
+Mean distance of this iteration is 14.0806
+Learning rate of the next iteration is 0.0974875
+Radius of the next iteration is 23.05
+Mean distance of this iteration is 14.1245
+Learning rate of the next iteration is 0.0972973
+Radius of the next iteration is 23
+Mean distance of this iteration is 14.1487
+Learning rate of the next iteration is 0.0971071
+Radius of the next iteration is 22.95
+Mean distance of this iteration is 14.0706
+Learning rate of the next iteration is 0.0969169
+Radius of the next iteration is 22.9
+Mean distance of this iteration is 13.8649
+Learning rate of the next iteration is 0.0967267
+Radius of the next iteration is 22.85
+Mean distance of this iteration is 13.8985
+Learning rate of the next iteration is 0.0965365
+Radius of the next iteration is 22.8
+Mean distance of this iteration is 13.843
+Learning rate of the next iteration is 0.0963463
+Radius of the next iteration is 22.75
+Mean distance of this iteration is 13.864
+Learning rate of the next iteration is 0.0961562
+Radius of the next iteration is 22.7
+Mean distance of this iteration is 13.8174
+Learning rate of the next iteration is 0.095966
+Radius of the next iteration is 22.65
+Mean distance of this iteration is 13.8507
+Learning rate of the next iteration is 0.0957758
+Radius of the next iteration is 22.6
+Mean distance of this iteration is 13.8144
+Learning rate of the next iteration is 0.0955856
+Radius of the next iteration is 22.55
+Mean distance of this iteration is 13.8257
+Learning rate of the next iteration is 0.0953954
+Radius of the next iteration is 22.5
+Mean distance of this iteration is 13.7948
+Learning rate of the next iteration is 0.0952052
+Radius of the next iteration is 22.45
+Mean distance of this iteration is 13.7357
+Learning rate of the next iteration is 0.095015
+Radius of the next iteration is 22.4
+Mean distance of this iteration is 13.8177
+Learning rate of the next iteration is 0.0948248
+Radius of the next iteration is 22.35
+Mean distance of this iteration is 13.7825
+Learning rate of the next iteration is 0.0946346
+Radius of the next iteration is 22.3
+Mean distance of this iteration is 13.7482
+Learning rate of the next iteration is 0.0944444
+Radius of the next iteration is 22.25
+Mean distance of this iteration is 13.7425
+Learning rate of the next iteration is 0.0942543
+Radius of the next iteration is 22.2
+Mean distance of this iteration is 13.7924
+Learning rate of the next iteration is 0.0940641
+Radius of the next iteration is 22.15
+Mean distance of this iteration is 13.7557
+Learning rate of the next iteration is 0.0938739
+Radius of the next iteration is 22.1
+Mean distance of this iteration is 13.7705
+Learning rate of the next iteration is 0.0936837
+Radius of the next iteration is 22.05
+Mean distance of this iteration is 13.7543
+Learning rate of the next iteration is 0.0934935
+Radius of the next iteration is 22
+Mean distance of this iteration is 13.812
+Learning rate of the next iteration is 0.0933033
+Radius of the next iteration is 21.95
+Mean distance of this iteration is 13.6882
+Learning rate of the next iteration is 0.0931131
+Radius of the next iteration is 21.9
+Mean distance of this iteration is 13.5671
+Learning rate of the next iteration is 0.0929229
+Radius of the next iteration is 21.85
+Mean distance of this iteration is 13.5119
+Learning rate of the next iteration is 0.0927327
+Radius of the next iteration is 21.8
+Mean distance of this iteration is 13.4494
+Learning rate of the next iteration is 0.0925425
+Radius of the next iteration is 21.75
+Mean distance of this iteration is 13.5206
+Learning rate of the next iteration is 0.0923524
+Radius of the next iteration is 21.7
+Mean distance of this iteration is 13.5294
+Learning rate of the next iteration is 0.0921622
+Radius of the next iteration is 21.65
+Mean distance of this iteration is 13.4741
+Learning rate of the next iteration is 0.091972
+Radius of the next iteration is 21.6
+Mean distance of this iteration is 13.5445
+Learning rate of the next iteration is 0.0917818
+Radius of the next iteration is 21.55
+Mean distance of this iteration is 13.4534
+Learning rate of the next iteration is 0.0915916
+Radius of the next iteration is 21.5
+Mean distance of this iteration is 13.5243
+Learning rate of the next iteration is 0.0914014
+Radius of the next iteration is 21.45
+Mean distance of this iteration is 13.4767
+Learning rate of the next iteration is 0.0912112
+Radius of the next iteration is 21.4
+Mean distance of this iteration is 13.5093
+Learning rate of the next iteration is 0.091021
+Radius of the next iteration is 21.35
+Mean distance of this iteration is 13.4897
+Learning rate of the next iteration is 0.0908308
+Radius of the next iteration is 21.3
+Mean distance of this iteration is 13.5201
+Learning rate of the next iteration is 0.0906406
+Radius of the next iteration is 21.25
+Mean distance of this iteration is 13.4681
+Learning rate of the next iteration is 0.0904505
+Radius of the next iteration is 21.2
+Mean distance of this iteration is 13.5358
+Learning rate of the next iteration is 0.0902603
+Radius of the next iteration is 21.15
+Mean distance of this iteration is 13.5103
+Learning rate of the next iteration is 0.0900701
+Radius of the next iteration is 21.1
+Mean distance of this iteration is 13.5786
+Learning rate of the next iteration is 0.0898799
+Radius of the next iteration is 21.05
+Mean distance of this iteration is 13.466
+Learning rate of the next iteration is 0.0896897
+Radius of the next iteration is 21
+Mean distance of this iteration is 13.4049
+Learning rate of the next iteration is 0.0894995
+Radius of the next iteration is 20.95
+Mean distance of this iteration is 13.3771
+Learning rate of the next iteration is 0.0893093
+Radius of the next iteration is 20.9
+Mean distance of this iteration is 13.3214
+Learning rate of the next iteration is 0.0891191
+Radius of the next iteration is 20.85
+Mean distance of this iteration is 13.3321
+Learning rate of the next iteration is 0.0889289
+Radius of the next iteration is 20.8
+Mean distance of this iteration is 13.3038
+Learning rate of the next iteration is 0.0887387
+Radius of the next iteration is 20.75
+Mean distance of this iteration is 13.2291
+Learning rate of the next iteration is 0.0885485
+Radius of the next iteration is 20.7
+Mean distance of this iteration is 13.204
+Learning rate of the next iteration is 0.0883584
+Radius of the next iteration is 20.65
+Mean distance of this iteration is 13.1899
+Learning rate of the next iteration is 0.0881682
+Radius of the next iteration is 20.6
+Mean distance of this iteration is 13.1388
+Learning rate of the next iteration is 0.087978
+Radius of the next iteration is 20.55
+Mean distance of this iteration is 13.1716
+Learning rate of the next iteration is 0.0877878
+Radius of the next iteration is 20.5
+Mean distance of this iteration is 13.1543
+Learning rate of the next iteration is 0.0875976
+Radius of the next iteration is 20.45
+Mean distance of this iteration is 13.2255
+Learning rate of the next iteration is 0.0874074
+Radius of the next iteration is 20.4
+Mean distance of this iteration is 13.2196
+Learning rate of the next iteration is 0.0872172
+Radius of the next iteration is 20.35
+Mean distance of this iteration is 13.213
+Learning rate of the next iteration is 0.087027
+Radius of the next iteration is 20.3
+Mean distance of this iteration is 13.2292
+Learning rate of the next iteration is 0.0868368
+Radius of the next iteration is 20.25
+Mean distance of this iteration is 13.1625
+Learning rate of the next iteration is 0.0866466
+Radius of the next iteration is 20.2
+Mean distance of this iteration is 13.1555
+Learning rate of the next iteration is 0.0864565
+Radius of the next iteration is 20.15
+Mean distance of this iteration is 13.1498
+Learning rate of the next iteration is 0.0862663
+Radius of the next iteration is 20.1
+Mean distance of this iteration is 13.1675
+Learning rate of the next iteration is 0.0860761
+Radius of the next iteration is 20.05
+Mean distance of this iteration is 13.2162
+Learning rate of the next iteration is 0.0858859
+Radius of the next iteration is 20
+Mean distance of this iteration is 13.1425
+Learning rate of the next iteration is 0.0856957
+Radius of the next iteration is 19.95
+Mean distance of this iteration is 13.0864
+Learning rate of the next iteration is 0.0855055
+Radius of the next iteration is 19.9
+Mean distance of this iteration is 12.9572
+Learning rate of the next iteration is 0.0853153
+Radius of the next iteration is 19.85
+Mean distance of this iteration is 12.9302
+Learning rate of the next iteration is 0.0851251
+Radius of the next iteration is 19.8
+Mean distance of this iteration is 12.9558
+Learning rate of the next iteration is 0.0849349
+Radius of the next iteration is 19.75
+Mean distance of this iteration is 12.9052
+Learning rate of the next iteration is 0.0847447
+Radius of the next iteration is 19.7
+Mean distance of this iteration is 12.8822
+Learning rate of the next iteration is 0.0845546
+Radius of the next iteration is 19.65
+Mean distance of this iteration is 12.8907
+Learning rate of the next iteration is 0.0843644
+Radius of the next iteration is 19.6
+Mean distance of this iteration is 12.9114
+Learning rate of the next iteration is 0.0841742
+Radius of the next iteration is 19.55
+Mean distance of this iteration is 12.86
+Learning rate of the next iteration is 0.083984
+Radius of the next iteration is 19.5
+Mean distance of this iteration is 12.8363
+Learning rate of the next iteration is 0.0837938
+Radius of the next iteration is 19.45
+Mean distance of this iteration is 12.8686
+Learning rate of the next iteration is 0.0836036
+Radius of the next iteration is 19.4
+Mean distance of this iteration is 12.9322
+Learning rate of the next iteration is 0.0834134
+Radius of the next iteration is 19.35
+Mean distance of this iteration is 12.8656
+Learning rate of the next iteration is 0.0832232
+Radius of the next iteration is 19.3
+Mean distance of this iteration is 12.858
+Learning rate of the next iteration is 0.083033
+Radius of the next iteration is 19.25
+Mean distance of this iteration is 12.8822
+Learning rate of the next iteration is 0.0828428
+Radius of the next iteration is 19.2
+Mean distance of this iteration is 12.8935
+Learning rate of the next iteration is 0.0826527
+Radius of the next iteration is 19.15
+Mean distance of this iteration is 12.8939
+Learning rate of the next iteration is 0.0824625
+Radius of the next iteration is 19.1
+Mean distance of this iteration is 12.9182
+Learning rate of the next iteration is 0.0822723
+Radius of the next iteration is 19.05
+Mean distance of this iteration is 12.892
+Learning rate of the next iteration is 0.0820821
+Radius of the next iteration is 19
+Mean distance of this iteration is 12.8762
+Learning rate of the next iteration is 0.0818919
+Radius of the next iteration is 18.95
+Mean distance of this iteration is 12.8358
+Learning rate of the next iteration is 0.0817017
+Radius of the next iteration is 18.9
+Mean distance of this iteration is 12.7649
+Learning rate of the next iteration is 0.0815115
+Radius of the next iteration is 18.85
+Mean distance of this iteration is 12.634
+Learning rate of the next iteration is 0.0813213
+Radius of the next iteration is 18.8
+Mean distance of this iteration is 12.5183
+Learning rate of the next iteration is 0.0811311
+Radius of the next iteration is 18.75
+Mean distance of this iteration is 12.3969
+Learning rate of the next iteration is 0.0809409
+Radius of the next iteration is 18.7
+Mean distance of this iteration is 12.3388
+Learning rate of the next iteration is 0.0807508
+Radius of the next iteration is 18.65
+Mean distance of this iteration is 12.2196
+Learning rate of the next iteration is 0.0805606
+Radius of the next iteration is 18.6
+Mean distance of this iteration is 12.1547
+Learning rate of the next iteration is 0.0803704
+Radius of the next iteration is 18.55
+Mean distance of this iteration is 12.1101
+Learning rate of the next iteration is 0.0801802
+Radius of the next iteration is 18.5
+Mean distance of this iteration is 12.1002
+Learning rate of the next iteration is 0.07999
+Radius of the next iteration is 18.45
+Mean distance of this iteration is 12.0452
+Learning rate of the next iteration is 0.0797998
+Radius of the next iteration is 18.4
+Mean distance of this iteration is 11.9607
+Learning rate of the next iteration is 0.0796096
+Radius of the next iteration is 18.35
+Mean distance of this iteration is 11.9829
+Learning rate of the next iteration is 0.0794194
+Radius of the next iteration is 18.3
+Mean distance of this iteration is 11.9625
+Learning rate of the next iteration is 0.0792292
+Radius of the next iteration is 18.25
+Mean distance of this iteration is 11.9512
+Learning rate of the next iteration is 0.079039
+Radius of the next iteration is 18.2
+Mean distance of this iteration is 11.9091
+Learning rate of the next iteration is 0.0788488
+Radius of the next iteration is 18.15
+Mean distance of this iteration is 11.8722
+Learning rate of the next iteration is 0.0786587
+Radius of the next iteration is 18.1
+Mean distance of this iteration is 11.8802
+Learning rate of the next iteration is 0.0784685
+Radius of the next iteration is 18.05
+Mean distance of this iteration is 11.8413
+Learning rate of the next iteration is 0.0782783
+Radius of the next iteration is 18
+Mean distance of this iteration is 11.8411
+Learning rate of the next iteration is 0.0780881
+Radius of the next iteration is 17.95
+Mean distance of this iteration is 11.7583
+Learning rate of the next iteration is 0.0778979
+Radius of the next iteration is 17.9
+Mean distance of this iteration is 11.6611
+Learning rate of the next iteration is 0.0777077
+Radius of the next iteration is 17.85
+Mean distance of this iteration is 11.5714
+Learning rate of the next iteration is 0.0775175
+Radius of the next iteration is 17.8
+Mean distance of this iteration is 11.5307
+Learning rate of the next iteration is 0.0773273
+Radius of the next iteration is 17.75
+Mean distance of this iteration is 11.4588
+Learning rate of the next iteration is 0.0771371
+Radius of the next iteration is 17.7
+Mean distance of this iteration is 11.4054
+Learning rate of the next iteration is 0.0769469
+Radius of the next iteration is 17.65
+Mean distance of this iteration is 11.369
+Learning rate of the next iteration is 0.0767568
+Radius of the next iteration is 17.6
+Mean distance of this iteration is 11.3925
+Learning rate of the next iteration is 0.0765666
+Radius of the next iteration is 17.55
+Mean distance of this iteration is 11.3678
+Learning rate of the next iteration is 0.0763764
+Radius of the next iteration is 17.5
+Mean distance of this iteration is 11.3387
+Learning rate of the next iteration is 0.0761862
+Radius of the next iteration is 17.45
+Mean distance of this iteration is 11.3228
+Learning rate of the next iteration is 0.075996
+Radius of the next iteration is 17.4
+Mean distance of this iteration is 11.3177
+Learning rate of the next iteration is 0.0758058
+Radius of the next iteration is 17.35
+Mean distance of this iteration is 11.3088
+Learning rate of the next iteration is 0.0756156
+Radius of the next iteration is 17.3
+Mean distance of this iteration is 11.3122
+Learning rate of the next iteration is 0.0754254
+Radius of the next iteration is 17.25
+Mean distance of this iteration is 11.3132
+Learning rate of the next iteration is 0.0752352
+Radius of the next iteration is 17.2
+Mean distance of this iteration is 11.2899
+Learning rate of the next iteration is 0.075045
+Radius of the next iteration is 17.15
+Mean distance of this iteration is 11.2897
+Learning rate of the next iteration is 0.0748549
+Radius of the next iteration is 17.1
+Mean distance of this iteration is 11.2651
+Learning rate of the next iteration is 0.0746647
+Radius of the next iteration is 17.05
+Mean distance of this iteration is 11.2838
+Learning rate of the next iteration is 0.0744745
+Radius of the next iteration is 17
+Mean distance of this iteration is 11.2875
+Learning rate of the next iteration is 0.0742843
+Radius of the next iteration is 16.95
+Mean distance of this iteration is 11.2279
+Learning rate of the next iteration is 0.0740941
+Radius of the next iteration is 16.9
+Mean distance of this iteration is 11.1673
+Learning rate of the next iteration is 0.0739039
+Radius of the next iteration is 16.85
+Mean distance of this iteration is 11.1193
+Learning rate of the next iteration is 0.0737137
+Radius of the next iteration is 16.8
+Mean distance of this iteration is 11.0878
+Learning rate of the next iteration is 0.0735235
+Radius of the next iteration is 16.75
+Mean distance of this iteration is 11.0478
+Learning rate of the next iteration is 0.0733333
+Radius of the next iteration is 16.7
+Mean distance of this iteration is 11.0236
+Learning rate of the next iteration is 0.0731431
+Radius of the next iteration is 16.65
+Mean distance of this iteration is 10.9648
+Learning rate of the next iteration is 0.072953
+Radius of the next iteration is 16.6
+Mean distance of this iteration is 10.9195
+Learning rate of the next iteration is 0.0727628
+Radius of the next iteration is 16.55
+Mean distance of this iteration is 10.8754
+Learning rate of the next iteration is 0.0725726
+Radius of the next iteration is 16.5
+Mean distance of this iteration is 10.8769
+Learning rate of the next iteration is 0.0723824
+Radius of the next iteration is 16.45
+Mean distance of this iteration is 10.8077
+Learning rate of the next iteration is 0.0721922
+Radius of the next iteration is 16.4
+Mean distance of this iteration is 10.7884
+Learning rate of the next iteration is 0.072002
+Radius of the next iteration is 16.35
+Mean distance of this iteration is 10.7001
+Learning rate of the next iteration is 0.0718118
+Radius of the next iteration is 16.3
+Mean distance of this iteration is 10.7405
+Learning rate of the next iteration is 0.0716216
+Radius of the next iteration is 16.25
+Mean distance of this iteration is 10.6759
+Learning rate of the next iteration is 0.0714314
+Radius of the next iteration is 16.2
+Mean distance of this iteration is 10.6629
+Learning rate of the next iteration is 0.0712412
+Radius of the next iteration is 16.15
+Mean distance of this iteration is 10.6162
+Learning rate of the next iteration is 0.0710511
+Radius of the next iteration is 16.1
+Mean distance of this iteration is 10.6111
+Learning rate of the next iteration is 0.0708609
+Radius of the next iteration is 16.05
+Mean distance of this iteration is 10.5957
+Learning rate of the next iteration is 0.0706707
+Radius of the next iteration is 16
+Mean distance of this iteration is 10.5655
+Learning rate of the next iteration is 0.0704805
+Radius of the next iteration is 15.95
+Mean distance of this iteration is 10.4866
+Learning rate of the next iteration is 0.0702903
+Radius of the next iteration is 15.9
+Mean distance of this iteration is 10.3943
+Learning rate of the next iteration is 0.0701001
+Radius of the next iteration is 15.85
+Mean distance of this iteration is 10.304
+Learning rate of the next iteration is 0.0699099
+Radius of the next iteration is 15.8
+Mean distance of this iteration is 10.2546
+Learning rate of the next iteration is 0.0697197
+Radius of the next iteration is 15.75
+Mean distance of this iteration is 10.1693
+Learning rate of the next iteration is 0.0695295
+Radius of the next iteration is 15.7
+Mean distance of this iteration is 10.141
+Learning rate of the next iteration is 0.0693393
+Radius of the next iteration is 15.65
+Mean distance of this iteration is 10.1039
+Learning rate of the next iteration is 0.0691491
+Radius of the next iteration is 15.6
+Mean distance of this iteration is 10.0853
+Learning rate of the next iteration is 0.068959
+Radius of the next iteration is 15.55
+Mean distance of this iteration is 10.0649
+Learning rate of the next iteration is 0.0687688
+Radius of the next iteration is 15.5
+Mean distance of this iteration is 10.0449
+Learning rate of the next iteration is 0.0685786
+Radius of the next iteration is 15.45
+Mean distance of this iteration is 10.0051
+Learning rate of the next iteration is 0.0683884
+Radius of the next iteration is 15.4
+Mean distance of this iteration is 9.97548
+Learning rate of the next iteration is 0.0681982
+Radius of the next iteration is 15.35
+Mean distance of this iteration is 9.9663
+Learning rate of the next iteration is 0.068008
+Radius of the next iteration is 15.3
+Mean distance of this iteration is 9.92302
+Learning rate of the next iteration is 0.0678178
+Radius of the next iteration is 15.25
+Mean distance of this iteration is 9.95301
+Learning rate of the next iteration is 0.0676276
+Radius of the next iteration is 15.2
+Mean distance of this iteration is 9.91162
+Learning rate of the next iteration is 0.0674374
+Radius of the next iteration is 15.15
+Mean distance of this iteration is 9.91683
+Learning rate of the next iteration is 0.0672472
+Radius of the next iteration is 15.1
+Mean distance of this iteration is 9.92887
+Learning rate of the next iteration is 0.0670571
+Radius of the next iteration is 15.05
+Mean distance of this iteration is 9.88127
+Learning rate of the next iteration is 0.0668669
+Radius of the next iteration is 15
+Mean distance of this iteration is 9.87694
+Learning rate of the next iteration is 0.0666767
+Radius of the next iteration is 14.95
+Mean distance of this iteration is 9.82387
+Learning rate of the next iteration is 0.0664865
+Radius of the next iteration is 14.9
+Mean distance of this iteration is 9.71493
+Learning rate of the next iteration is 0.0662963
+Radius of the next iteration is 14.85
+Mean distance of this iteration is 9.64485
+Learning rate of the next iteration is 0.0661061
+Radius of the next iteration is 14.8
+Mean distance of this iteration is 9.5538
+Learning rate of the next iteration is 0.0659159
+Radius of the next iteration is 14.75
+Mean distance of this iteration is 9.45074
+Learning rate of the next iteration is 0.0657257
+Radius of the next iteration is 14.7
+Mean distance of this iteration is 9.42404
+Learning rate of the next iteration is 0.0655355
+Radius of the next iteration is 14.65
+Mean distance of this iteration is 9.35477
+Learning rate of the next iteration is 0.0653453
+Radius of the next iteration is 14.6
+Mean distance of this iteration is 9.32587
+Learning rate of the next iteration is 0.0651552
+Radius of the next iteration is 14.55
+Mean distance of this iteration is 9.26232
+Learning rate of the next iteration is 0.064965
+Radius of the next iteration is 14.5
+Mean distance of this iteration is 9.20743
+Learning rate of the next iteration is 0.0647748
+Radius of the next iteration is 14.45
+Mean distance of this iteration is 9.15929
+Learning rate of the next iteration is 0.0645846
+Radius of the next iteration is 14.4
+Mean distance of this iteration is 9.10936
+Learning rate of the next iteration is 0.0643944
+Radius of the next iteration is 14.35
+Mean distance of this iteration is 9.09521
+Learning rate of the next iteration is 0.0642042
+Radius of the next iteration is 14.3
+Mean distance of this iteration is 9.05018
+Learning rate of the next iteration is 0.064014
+Radius of the next iteration is 14.25
+Mean distance of this iteration is 9.02248
+Learning rate of the next iteration is 0.0638238
+Radius of the next iteration is 14.2
+Mean distance of this iteration is 8.99818
+Learning rate of the next iteration is 0.0636336
+Radius of the next iteration is 14.15
+Mean distance of this iteration is 8.96571
+Learning rate of the next iteration is 0.0634434
+Radius of the next iteration is 14.1
+Mean distance of this iteration is 8.96232
+Learning rate of the next iteration is 0.0632533
+Radius of the next iteration is 14.05
+Mean distance of this iteration is 8.95035
+Learning rate of the next iteration is 0.0630631
+Radius of the next iteration is 14
+Mean distance of this iteration is 8.93674
+Learning rate of the next iteration is 0.0628729
+Radius of the next iteration is 13.95
+Mean distance of this iteration is 8.87055
+Learning rate of the next iteration is 0.0626827
+Radius of the next iteration is 13.9
+Mean distance of this iteration is 8.80587
+Learning rate of the next iteration is 0.0624925
+Radius of the next iteration is 13.85
+Mean distance of this iteration is 8.73558
+Learning rate of the next iteration is 0.0623023
+Radius of the next iteration is 13.8
+Mean distance of this iteration is 8.67721
+Learning rate of the next iteration is 0.0621121
+Radius of the next iteration is 13.75
+Mean distance of this iteration is 8.61094
+Learning rate of the next iteration is 0.0619219
+Radius of the next iteration is 13.7
+Mean distance of this iteration is 8.56579
+Learning rate of the next iteration is 0.0617317
+Radius of the next iteration is 13.65
+Mean distance of this iteration is 8.53029
+Learning rate of the next iteration is 0.0615415
+Radius of the next iteration is 13.6
+Mean distance of this iteration is 8.4861
+Learning rate of the next iteration is 0.0613514
+Radius of the next iteration is 13.55
+Mean distance of this iteration is 8.45536
+Learning rate of the next iteration is 0.0611612
+Radius of the next iteration is 13.5
+Mean distance of this iteration is 8.42548
+Learning rate of the next iteration is 0.060971
+Radius of the next iteration is 13.45
+Mean distance of this iteration is 8.3845
+Learning rate of the next iteration is 0.0607808
+Radius of the next iteration is 13.4
+Mean distance of this iteration is 8.35782
+Learning rate of the next iteration is 0.0605906
+Radius of the next iteration is 13.35
+Mean distance of this iteration is 8.32071
+Learning rate of the next iteration is 0.0604004
+Radius of the next iteration is 13.3
+Mean distance of this iteration is 8.29655
+Learning rate of the next iteration is 0.0602102
+Radius of the next iteration is 13.25
+Mean distance of this iteration is 8.26519
+Learning rate of the next iteration is 0.06002
+Radius of the next iteration is 13.2
+Mean distance of this iteration is 8.21938
+Learning rate of the next iteration is 0.0598298
+Radius of the next iteration is 13.15
+Mean distance of this iteration is 8.20831
+Learning rate of the next iteration is 0.0596396
+Radius of the next iteration is 13.1
+Mean distance of this iteration is 8.17835
+Learning rate of the next iteration is 0.0594495
+Radius of the next iteration is 13.05
+Mean distance of this iteration is 8.15937
+Learning rate of the next iteration is 0.0592593
+Radius of the next iteration is 13
+Mean distance of this iteration is 8.17082
+Learning rate of the next iteration is 0.0590691
+Radius of the next iteration is 12.95
+Mean distance of this iteration is 8.09788
+Learning rate of the next iteration is 0.0588789
+Radius of the next iteration is 12.9
+Mean distance of this iteration is 8.04511
+Learning rate of the next iteration is 0.0586887
+Radius of the next iteration is 12.85
+Mean distance of this iteration is 7.99185
+Learning rate of the next iteration is 0.0584985
+Radius of the next iteration is 12.8
+Mean distance of this iteration is 7.90523
+Learning rate of the next iteration is 0.0583083
+Radius of the next iteration is 12.75
+Mean distance of this iteration is 7.86252
+Learning rate of the next iteration is 0.0581181
+Radius of the next iteration is 12.7
+Mean distance of this iteration is 7.77512
+Learning rate of the next iteration is 0.0579279
+Radius of the next iteration is 12.65
+Mean distance of this iteration is 7.72363
+Learning rate of the next iteration is 0.0577377
+Radius of the next iteration is 12.6
+Mean distance of this iteration is 7.65629
+Learning rate of the next iteration is 0.0575475
+Radius of the next iteration is 12.55
+Mean distance of this iteration is 7.59038
+Learning rate of the next iteration is 0.0573574
+Radius of the next iteration is 12.5
+Mean distance of this iteration is 7.5334
+Learning rate of the next iteration is 0.0571672
+Radius of the next iteration is 12.45
+Mean distance of this iteration is 7.49063
+Learning rate of the next iteration is 0.056977
+Radius of the next iteration is 12.4
+Mean distance of this iteration is 7.45267
+Learning rate of the next iteration is 0.0567868
+Radius of the next iteration is 12.35
+Mean distance of this iteration is 7.39938
+Learning rate of the next iteration is 0.0565966
+Radius of the next iteration is 12.3
+Mean distance of this iteration is 7.3788
+Learning rate of the next iteration is 0.0564064
+Radius of the next iteration is 12.25
+Mean distance of this iteration is 7.34275
+Learning rate of the next iteration is 0.0562162
+Radius of the next iteration is 12.2
+Mean distance of this iteration is 7.30844
+Learning rate of the next iteration is 0.056026
+Radius of the next iteration is 12.15
+Mean distance of this iteration is 7.27803
+Learning rate of the next iteration is 0.0558358
+Radius of the next iteration is 12.1
+Mean distance of this iteration is 7.26243
+Learning rate of the next iteration is 0.0556456
+Radius of the next iteration is 12.05
+Mean distance of this iteration is 7.247
+Learning rate of the next iteration is 0.0554555
+Radius of the next iteration is 12
+Mean distance of this iteration is 7.20333
+Learning rate of the next iteration is 0.0552653
+Radius of the next iteration is 11.95
+Mean distance of this iteration is 7.13329
+Learning rate of the next iteration is 0.0550751
+Radius of the next iteration is 11.9
+Mean distance of this iteration is 7.03309
+Learning rate of the next iteration is 0.0548849
+Radius of the next iteration is 11.85
+Mean distance of this iteration is 6.93771
+Learning rate of the next iteration is 0.0546947
+Radius of the next iteration is 11.8
+Mean distance of this iteration is 6.83741
+Learning rate of the next iteration is 0.0545045
+Radius of the next iteration is 11.75
+Mean distance of this iteration is 6.74579
+Learning rate of the next iteration is 0.0543143
+Radius of the next iteration is 11.7
+Mean distance of this iteration is 6.67337
+Learning rate of the next iteration is 0.0541241
+Radius of the next iteration is 11.65
+Mean distance of this iteration is 6.60399
+Learning rate of the next iteration is 0.0539339
+Radius of the next iteration is 11.6
+Mean distance of this iteration is 6.50896
+Learning rate of the next iteration is 0.0537437
+Radius of the next iteration is 11.55
+Mean distance of this iteration is 6.44072
+Learning rate of the next iteration is 0.0535536
+Radius of the next iteration is 11.5
+Mean distance of this iteration is 6.35974
+Learning rate of the next iteration is 0.0533634
+Radius of the next iteration is 11.45
+Mean distance of this iteration is 6.29631
+Learning rate of the next iteration is 0.0531732
+Radius of the next iteration is 11.4
+Mean distance of this iteration is 6.23928
+Learning rate of the next iteration is 0.052983
+Radius of the next iteration is 11.35
+Mean distance of this iteration is 6.18356
+Learning rate of the next iteration is 0.0527928
+Radius of the next iteration is 11.3
+Mean distance of this iteration is 6.13467
+Learning rate of the next iteration is 0.0526026
+Radius of the next iteration is 11.25
+Mean distance of this iteration is 6.05577
+Learning rate of the next iteration is 0.0524124
+Radius of the next iteration is 11.2
+Mean distance of this iteration is 6.02569
+Learning rate of the next iteration is 0.0522222
+Radius of the next iteration is 11.15
+Mean distance of this iteration is 5.99175
+Learning rate of the next iteration is 0.052032
+Radius of the next iteration is 11.1
+Mean distance of this iteration is 5.93688
+Learning rate of the next iteration is 0.0518418
+Radius of the next iteration is 11.05
+Mean distance of this iteration is 5.91525
+Learning rate of the next iteration is 0.0516517
+Radius of the next iteration is 11
+Mean distance of this iteration is 5.89441
+Learning rate of the next iteration is 0.0514615
+Radius of the next iteration is 10.95
+Mean distance of this iteration is 5.82195
+Learning rate of the next iteration is 0.0512713
+Radius of the next iteration is 10.9
+Mean distance of this iteration is 5.73967
+Learning rate of the next iteration is 0.0510811
+Radius of the next iteration is 10.85
+Mean distance of this iteration is 5.64993
+Learning rate of the next iteration is 0.0508909
+Radius of the next iteration is 10.8
+Mean distance of this iteration is 5.55474
+Learning rate of the next iteration is 0.0507007
+Radius of the next iteration is 10.75
+Mean distance of this iteration is 5.48459
+Learning rate of the next iteration is 0.0505105
+Radius of the next iteration is 10.7
+Mean distance of this iteration is 5.40372
+Learning rate of the next iteration is 0.0503203
+Radius of the next iteration is 10.65
+Mean distance of this iteration is 5.33188
+Learning rate of the next iteration is 0.0501301
+Radius of the next iteration is 10.6
+Mean distance of this iteration is 5.25664
+Learning rate of the next iteration is 0.0499399
+Radius of the next iteration is 10.55
+Mean distance of this iteration is 5.18687
+Learning rate of the next iteration is 0.0497498
+Radius of the next iteration is 10.5
+Mean distance of this iteration is 5.12214
+Learning rate of the next iteration is 0.0495596
+Radius of the next iteration is 10.45
+Mean distance of this iteration is 5.06983
+Learning rate of the next iteration is 0.0493694
+Radius of the next iteration is 10.4
+Mean distance of this iteration is 5.01946
+Learning rate of the next iteration is 0.0491792
+Radius of the next iteration is 10.35
+Mean distance of this iteration is 4.98251
+Learning rate of the next iteration is 0.048989
+Radius of the next iteration is 10.3
+Mean distance of this iteration is 4.94879
+Learning rate of the next iteration is 0.0487988
+Radius of the next iteration is 10.25
+Mean distance of this iteration is 4.89771
+Learning rate of the next iteration is 0.0486086
+Radius of the next iteration is 10.2
+Mean distance of this iteration is 4.85111
+Learning rate of the next iteration is 0.0484184
+Radius of the next iteration is 10.15
+Mean distance of this iteration is 4.8113
+Learning rate of the next iteration is 0.0482282
+Radius of the next iteration is 10.1
+Mean distance of this iteration is 4.77466
+Learning rate of the next iteration is 0.048038
+Radius of the next iteration is 10.05
+Mean distance of this iteration is 4.74422
+Learning rate of the next iteration is 0.0478478
+Radius of the next iteration is 10
+Mean distance of this iteration is 4.70892
+Learning rate of the next iteration is 0.0476577
+Radius of the next iteration is 9.95
+Mean distance of this iteration is 4.66588
+Learning rate of the next iteration is 0.0474675
+Radius of the next iteration is 9.9
+Mean distance of this iteration is 4.60742
+Learning rate of the next iteration is 0.0472773
+Radius of the next iteration is 9.85
+Mean distance of this iteration is 4.53996
+Learning rate of the next iteration is 0.0470871
+Radius of the next iteration is 9.8
+Mean distance of this iteration is 4.48224
+Learning rate of the next iteration is 0.0468969
+Radius of the next iteration is 9.75
+Mean distance of this iteration is 4.4151
+Learning rate of the next iteration is 0.0467067
+Radius of the next iteration is 9.7
+Mean distance of this iteration is 4.32907
+Learning rate of the next iteration is 0.0465165
+Radius of the next iteration is 9.65
+Mean distance of this iteration is 4.25069
+Learning rate of the next iteration is 0.0463263
+Radius of the next iteration is 9.6
+Mean distance of this iteration is 4.16614
+Learning rate of the next iteration is 0.0461361
+Radius of the next iteration is 9.55
+Mean distance of this iteration is 4.08386
+Learning rate of the next iteration is 0.0459459
+Radius of the next iteration is 9.5
+Mean distance of this iteration is 4.00607
+Learning rate of the next iteration is 0.0457558
+Radius of the next iteration is 9.45
+Mean distance of this iteration is 3.92963
+Learning rate of the next iteration is 0.0455656
+Radius of the next iteration is 9.4
+Mean distance of this iteration is 3.85711
+Learning rate of the next iteration is 0.0453754
+Radius of the next iteration is 9.35
+Mean distance of this iteration is 3.78326
+Learning rate of the next iteration is 0.0451852
+Radius of the next iteration is 9.3
+Mean distance of this iteration is 3.71143
+Learning rate of the next iteration is 0.044995
+Radius of the next iteration is 9.25
+Mean distance of this iteration is 3.65001
+Learning rate of the next iteration is 0.0448048
+Radius of the next iteration is 9.2
+Mean distance of this iteration is 3.59433
+Learning rate of the next iteration is 0.0446146
+Radius of the next iteration is 9.15
+Mean distance of this iteration is 3.54303
+Learning rate of the next iteration is 0.0444244
+Radius of the next iteration is 9.1
+Mean distance of this iteration is 3.48952
+Learning rate of the next iteration is 0.0442342
+Radius of the next iteration is 9.05
+Mean distance of this iteration is 3.43728
+Learning rate of the next iteration is 0.044044
+Radius of the next iteration is 9
+Mean distance of this iteration is 3.38977
+Learning rate of the next iteration is 0.0438539
+Radius of the next iteration is 8.95
+Mean distance of this iteration is 3.33734
+Learning rate of the next iteration is 0.0436637
+Radius of the next iteration is 8.9
+Mean distance of this iteration is 3.26924
+Learning rate of the next iteration is 0.0434735
+Radius of the next iteration is 8.85
+Mean distance of this iteration is 3.19051
+Learning rate of the next iteration is 0.0432833
+Radius of the next iteration is 8.8
+Mean distance of this iteration is 3.11554
+Learning rate of the next iteration is 0.0430931
+Radius of the next iteration is 8.75
+Mean distance of this iteration is 3.04304
+Learning rate of the next iteration is 0.0429029
+Radius of the next iteration is 8.7
+Mean distance of this iteration is 2.96807
+Learning rate of the next iteration is 0.0427127
+Radius of the next iteration is 8.65
+Mean distance of this iteration is 2.89978
+Learning rate of the next iteration is 0.0425225
+Radius of the next iteration is 8.6
+Mean distance of this iteration is 2.83285
+Learning rate of the next iteration is 0.0423323
+Radius of the next iteration is 8.55
+Mean distance of this iteration is 2.76939
+Learning rate of the next iteration is 0.0421421
+Radius of the next iteration is 8.5
+Mean distance of this iteration is 2.71038
+Learning rate of the next iteration is 0.041952
+Radius of the next iteration is 8.45
+Mean distance of this iteration is 2.65028
+Learning rate of the next iteration is 0.0417618
+Radius of the next iteration is 8.4
+Mean distance of this iteration is 2.5973
+Learning rate of the next iteration is 0.0415716
+Radius of the next iteration is 8.35
+Mean distance of this iteration is 2.54122
+Learning rate of the next iteration is 0.0413814
+Radius of the next iteration is 8.3
+Mean distance of this iteration is 2.49443
+Learning rate of the next iteration is 0.0411912
+Radius of the next iteration is 8.25
+Mean distance of this iteration is 2.44494
+Learning rate of the next iteration is 0.041001
+Radius of the next iteration is 8.2
+Mean distance of this iteration is 2.40715
+Learning rate of the next iteration is 0.0408108
+Radius of the next iteration is 8.15
+Mean distance of this iteration is 2.36268
+Learning rate of the next iteration is 0.0406206
+Radius of the next iteration is 8.1
+Mean distance of this iteration is 2.32332
+Learning rate of the next iteration is 0.0404304
+Radius of the next iteration is 8.05
+Mean distance of this iteration is 2.27677
+Learning rate of the next iteration is 0.0402402
+Radius of the next iteration is 8
+Mean distance of this iteration is 2.23935
+Learning rate of the next iteration is 0.0400501
+Radius of the next iteration is 7.95
+Mean distance of this iteration is 2.19148
+Learning rate of the next iteration is 0.0398599
+Radius of the next iteration is 7.9
+Mean distance of this iteration is 2.13319
+Learning rate of the next iteration is 0.0396697
+Radius of the next iteration is 7.85
+Mean distance of this iteration is 2.07521
+Learning rate of the next iteration is 0.0394795
+Radius of the next iteration is 7.8
+Mean distance of this iteration is 2.01967
+Learning rate of the next iteration is 0.0392893
+Radius of the next iteration is 7.75
+Mean distance of this iteration is 1.96483
+Learning rate of the next iteration is 0.0390991
+Radius of the next iteration is 7.7
+Mean distance of this iteration is 1.91215
+Learning rate of the next iteration is 0.0389089
+Radius of the next iteration is 7.65
+Mean distance of this iteration is 1.86101
+Learning rate of the next iteration is 0.0387187
+Radius of the next iteration is 7.6
+Mean distance of this iteration is 1.81216
+Learning rate of the next iteration is 0.0385285
+Radius of the next iteration is 7.55
+Mean distance of this iteration is 1.76935
+Learning rate of the next iteration is 0.0383383
+Radius of the next iteration is 7.5
+Mean distance of this iteration is 1.72812
+Learning rate of the next iteration is 0.0381481
+Radius of the next iteration is 7.45
+Mean distance of this iteration is 1.68544
+Learning rate of the next iteration is 0.037958
+Radius of the next iteration is 7.4
+Mean distance of this iteration is 1.64979
+Learning rate of the next iteration is 0.0377678
+Radius of the next iteration is 7.35
+Mean distance of this iteration is 1.61307
+Learning rate of the next iteration is 0.0375776
+Radius of the next iteration is 7.3
+Mean distance of this iteration is 1.57903
+Learning rate of the next iteration is 0.0373874
+Radius of the next iteration is 7.25
+Mean distance of this iteration is 1.54585
+Learning rate of the next iteration is 0.0371972
+Radius of the next iteration is 7.2
+Mean distance of this iteration is 1.51326
+Learning rate of the next iteration is 0.037007
+Radius of the next iteration is 7.15
+Mean distance of this iteration is 1.48262
+Learning rate of the next iteration is 0.0368168
+Radius of the next iteration is 7.1
+Mean distance of this iteration is 1.45186
+Learning rate of the next iteration is 0.0366266
+Radius of the next iteration is 7.05
+Mean distance of this iteration is 1.42071
+Learning rate of the next iteration is 0.0364364
+Radius of the next iteration is 7
+Mean distance of this iteration is 1.39015
+Learning rate of the next iteration is 0.0362462
+Radius of the next iteration is 6.95
+Mean distance of this iteration is 1.35802
+Learning rate of the next iteration is 0.0360561
+Radius of the next iteration is 6.9
+Mean distance of this iteration is 1.32431
+Learning rate of the next iteration is 0.0358659
+Radius of the next iteration is 6.85
+Mean distance of this iteration is 1.29348
+Learning rate of the next iteration is 0.0356757
+Radius of the next iteration is 6.8
+Mean distance of this iteration is 1.26197
+Learning rate of the next iteration is 0.0354855
+Radius of the next iteration is 6.75
+Mean distance of this iteration is 1.23128
+Learning rate of the next iteration is 0.0352953
+Radius of the next iteration is 6.7
+Mean distance of this iteration is 1.19972
+Learning rate of the next iteration is 0.0351051
+Radius of the next iteration is 6.65
+Mean distance of this iteration is 1.16832
+Learning rate of the next iteration is 0.0349149
+Radius of the next iteration is 6.6
+Mean distance of this iteration is 1.13807
+Learning rate of the next iteration is 0.0347247
+Radius of the next iteration is 6.55
+Mean distance of this iteration is 1.10741
+Learning rate of the next iteration is 0.0345345
+Radius of the next iteration is 6.5
+Mean distance of this iteration is 1.07801
+Learning rate of the next iteration is 0.0343443
+Radius of the next iteration is 6.45
+Mean distance of this iteration is 1.04873
+Learning rate of the next iteration is 0.0341542
+Radius of the next iteration is 6.4
+Mean distance of this iteration is 1.02162
+Learning rate of the next iteration is 0.033964
+Radius of the next iteration is 6.35
+Mean distance of this iteration is 0.995391
+Learning rate of the next iteration is 0.0337738
+Radius of the next iteration is 6.3
+Mean distance of this iteration is 0.970003
+Learning rate of the next iteration is 0.0335836
+Radius of the next iteration is 6.25
+Mean distance of this iteration is 0.945307
+Learning rate of the next iteration is 0.0333934
+Radius of the next iteration is 6.2
+Mean distance of this iteration is 0.921852
+Learning rate of the next iteration is 0.0332032
+Radius of the next iteration is 6.15
+Mean distance of this iteration is 0.899653
+Learning rate of the next iteration is 0.033013
+Radius of the next iteration is 6.1
+Mean distance of this iteration is 0.878077
+Learning rate of the next iteration is 0.0328228
+Radius of the next iteration is 6.05
+Mean distance of this iteration is 0.857059
+Learning rate of the next iteration is 0.0326326
+Radius of the next iteration is 6
+Mean distance of this iteration is 0.835329
+Learning rate of the next iteration is 0.0324424
+Radius of the next iteration is 5.95
+Mean distance of this iteration is 0.814038
+Learning rate of the next iteration is 0.0322523
+Radius of the next iteration is 5.9
+Mean distance of this iteration is 0.794422
+Learning rate of the next iteration is 0.0320621
+Radius of the next iteration is 5.85
+Mean distance of this iteration is 0.775454
+Learning rate of the next iteration is 0.0318719
+Radius of the next iteration is 5.8
+Mean distance of this iteration is 0.757103
+Learning rate of the next iteration is 0.0316817
+Radius of the next iteration is 5.75
+Mean distance of this iteration is 0.740342
+Learning rate of the next iteration is 0.0314915
+Radius of the next iteration is 5.7
+Mean distance of this iteration is 0.72369
+Learning rate of the next iteration is 0.0313013
+Radius of the next iteration is 5.65
+Mean distance of this iteration is 0.707623
+Learning rate of the next iteration is 0.0311111
+Radius of the next iteration is 5.6
+Mean distance of this iteration is 0.691513
+Learning rate of the next iteration is 0.0309209
+Radius of the next iteration is 5.55
+Mean distance of this iteration is 0.67633
+Learning rate of the next iteration is 0.0307307
+Radius of the next iteration is 5.5
+Mean distance of this iteration is 0.661096
+Learning rate of the next iteration is 0.0305405
+Radius of the next iteration is 5.45
+Mean distance of this iteration is 0.646347
+Learning rate of the next iteration is 0.0303504
+Radius of the next iteration is 5.4
+Mean distance of this iteration is 0.631411
+Learning rate of the next iteration is 0.0301602
+Radius of the next iteration is 5.35
+Mean distance of this iteration is 0.617201
+Learning rate of the next iteration is 0.02997
+Radius of the next iteration is 5.3
+Mean distance of this iteration is 0.603104
+Learning rate of the next iteration is 0.0297798
+Radius of the next iteration is 5.25
+Mean distance of this iteration is 0.589917
+Learning rate of the next iteration is 0.0295896
+Radius of the next iteration is 5.2
+Mean distance of this iteration is 0.576699
+Learning rate of the next iteration is 0.0293994
+Radius of the next iteration is 5.15
+Mean distance of this iteration is 0.564121
+Learning rate of the next iteration is 0.0292092
+Radius of the next iteration is 5.1
+Mean distance of this iteration is 0.55194
+Learning rate of the next iteration is 0.029019
+Radius of the next iteration is 5.05
+Mean distance of this iteration is 0.539971
+Learning rate of the next iteration is 0.0288288
+Radius of the next iteration is 5
+Mean distance of this iteration is 0.529032
+Learning rate of the next iteration is 0.0286386
+Radius of the next iteration is 4.95
+Mean distance of this iteration is 0.517862
+Learning rate of the next iteration is 0.0284484
+Radius of the next iteration is 4.9
+Mean distance of this iteration is 0.506621
+Learning rate of the next iteration is 0.0282583
+Radius of the next iteration is 4.85
+Mean distance of this iteration is 0.495863
+Learning rate of the next iteration is 0.0280681
+Radius of the next iteration is 4.8
+Mean distance of this iteration is 0.485782
+Learning rate of the next iteration is 0.0278779
+Radius of the next iteration is 4.75
+Mean distance of this iteration is 0.475522
+Learning rate of the next iteration is 0.0276877
+Radius of the next iteration is 4.7
+Mean distance of this iteration is 0.465183
+Learning rate of the next iteration is 0.0274975
+Radius of the next iteration is 4.65
+Mean distance of this iteration is 0.454758
+Learning rate of the next iteration is 0.0273073
+Radius of the next iteration is 4.6
+Mean distance of this iteration is 0.443958
+Learning rate of the next iteration is 0.0271171
+Radius of the next iteration is 4.55
+Mean distance of this iteration is 0.433227
+Learning rate of the next iteration is 0.0269269
+Radius of the next iteration is 4.5
+Mean distance of this iteration is 0.422887
+Learning rate of the next iteration is 0.0267367
+Radius of the next iteration is 4.45
+Mean distance of this iteration is 0.412914
+Learning rate of the next iteration is 0.0265465
+Radius of the next iteration is 4.4
+Mean distance of this iteration is 0.403197
+Learning rate of the next iteration is 0.0263564
+Radius of the next iteration is 4.35
+Mean distance of this iteration is 0.393601
+Learning rate of the next iteration is 0.0261662
+Radius of the next iteration is 4.3
+Mean distance of this iteration is 0.38437
+Learning rate of the next iteration is 0.025976
+Radius of the next iteration is 4.25
+Mean distance of this iteration is 0.375392
+Learning rate of the next iteration is 0.0257858
+Radius of the next iteration is 4.2
+Mean distance of this iteration is 0.366456
+Learning rate of the next iteration is 0.0255956
+Radius of the next iteration is 4.15
+Mean distance of this iteration is 0.357496
+Learning rate of the next iteration is 0.0254054
+Radius of the next iteration is 4.1
+Mean distance of this iteration is 0.348804
+Learning rate of the next iteration is 0.0252152
+Radius of the next iteration is 4.05
+Mean distance of this iteration is 0.340403
+Learning rate of the next iteration is 0.025025
+Radius of the next iteration is 4
+Mean distance of this iteration is 0.332284
+Learning rate of the next iteration is 0.0248348
+Radius of the next iteration is 3.95
+Mean distance of this iteration is 0.32419
+Learning rate of the next iteration is 0.0246446
+Radius of the next iteration is 3.9
+Mean distance of this iteration is 0.316139
+Learning rate of the next iteration is 0.0244545
+Radius of the next iteration is 3.85
+Mean distance of this iteration is 0.308348
+Learning rate of the next iteration is 0.0242643
+Radius of the next iteration is 3.8
+Mean distance of this iteration is 0.300807
+Learning rate of the next iteration is 0.0240741
+Radius of the next iteration is 3.75
+Mean distance of this iteration is 0.293509
+Learning rate of the next iteration is 0.0238839
+Radius of the next iteration is 3.7
+Mean distance of this iteration is 0.286443
+Learning rate of the next iteration is 0.0236937
+Radius of the next iteration is 3.65
+Mean distance of this iteration is 0.279601
+Learning rate of the next iteration is 0.0235035
+Radius of the next iteration is 3.6
+Mean distance of this iteration is 0.272976
+Learning rate of the next iteration is 0.0233133
+Radius of the next iteration is 3.55
+Mean distance of this iteration is 0.266561
+Learning rate of the next iteration is 0.0231231
+Radius of the next iteration is 3.5
+Mean distance of this iteration is 0.260346
+Learning rate of the next iteration is 0.0229329
+Radius of the next iteration is 3.45
+Mean distance of this iteration is 0.254326
+Learning rate of the next iteration is 0.0227427
+Radius of the next iteration is 3.4
+Mean distance of this iteration is 0.248494
+Learning rate of the next iteration is 0.0225526
+Radius of the next iteration is 3.35
+Mean distance of this iteration is 0.242842
+Learning rate of the next iteration is 0.0223624
+Radius of the next iteration is 3.3
+Mean distance of this iteration is 0.237366
+Learning rate of the next iteration is 0.0221722
+Radius of the next iteration is 3.25
+Mean distance of this iteration is 0.232058
+Learning rate of the next iteration is 0.021982
+Radius of the next iteration is 3.2
+Mean distance of this iteration is 0.226912
+Learning rate of the next iteration is 0.0217918
+Radius of the next iteration is 3.15
+Mean distance of this iteration is 0.221924
+Learning rate of the next iteration is 0.0216016
+Radius of the next iteration is 3.1
+Mean distance of this iteration is 0.217088
+Learning rate of the next iteration is 0.0214114
+Radius of the next iteration is 3.05
+Mean distance of this iteration is 0.212399
+Learning rate of the next iteration is 0.0212212
+Radius of the next iteration is 3
+Mean distance of this iteration is 0.207851
+Learning rate of the next iteration is 0.021031
+Radius of the next iteration is 2.95
+Mean distance of this iteration is 0.20344
+Learning rate of the next iteration is 0.0208408
+Radius of the next iteration is 2.9
+Mean distance of this iteration is 0.199162
+Learning rate of the next iteration is 0.0206507
+Radius of the next iteration is 2.85
+Mean distance of this iteration is 0.195011
+Learning rate of the next iteration is 0.0204605
+Radius of the next iteration is 2.8
+Mean distance of this iteration is 0.190984
+Learning rate of the next iteration is 0.0202703
+Radius of the next iteration is 2.75
+Mean distance of this iteration is 0.187076
+Learning rate of the next iteration is 0.0200801
+Radius of the next iteration is 2.7
+Mean distance of this iteration is 0.183284
+Learning rate of the next iteration is 0.0198899
+Radius of the next iteration is 2.65
+Mean distance of this iteration is 0.179604
+Learning rate of the next iteration is 0.0196997
+Radius of the next iteration is 2.6
+Mean distance of this iteration is 0.176031
+Learning rate of the next iteration is 0.0195095
+Radius of the next iteration is 2.55
+Mean distance of this iteration is 0.172564
+Learning rate of the next iteration is 0.0193193
+Radius of the next iteration is 2.5
+Mean distance of this iteration is 0.169197
+Learning rate of the next iteration is 0.0191291
+Radius of the next iteration is 2.45
+Mean distance of this iteration is 0.165928
+Learning rate of the next iteration is 0.0189389
+Radius of the next iteration is 2.4
+Mean distance of this iteration is 0.162754
+Learning rate of the next iteration is 0.0187487
+Radius of the next iteration is 2.35
+Mean distance of this iteration is 0.159672
+Learning rate of the next iteration is 0.0185586
+Radius of the next iteration is 2.3
+Mean distance of this iteration is 0.156678
+Learning rate of the next iteration is 0.0183684
+Radius of the next iteration is 2.25
+Mean distance of this iteration is 0.15377
+Learning rate of the next iteration is 0.0181782
+Radius of the next iteration is 2.2
+Mean distance of this iteration is 0.150946
+Learning rate of the next iteration is 0.017988
+Radius of the next iteration is 2.15
+Mean distance of this iteration is 0.148202
+Learning rate of the next iteration is 0.0177978
+Radius of the next iteration is 2.1
+Mean distance of this iteration is 0.145536
+Learning rate of the next iteration is 0.0176076
+Radius of the next iteration is 2.05
+Mean distance of this iteration is 0.142946
+Learning rate of the next iteration is 0.0174174
+Radius of the next iteration is 2
+Mean distance of this iteration is 0.140429
+Learning rate of the next iteration is 0.0172272
+Radius of the next iteration is 1.95
+Mean distance of this iteration is 0.137983
+Learning rate of the next iteration is 0.017037
+Radius of the next iteration is 1.9
+Mean distance of this iteration is 0.135606
+Learning rate of the next iteration is 0.0168468
+Radius of the next iteration is 1.85
+Mean distance of this iteration is 0.133296
+Learning rate of the next iteration is 0.0166567
+Radius of the next iteration is 1.8
+Mean distance of this iteration is 0.13105
+Learning rate of the next iteration is 0.0164665
+Radius of the next iteration is 1.75
+Mean distance of this iteration is 0.128867
+Learning rate of the next iteration is 0.0162763
+Radius of the next iteration is 1.7
+Mean distance of this iteration is 0.126745
+Learning rate of the next iteration is 0.0160861
+Radius of the next iteration is 1.65
+Mean distance of this iteration is 0.124682
+Learning rate of the next iteration is 0.0158959
+Radius of the next iteration is 1.6
+Mean distance of this iteration is 0.122677
+Learning rate of the next iteration is 0.0157057
+Radius of the next iteration is 1.55
+Mean distance of this iteration is 0.120727
+Learning rate of the next iteration is 0.0155155
+Radius of the next iteration is 1.5
+Mean distance of this iteration is 0.11883
+Learning rate of the next iteration is 0.0153253
+Radius of the next iteration is 1.45
+Mean distance of this iteration is 0.116987
+Learning rate of the next iteration is 0.0151351
+Radius of the next iteration is 1.4
+Mean distance of this iteration is 0.115194
+Learning rate of the next iteration is 0.0149449
+Radius of the next iteration is 1.35
+Mean distance of this iteration is 0.11345
+Learning rate of the next iteration is 0.0147548
+Radius of the next iteration is 1.3
+Mean distance of this iteration is 0.111755
+Learning rate of the next iteration is 0.0145646
+Radius of the next iteration is 1.25
+Mean distance of this iteration is 0.110106
+Learning rate of the next iteration is 0.0143744
+Radius of the next iteration is 1.2
+Mean distance of this iteration is 0.108502
+Learning rate of the next iteration is 0.0141842
+Radius of the next iteration is 1.15
+Mean distance of this iteration is 0.106943
+Learning rate of the next iteration is 0.013994
+Radius of the next iteration is 1.1
+Mean distance of this iteration is 0.105426
+Learning rate of the next iteration is 0.0138038
+Radius of the next iteration is 1.05
+Mean distance of this iteration is 0.10395
+Learning rate of the next iteration is 0.0136136
+Radius of the next iteration is 1
+Mean distance of this iteration is 0.102516
+Learning rate of the next iteration is 0.0134234
+Radius of the next iteration is 0.95
+Mean distance of this iteration is 0.10112
+Learning rate of the next iteration is 0.0132332
+Radius of the next iteration is 0.9
+Mean distance of this iteration is 0.0997626
+Learning rate of the next iteration is 0.013043
+Radius of the next iteration is 0.85
+Mean distance of this iteration is 0.0984424
+Learning rate of the next iteration is 0.0128529
+Radius of the next iteration is 0.8
+Mean distance of this iteration is 0.0971584
+Learning rate of the next iteration is 0.0126627
+Radius of the next iteration is 0.75
+Mean distance of this iteration is 0.0959097
+Learning rate of the next iteration is 0.0124725
+Radius of the next iteration is 0.7
+Mean distance of this iteration is 0.0946952
+Learning rate of the next iteration is 0.0122823
+Radius of the next iteration is 0.65
+Mean distance of this iteration is 0.0935141
+Learning rate of the next iteration is 0.0120921
+Radius of the next iteration is 0.6
+Mean distance of this iteration is 0.0923655
+Learning rate of the next iteration is 0.0119019
+Radius of the next iteration is 0.55
+Mean distance of this iteration is 0.0912486
+Learning rate of the next iteration is 0.0117117
+Radius of the next iteration is 0.5
+Mean distance of this iteration is 0.0901626
+Learning rate of the next iteration is 0.0115215
+Radius of the next iteration is 0.45
+Mean distance of this iteration is 0.0891066
+Learning rate of the next iteration is 0.0113313
+Radius of the next iteration is 0.4
+Mean distance of this iteration is 0.08808
+Learning rate of the next iteration is 0.0111411
+Radius of the next iteration is 0.35
+Mean distance of this iteration is 0.0870819
+Learning rate of the next iteration is 0.010951
+Radius of the next iteration is 0.3
+Mean distance of this iteration is 0.0861117
+Learning rate of the next iteration is 0.0107608
+Radius of the next iteration is 0.25
+Mean distance of this iteration is 0.0851687
+Learning rate of the next iteration is 0.0105706
+Radius of the next iteration is 0.2
+Mean distance of this iteration is 0.0842523
+Learning rate of the next iteration is 0.0103804
+Radius of the next iteration is 0.15
+Mean distance of this iteration is 0.0833617
+Learning rate of the next iteration is 0.0101902
+Radius of the next iteration is 0.1
+Mean distance of this iteration is 0.0824963
+Learning rate of the next iteration is 0.01
+Radius of the next iteration is 0.05
+Mean distance of this iteration is 0.0816557
+Learning rate of the next iteration is 0.00980981
+Radius of the next iteration is 7.02174e-13
