@@ -1,11 +1,11 @@
 Problems:
-Poca convergenza con pochi neuroni, indipendentemente dalle iterazioni e dal learning rate( la media rimane "Stabile" e fa salti bruschi verso il basso
-)
+Poca convergenza con pochi neuroni, servono molte iterazioni
 
-Controllare lambda e step di lr e raggio
+COntrollare lambda e step di lr e raggio
+
+Ottimizzare prestazioni update
 
 TODO:
-Smart initialization
 
 Distanza esagonale
 
@@ -13,4 +13,4 @@ Possibilità di salvare su file la matrice
 
 Questione uso thread e blocchi dinamico
 
-? Lambda stimate e non passate da riga di comando ?
+Lambda stimate e non passate da riga di comando

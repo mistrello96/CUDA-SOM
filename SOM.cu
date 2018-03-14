@@ -100,7 +100,7 @@ int main(int argc, char **argv)
     // max number of iteration
     int maxnIter = 0;
     // accuracy threshold
-    double accuracyTreshold = 0;
+    double accuracyTreshold = -1;
     // Times of Samples vector is presented to the SOM
     int nIter = 0;
     // Initial radius of the update
@@ -186,7 +186,7 @@ int main(int argc, char **argv)
     // estimate the neurons number if not given
     if (nRows==0 | nColumns == 0)
     {
-    	int tmp = 5 * sqrt(nSamples);
+    	int tmp = 5 * nSamples;
     	nRows = sqrt(tmp) + 1;
     	nColumns = sqrt(tmp) + 1;
     }
@@ -238,7 +238,9 @@ int main(int argc, char **argv)
 
     // SOM INIZIALIZATION
     // generating random seed
+    
     srand(time(NULL));
+    /*
     // random values SOM initialization
     for(int i = 0; i < totalLength; i++)
     {
@@ -246,6 +248,21 @@ int main(int argc, char **argv)
     	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
     	h_Matrix[i] = tmp; 
     }
+    */
+    for(int i = 0; i < nNeurons; i++)
+    {   
+        int r = rand() % nSamples;
+        for(int j = 0; j < nElements; j++)
+        {
+        h_Matrix[i*nElements+j] = Samples[r+j];
+        }
+
+    }
+
+    for(int i = 0; i < totalLength; i++){
+        std::cout << h_Matrix[i] << std::endl;
+    }
+    
 
 	// inizializing the learnig rate
     double lr = ilr;
