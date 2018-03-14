@@ -7,6 +7,7 @@
 #include <sstream>
 #include <float.h>
 #include <algorithm>
+#include <iostream>
 
 #define CUDA_CHECK_RETURN(value) {											\
 		cudaError_t _m_cudaStat = value;										\
@@ -79,16 +80,56 @@ int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 	}
 }
 
+void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements){
+    std::ofstream myfile;
+    myfile.open (filePath.c_str());
+    myfile << "nRows \n" << nRows << "\n" << "nColumns \n" << nColumns << "\n";
+    for (int i = 0; i < nRows*nColumns*nElements; i++)
+    {
+        myfile << matrix[i] << "\n";  
+    }
+    myfile.close();
+}
+
+/*
+void loadMatrixfromFile(std::string filePath, double* h_Matrix, int* &nRows, int* &nColumns){
+    int counter = 0;
+    std::string line;
+    std::ifstream file (filePath.c_str());
+    if (file.is_open())
+    {
+        std::getline (file, line);
+        std::getline (file, line);
+        *nRows = strtoi((line).c_str(),0);
+        std::getline (file, line);
+        std::getline (file, line);
+        *nRows = strtoi((line).c_str(),0);
+        while (std::getline (file, line))
+        {
+            h_Matrix[counter] = strtoi((line).c_str(),0);
+            counter ++;
+        }
+        file.close();
+        return counter;
+    }
+}
+*/
+
 
 int main(int argc, char **argv)
 {
 	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
 	// path of the input file
 	std::string filePath = "./";
+    std::string inputSOM = "";
 	// verbose flag
     bool verbose = false;
     // advanced debug flag
     bool debug = false;
+    // save SOM to file
+    bool print = false;
+    // load SOM from file
+    bool load = false;
     // number of rows in the martix
     int nRows = 0;
     // number of column in the martix
@@ -108,7 +149,7 @@ int main(int argc, char **argv)
 
     // COMMAND LINE PARSING
     int c;
-    while ((c = getopt (argc, argv, "i:vdx:y:s:f:n:a:r:h")) != -1)
+    while ((c = getopt (argc, argv, "i:vdx:y:s:f:n:a:r:hol:")) != -1)
     switch (c)
 	{
         case 'i':
@@ -119,6 +160,10 @@ int main(int argc, char **argv)
             break;
         case 'd':
             debug = true;
+            break;
+        case 'l':
+            inputSOM = optarg;
+            load = true;
             break;
         case 'x':
             nRows = atoi(optarg);
@@ -141,6 +186,8 @@ int main(int argc, char **argv)
         case 'r':
         	initialRadius = atoi(optarg);
         	break;
+        case 'o':
+            print = true;
         case 'h':
             std::cout << "-i allows to provide the PATH of an input file. If not specified, ./ is assumed" << std::endl;
             std::cout << "-x allows to provide the number of rows in the neuron's matrix." << std::endl;
@@ -152,17 +199,18 @@ int main(int argc, char **argv)
             std::cout << "-v enables debug prints" << std::endl;
             std::cout << "-d enables advanced debug prints" << std::endl;
             std::cout << "-r allows to chose the initial radius of the updating function" << std::endl;
+            std::cout << "-o allows to save the SOM produced in a file" << std::endl;
+            std::cout << "-l allows to load the SOM from file" << std::endl;
             std::cout << "-h shows help menu of the tool" << std::endl;
             return 0;
     }
 
     // checking the required params
-    if (ilr == 0 | maxnIter == 0)
+    if ((ilr == 0 | maxnIter == 0) & !debug & !verbose)
     {
         std::cout << "Required params are missing, program will abort" << std::endl;
         exit(-1);        
     }
-    
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
@@ -240,35 +288,30 @@ int main(int argc, char **argv)
     // SOM INIZIALIZATION
     // generating random seed
     
-    srand(time(NULL));
-    /*
-    // random values SOM initialization
-    for(int i = 0; i < totalLength; i++)
-    {
-        double tmp = rand() / (float) RAND_MAX;
-    	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
-    	h_Matrix[i] = tmp; 
-    }
-    
-    */
-    for (int i = 0; i < nNeurons; i++)
-    {
-        int r = rand() % nSamples;
-        for (int k = i * nElements, j = 0; j < nElements; k++, j++)
+    if(!load){
+        srand(time(NULL));
+        /*
+        // random values SOM initialization
+        for(int i = 0; i < totalLength; i++)
         {
-             h_Matrix[k] = Samples[r*nElements + j];
+            double tmp = rand() / (float) RAND_MAX;
+        	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
+        	h_Matrix[i] = tmp; 
+        }
+        
+        */
+        for (int i = 0; i < nNeurons; i++)
+        {
+            int r = rand() % nSamples;
+            for (int k = i * nElements, j = 0; j < nElements; k++, j++)
+            {
+                 h_Matrix[k] = Samples[r*nElements + j];
+            }
         }
     }
 
     if (debug){
-        for (int i = 0; i < nNeurons; i++)
-        {
-            for (int k = i * nElements, j = 0; j < nElements; k++, j++)
-            {
-                std::cout << h_Matrix[k] << "\t";  
-            }
-            std::cout << std::endl;
-        }
+        saveSOMtoFile("initialSOM.txt", h_Matrix, nRows, nColumns, nElements);
     }
     
 	// inizializing the learnig rate
@@ -278,16 +321,9 @@ int main(int argc, char **argv)
     // initializing accuracy of the first iteration with a fake value
 	double accuracy = DBL_MAX;
 
-	// COMPUTING STEPS
-    // controllare funzione lamda!!
-    double radiusLambda = (double) (maxnIter-1) / log((double)initialRadius);
-    double radiusStep = initialRadius / maxnIter;
-    // computing lr linear decreasing step
-    double lrstep = (ilr - flr) / (maxnIter-1);
-
     // debug print
     if(verbose | debug){
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << lrstep << " learning rate spep, "<< accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, " << radiusStep << " radiusStep "  << std::endl;
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, "  << std::endl;
     }
 
     // initializing indexes to shuffle the Samples vector
@@ -300,7 +336,14 @@ int main(int argc, char **argv)
     while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter)){
     	// randomize indexes of samples
     	std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
-	    // ITERATE ON EACH SAMPLE TO FIND BMU
+
+        if (debug | verbose)
+        {
+            std::cout << "Learning rate of this iteration is " << lr << std::endl;
+            std::cout << "Radius of this iteration is " << radius << std::endl;
+        }
+
+        // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++){
 
 		    // distance array inizialization
@@ -312,6 +355,7 @@ int main(int argc, char **argv)
 		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++){
 		    	h_ActualSample[j] = Samples[i];
 		    } 
+
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
@@ -348,7 +392,7 @@ int main(int argc, char **argv)
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
-	        if ((int) radius == 0)
+	        if (radius == 0)
 	        {
 	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
 	        		h_Matrix[i] = h_Matrix[i] + lr * (h_ActualSample[j] - h_Matrix[i]);
@@ -361,8 +405,8 @@ int main(int argc, char **argv)
 	                int x = i / nColumns;
 	                int y = i % nColumns;
 	                int distance = sqrt((x - BMU_x)*(x - BMU_x) + (y - BMU_y)*(y - BMU_y));
-	                if (distance <= (int)radius){
-	                    double gaussian = exp(- (double)(distance * distance)/(double)(2 * (int)radius * (int)radius));
+	                if (distance <= radius){
+	                    double gaussian = exp(- (double)(distance * distance)/(double)(2 * radius * radius));
 	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++){
 	                        h_Matrix[k] = h_Matrix[k] + gaussian * lr * (h_ActualSample[j] - h_Matrix[k]);
 	                    }
@@ -384,16 +428,13 @@ int main(int argc, char **argv)
 
 		// updating the counter iteration
 		nIter ++;
-		// updating lr
-		lr = lr - lrstep;
-		// updating radius
-		radius = radius - radiusStep;
+        // updating radius and learning rate
+        radius =(int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
+        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
+    }
 
-		if (debug | verbose)
-		{
-		std::cout << "Learning rate of the next iteration is " << lr << std::endl;
-		std::cout << "Radius of the next iteration is " << radius << std::endl;
-		}
+    if (debug | print){
+        saveSOMtoFile("outputSOM.txt",h_Matrix, nRows, nColumns, nElements);
     }
 
 	//freeing all allocated memory

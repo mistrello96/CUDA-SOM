@@ -1,7 +1,7 @@
 Problems:
-Poca convergenza con pochi neuroni, servono molte iterazioni
-
-Controllare lambda e step di lr e raggio
+Poca convergenza con pochi neuroni, indipendentemente dalle iterazioni
+	Distanza iniziale troppo big
+	Il raggio compromette la convergenza(Magari per i valor iiniziali?)
 
 Ottimizzare prestazioni update
 
@@ -9,8 +9,6 @@ TODO:
 
 Distanza esagonale
 
-Possibilità di salvare su file la matrice
-
 Questione uso thread e blocchi dinamico
 
-?Lambda stimate e non passate da riga di comando?
+Possibilità di caricare la SOM da file??

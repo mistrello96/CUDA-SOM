@@ -46,7 +46,7 @@ get_best_k_wss <- function(seqdata) {
 #setwd("C:\\Users\\aresio\\Documents\\PythonCode\\clustering")
 
 # read and format files
-input_file = "Bicocca_data.txt" # dati raw
+input_file = "dati_bicocca_leucemia.txt" # dati raw
 #input_file = "dati_bicocca_melanoma.txt" # dati raw
 test_name = "Leukemia"
 #test_name = "Melanoma"
@@ -59,12 +59,12 @@ for (best_clustering in c(2,3,4,5,6,7,8,9,10)) {
   
   # main plot
   D <- optimal_som(seqdata);
-  som_model <- som(seqdata, rlen=1000, radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F), keep.data=T ) 
+  som_model <- som(seqdata, rlen=1000,radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F), keep.data=T ) 
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
   cluster = hclust(object.distances(som_model, "codes"))
-  # som.hc <- cutree(cluster, k=best_clustering);
-  som.hc <- cutree(cluster, k=best_clustering); 
+  # som.hc <- cutree(cluster, k=2);
+  som.hc <- cutree(cluster, k=2); 
   add.cluster.boundaries(som_model, som.hc);
   
   # extract cluster data
