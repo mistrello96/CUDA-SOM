@@ -162,6 +162,7 @@ int main(int argc, char **argv)
         std::cout << "Required params are missing, program will abort" << std::endl;
         exit(-1);        
     }
+    
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
@@ -248,22 +249,28 @@ int main(int argc, char **argv)
     	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
     	h_Matrix[i] = tmp; 
     }
+    
     */
-    for(int i = 0; i < nNeurons; i++)
-    {   
+    for (int i = 0; i < nNeurons; i++)
+    {
         int r = rand() % nSamples;
-        for(int j = 0; j < nElements; j++)
+        for (int k = i * nElements, j = 0; j < nElements; k++, j++)
         {
-        h_Matrix[i*nElements+j] = Samples[r+j];
+             h_Matrix[k] = Samples[r*nElements + j];
         }
-
     }
 
-    for(int i = 0; i < totalLength; i++){
-        std::cout << h_Matrix[i] << std::endl;
+    if (debug){
+        for (int i = 0; i < nNeurons; i++)
+        {
+            for (int k = i * nElements, j = 0; j < nElements; k++, j++)
+            {
+                std::cout << h_Matrix[k] << "\t";  
+            }
+            std::cout << std::endl;
+        }
     }
     
-
 	// inizializing the learnig rate
     double lr = ilr;
     // initializiang the radius of the updating function
@@ -283,7 +290,7 @@ int main(int argc, char **argv)
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << lrstep << " learning rate spep, "<< accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, " << radiusStep << " radiusStep "  << std::endl;
     }
 
-    //TOMOVE
+    // initializing indexes to shuffle the Samples vector
     int randIndexes[nSamples];
     for (int i = 0; i < nSamples; i++)
     {
@@ -305,9 +312,6 @@ int main(int argc, char **argv)
 		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++){
 		    	h_ActualSample[j] = Samples[i];
 		    } 
-
-		    if (debug)
-		    	std::cout << "First element of the actual sample " << h_ActualSample[0] << " Last element of the actual sample " << h_ActualSample[nElements-1] << std::endl;
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));

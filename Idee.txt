@@ -1,7 +1,7 @@
 Problems:
 Poca convergenza con pochi neuroni, servono molte iterazioni
 
-COntrollare lambda e step di lr e raggio
+Controllare lambda e step di lr e raggio
 
 Ottimizzare prestazioni update
 
@@ -13,4 +13,4 @@ Possibilità di salvare su file la matrice
 
 Questione uso thread e blocchi dinamico
 
-Lambda stimate e non passate da riga di comando
+?Lambda stimate e non passate da riga di comando?
