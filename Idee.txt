@@ -1,7 +1,4 @@
 Problems:
-Poca convergenza con pochi neuroni, indipendentemente dalle iterazioni
-	Distanza iniziale troppo big
-	Il raggio compromette la convergenza(Magari per i valor iiniziali?)
 
 Ottimizzare prestazioni update
 
