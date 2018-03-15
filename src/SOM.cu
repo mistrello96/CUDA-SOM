@@ -9,6 +9,9 @@
 #include <algorithm>
 #include <iostream>
 
+#include "utility_functions.cpp"
+#include "distance_kernels.cu"
+
 #define CUDA_CHECK_RETURN(value) {											\
 		cudaError_t _m_cudaStat = value;										\
 		if (_m_cudaStat != cudaSuccess) {										\
@@ -16,105 +19,6 @@
 					cudaGetErrorString(_m_cudaStat), __LINE__, __FILE__);		\
 					exit(-13);															\
 } }
-
-// kernel to find the distance of each neuron from the sample vector
-__global__ void compute_distance(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
-{
-	// getting the index of the thread
-	int index = threadIdx.x + blockDim.x * blockIdx.x;
-	if (index < nNeuron)
-	{
-		// computing the corresponding index in the matrix
-		int matrixindex = index * nElements;
-		// tmp will store the distances of the neuron's component
-		double tmp = 0;
-		for(int i = 0; i < nElements; i++)
-		{
-			tmp = tmp + powf(k_matrix[matrixindex+i] - k_ActualSample[i], 2.0);
-		}
-
-		// save the distance of the neuron in distance vector
-		k_distance[index] = sqrtf(tmp)/nElements;
-	}
-}
-
-// function to check the avaiable memory
-double checkFreeGpuMem()
-{
-	double free_m;
-	size_t free_t,total_t;
-	cudaMemGetInfo(&free_t,&total_t);
-	free_m =(uint)free_t;
-
-	return free_m;
-}
-
-
-// returns the number of features per line
-int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
-{
-	int counter = 0;
-	std::string line;
-	std::ifstream file (filePath.c_str());
-	if (file.is_open())
-	{
-		while (std::getline (file, line))
-		{
-			std::istringstream iss(line);
-    		std::string element;
-    		int tmp = 0;
-    		while(std::getline(iss, element, '\t'))
-    		{
-    			tmp ++;
-				samples.push_back(strtof((element).c_str(),0));
-			}
-			counter = tmp;
-		}
-		file.close();
-		return counter;
-	}
-	else
-	{
-		std::cout << "Unable to open file";
-		exit(-1);
-	}
-}
-
-void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements){
-    std::ofstream myfile;
-    myfile.open (filePath.c_str());
-    myfile << "nRows \n" << nRows << "\n" << "nColumns \n" << nColumns << "\n";
-    for (int i = 0; i < nRows*nColumns*nElements; i++)
-    {
-        myfile << matrix[i] << "\n";  
-    }
-    myfile.close();
-}
-
-/*
-void loadMatrixfromFile(std::string filePath, double* h_Matrix, int* &nRows, int* &nColumns){
-    int counter = 0;
-    std::string line;
-    std::ifstream file (filePath.c_str());
-    if (file.is_open())
-    {
-        std::getline (file, line);
-        std::getline (file, line);
-        *nRows = strtoi((line).c_str(),0);
-        std::getline (file, line);
-        std::getline (file, line);
-        *nRows = strtoi((line).c_str(),0);
-        while (std::getline (file, line))
-        {
-            h_Matrix[counter] = strtoi((line).c_str(),0);
-            counter ++;
-        }
-        file.close();
-        return counter;
-    }
-}
-*/
-
 
 int main(int argc, char **argv)
 {
@@ -235,14 +139,14 @@ int main(int argc, char **argv)
     // estimate the neurons number if not given
     if (nRows==0 | nColumns == 0)
     {
-    	int tmp = 5 * nSamples;
-    	nRows = sqrt(tmp) + 1;
-    	nColumns = sqrt(tmp) + 1;
+    	int tmp = 5*(pow(nSamples, 0.54321));
+    	nRows = sqrt(tmp);
+    	nColumns = sqrt(tmp);
     }
 
-    // estimate the radius if not given
+    // estimate the radius if not given (covering 2/3 of the matrix)
     if (initialRadius == 0)
-    	initialRadius = max(nRows, nColumns) * 2 / 3;
+    	initialRadius = (max(nRows, nColumns)/2) * 2 / 3;
 
     // total number of neurons in the SOM
     int nNeurons = nRows * nColumns;
@@ -364,7 +268,7 @@ int main(int argc, char **argv)
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Distance, h_Distance, sizeof(double) * nNeurons, cudaMemcpyHostToDevice));	
 			
 		    // parallel search launch
-		    compute_distance<<<nblocks,1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements);
+		    compute_distance_euclidean_normalized<<<nblocks,1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements);
 
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
@@ -407,9 +311,10 @@ int main(int argc, char **argv)
 	                int y = i % nColumns;
 	                int distance = sqrt((x - BMU_x)*(x - BMU_x) + (y - BMU_y)*(y - BMU_y));
 	                if (distance <= radius){
-	                    double gaussian = exp(- (double)(distance * distance)/(double)(2 * radius * radius));
+	                    double g = gaussian(distance, radius);
+	                    int b = bubble(distance, radius);
 	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++){
-	                        h_Matrix[k] = h_Matrix[k] + gaussian * lr * (h_ActualSample[j] - h_Matrix[k]);
+	                        h_Matrix[k] = h_Matrix[k] + g * lr * (h_ActualSample[j] - h_Matrix[k]);
 	                    }
 	                }
 	            }
