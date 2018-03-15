@@ -34,7 +34,7 @@ __global__ void compute_distance(double* k_matrix, double* k_ActualSample, doubl
 		}
 
 		// save the distance of the neuron in distance vector
-		k_distance[index] = sqrtf(tmp);
+		k_distance[index] = sqrtf(tmp)/nElements;
 	}
 }
 
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 
     // estimate the radius if not given
     if (initialRadius == 0)
-    	initialRadius = max(nRows, nColumns) / 2;
+    	initialRadius = max(nRows, nColumns) * 2 / 3;
 
     // total number of neurons in the SOM
     int nNeurons = nRows * nColumns;
@@ -290,16 +290,16 @@ int main(int argc, char **argv)
     
     if(!load){
         srand(time(NULL));
+        
         /*
-        // random values SOM initialization
         for(int i = 0; i < totalLength; i++)
         {
             double tmp = rand() / (float) RAND_MAX;
-        	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
+        	tmp = -0.05 + tmp * (0.1);
         	h_Matrix[i] = tmp; 
         }
-        
         */
+        
         for (int i = 0; i < nNeurons; i++)
         {
             int r = rand() % nSamples;
@@ -308,12 +308,13 @@ int main(int argc, char **argv)
                  h_Matrix[k] = Samples[r*nElements + j];
             }
         }
+        
+
     }
 
     if (debug){
-        saveSOMtoFile("initialSOM.txt", h_Matrix, nRows, nColumns, nElements);
+        saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
-    
 	// inizializing the learnig rate
     double lr = ilr;
     // initializiang the radius of the updating function
@@ -388,7 +389,7 @@ int main(int argc, char **argv)
 
 			// debug print
 		    if(debug)
-			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << " , " << BMU_x << " is the x index " << BMU_y << " is the y index" << std::endl;
+			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
@@ -434,7 +435,7 @@ int main(int argc, char **argv)
     }
 
     if (debug | print){
-        saveSOMtoFile("outputSOM.txt",h_Matrix, nRows, nColumns, nElements);
+        saveSOMtoFile("outputSOM.out",h_Matrix, nRows, nColumns, nElements);
     }
 
 	//freeing all allocated memory

@@ -51,7 +51,7 @@ input_file = "dati_bicocca_leucemia.txt" # dati raw
 test_name = "Leukemia"
 #test_name = "Melanoma"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
-seqdata <- as.matrix(scale(seqdata_original))
+seqdata <- as.matrix(seqdata_original)
 #best_clustering <- get_best_k(seqdata);
 best_clustering <- NbClust(seqdata, distance="euclidean", min.nc=2, max.nc=10, method="complete", index="all")
 
@@ -59,7 +59,7 @@ for (best_clustering in c(2,3,4,5,6,7,8,9,10)) {
   
   # main plot
   D <- optimal_som(seqdata);
-  som_model <- som(seqdata, rlen=1000,radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F), keep.data=T ) 
+  som_model <- som(seqdata, rlen=1000 ,radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F), keep.data=T ) 
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
   cluster = hclust(object.distances(som_model, "codes"))
