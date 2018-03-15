@@ -11,3 +11,5 @@ Questione uso thread e blocchi dinamico
 Possibilità di caricare la SOM da file??
 
 Recuperare numero bloccji da cuda info
+
+Riscrivere il codice in più files
