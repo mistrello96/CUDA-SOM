@@ -2,15 +2,11 @@ Problems:
 
 Ottimizzare prestazioni update(Questione uso thread e blocchi dinamico)
 
-Aggiungere gestione kernel multipli, aggiungere gestione vicinato multiplo, gestione shuffle sui dati
+Aggiungere gestione kernel multipli, aggiungere gestione vicinato multiplo
 
 TODO:
 
 Possibilità di caricare la SOM da file??
-
-Recuperare numero blocchi da cuda info
-
-Riscrivere il codice in più files
 
 Matrice esagonale
 

@@ -11,6 +11,7 @@
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
+#include "cmdline.h"
 
 #define CUDA_CHECK_RETURN(value) {											\
 		cudaError_t _m_cudaStat = value;										\
@@ -22,99 +23,57 @@
 
 int main(int argc, char **argv)
 {
+	// reading passed params
+	gengetopt_args_info ai;
+    if (cmdline_parser (argc, argv, &ai) != 0) {
+        exit(1);
+    }
 	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
 	// path of the input file
-	std::string filePath = "./";
-    std::string inputSOM = "";
+	std::string filePath = ai.inputfile_arg;
 	// verbose flag
-    bool verbose = false;
+    bool verbose = ai.verbose_flag;
     // advanced debug flag
-    bool debug = false;
+    bool debug = ai.debug_flag;
     // save SOM to file
-    bool print = false;
-    // load SOM from file
-    bool load = false;
+    bool print = ai.save_flag;
     // number of rows in the martix
-    int nRows = 0;
+    int nRows = ai.nRows_arg;
     // number of column in the martix
-    int nColumns = 0;
+    int nColumns = ai.nColumns_arg;
     // initial learning rate
-    double ilr = 0;
+    double ilr = ai.initial_learning_rate_arg;
     // final learning rate
-    double flr = 0;
+    double flr = ai.final_learning_rate_arg;
     // max number of iteration
-    int maxnIter = 0;
+    int maxnIter = ai.iteration_arg;
     // accuracy threshold
-    double accuracyTreshold = -1;
-    // Times of Samples vector is presented to the SOM
+    double accuracyTreshold = ai.accuracy_arg;
+    // counter for times of Samples vector is presented to the SOM
     int nIter = 0;
     // Initial radius of the update
-    double initialRadius = 0;
-
-    // COMMAND LINE PARSING
-    int c;
-    while ((c = getopt (argc, argv, "i:vdx:y:s:f:n:a:r:hol:")) != -1)
-    switch (c)
-	{
-        case 'i':
-            filePath = optarg;
-            break;
-        case 'v':
-            verbose = true;
-            break;
-        case 'd':
-            debug = true;
-            break;
-        case 'l':
-            inputSOM = optarg;
-            load = true;
-            break;
-        case 'x':
-            nRows = atoi(optarg);
-            break;
-        case 'y':
-            nColumns = atoi(optarg);
-            break;
-        case 's':
-            ilr = strtof(optarg,0);
-            break;
-        case 'f':
-            flr = strtof(optarg,0);
-            break;
-        case 'n':
-            maxnIter = atoi(optarg);
-            break;
-        case 'a':
-            accuracyTreshold = strtof(optarg,0);
-            break;
-        case 'r':
-        	initialRadius = atoi(optarg);
-        	break;
-        case 'o':
-            print = true;
-        case 'h':
-            std::cout << "-i allows to provide the PATH of an input file. If not specified, ./ is assumed" << std::endl;
-            std::cout << "-x allows to provide the number of rows in the neuron's matrix." << std::endl;
-            std::cout << "-y allows to provide the numbers of columns in the neuron's matrix." << std::endl;
-            std::cout << "-s initial learning rate. REQUESTED" << std::endl;
-            std::cout << "-f final learning rate" << std::endl;
-            std::cout << "-a accuracy threshold" << std::endl;
-            std::cout << "-n number of times the dataset is presented to the SOM. REQUESTED" << std::endl;
-            std::cout << "-v enables debug prints" << std::endl;
-            std::cout << "-d enables advanced debug prints" << std::endl;
-            std::cout << "-r allows to chose the initial radius of the updating function" << std::endl;
-            std::cout << "-o allows to save the SOM produced in a file" << std::endl;
-            std::cout << "-l allows to load the SOM from file" << std::endl;
-            std::cout << "-h shows help menu of the tool" << std::endl;
-            return 0;
-    }
-
-    // checking the required params
-    if ((ilr == 0 | maxnIter == 0) & !debug & !verbose)
-    {
-        std::cout << "Required params are missing, program will abort" << std::endl;
-        exit(-1);        
-    }
+    double initialRadius = ai.radius_arg;
+    // type of distance used
+    char distanceType = ai.distance_arg[0];
+    // enable the normalization of the distance fuction
+    bool normalizeFlag = ai.normalize_flag;
+    // type of neighbors function used
+    char neighborsType = ai.neighbors_arg[0];
+    // type of initialization
+    char initializationType = ai.initialization_arg[0];
+    // type of lactice used
+    char lacticeType = ai.lactice_arg[0];
+    // dataset presentation methon
+    bool randomizeDataset = ai.randomize_flag;
+    // declaration of some usefull variables
+    double min_neuronValue, max_neuronValue;
+    int nSamples;
+    int nNeurons;
+    int totalLength;
+    int nblocks;
+    double lr;
+    double radius;
+	double accuracy;
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
@@ -123,21 +82,23 @@ int main(int argc, char **argv)
     int nElements = readSamplesfromFile(Samples, filePath);
 
     // EXTRACTING THE MIN/MAX FROM SAMPLES
-    // creating the thrust vector
-    thrust::device_vector<double> t_Samples(Samples);
-    // extract the minimum
-    thrust::device_vector<double>::iterator it = thrust::min_element(t_Samples.begin(), t_Samples.end());
-    double min_neuronValue = *it;
-    // extract maximum
-    thrust::device_vector<double>::iterator it2 = thrust::max_element(t_Samples.begin(), t_Samples.end());
-    double max_neuronValue = *it2;
+    if (initializationType == 'r'){
+	    // creating the thrust vector
+	    thrust::device_vector<double> t_Samples(Samples);
+	    // extract the minimum
+	    thrust::device_vector<double>::iterator it = thrust::min_element(t_Samples.begin(), t_Samples.end());
+	    min_neuronValue = *it;
+	    // extract maximum
+	    thrust::device_vector<double>::iterator it2 = thrust::max_element(t_Samples.begin(), t_Samples.end());
+	    max_neuronValue = *it2;
+	}
 
     // COMPUTE VALUES FOR THE SOM INITIALIZATION
     // retrive the number of samples
-    int nSamples = Samples.size() / nElements;
+    nSamples = Samples.size() / nElements;
 
     // estimate the neurons number if not given
-    if (nRows==0 | nColumns == 0)
+    if (nRows ==0 | nColumns == 0)
     {
     	int tmp = 5*(pow(nSamples, 0.54321));
     	nRows = sqrt(tmp);
@@ -146,14 +107,15 @@ int main(int argc, char **argv)
 
     // estimate the radius if not given (covering 2/3 of the matrix)
     if (initialRadius == 0)
-    	initialRadius = (max(nRows, nColumns)/2) * 2 / 3;
+    	initialRadius = 1 + (max(nRows, nColumns)/2) * 2 / 3;
 
     // total number of neurons in the SOM
-    int nNeurons = nRows * nColumns;
+    nNeurons = nRows * nColumns;
     // total length of the serialized matrix
-    int totalLength = nRows * nColumns * nElements;
+    totalLength = nRows * nColumns * nElements;
     // number of block used in the computation
-    int nblocks = (nNeurons / 1024) + 1;
+
+    nblocks = (nNeurons / getnThreads()) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535)
@@ -191,40 +153,38 @@ int main(int argc, char **argv)
 
     // SOM INIZIALIZATION
     // generating random seed
-    
-    if(!load){
-        srand(time(NULL));
-        
-        /*
-        for(int i = 0; i < totalLength; i++)
-        {
-            double tmp = rand() / (float) RAND_MAX;
-        	tmp = -0.05 + tmp * (0.1);
-        	h_Matrix[i] = tmp; 
-        }
-        */
-        
-        for (int i = 0; i < nNeurons; i++)
-        {
-            int r = rand() % nSamples;
-            for (int k = i * nElements, j = 0; j < nElements; k++, j++)
-            {
-                 h_Matrix[k] = Samples[r*nElements + j];
-            }
-        }
-        
-
+    srand(time(NULL));
+    if (initializationType == 'r'){
+	    for(int i = 0; i < totalLength; i++)
+	    {
+	        double tmp = rand() / (float) RAND_MAX;
+	    	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
+	    	h_Matrix[i] = tmp; 
+	    }
     }
+    else if (initializationType == 'c'){
+	    for (int i = 0; i < nNeurons; i++)
+	    {
+	        int r = rand() % nSamples;
+	        for (int k = i * nElements, j = 0; j < nElements; k++, j++)
+	        {
+	             h_Matrix[k] = Samples[r*nElements + j];
+	        }
+	    }
+	}
+	else {
+		// TODO PCA
+	}
 
-    if (debug){
+    if (debug | print){
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
 	// inizializing the learnig rate
-    double lr = ilr;
+    lr = ilr;
     // initializiang the radius of the updating function
-    double radius = initialRadius;
+    radius = initialRadius;
     // initializing accuracy of the first iteration with a fake value
-	double accuracy = DBL_MAX;
+	accuracy = DBL_MAX;
 
     // debug print
     if(verbose | debug){
@@ -240,7 +200,8 @@ int main(int argc, char **argv)
 
     while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter)){
     	// randomize indexes of samples
-    	std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
+    	if(randomizeDataset)
+    		std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
 
         if (debug | verbose)
         {
@@ -260,7 +221,6 @@ int main(int argc, char **argv)
 		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++){
 		    	h_ActualSample[j] = Samples[i];
 		    } 
-
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));

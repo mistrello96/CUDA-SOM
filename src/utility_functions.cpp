@@ -23,6 +23,12 @@ double checkFreeGpuMem()
 	return free_m;
 }
 
+int getnThreads(){
+    cudaDeviceProp prop;
+    cudaGetDeviceProperties(&prop, 0);
+    return prop.maxThreadsPerBlock;
+  
+}
 
 // returns the number of features per line
 int readSamplesfromFile(std::vector<double>& samples, std::string filePath)

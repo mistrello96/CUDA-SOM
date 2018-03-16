@@ -1,0 +1,23 @@
+version "0.1"
+package "CudaSOM"
+purpose "Cuda implementation of Self Organizing Map"
+
+# Options
+
+option "inputfile" i "PATH to the input file" string optional default="./"
+option "nRows" x "allows to provide the number of rows in the neuron's matrix" int optional default="0"
+option "nColumns" y "allows to provide the number of columns in the neuron's matrix" int optional default="0"
+option "initial_learning_rate" s "allows to provide initial learning rate" double required
+option "final_learning_rate" f "allows to provide final learning rate" double optional default="0"
+option "accuracy" a "allows to provide accuracy threshold" double optional default="0"
+option "iteration" n "number of times the dataset is presented to the SOM" int required
+option "debug" d "enables advanced debug prints" flag off
+option "verbose" v "enables debug print" flag off
+option "save" - "save the input and output SOM in files" flag off
+option "radius" r "allows to chose the initial radius of the updating function" int optional default= "0"
+option "distance" - "allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan" string optional default="e" values="e","s","m"
+option "normalize" - "Enable the normalization of the distance function" flag on
+option "neighbors" - "allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat" string optional default="g" values="b","g","m"
+option "initialization" - "allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA" string optional default="c" values="r","c","p"
+option "lactice" - "allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice" string optional default="r" values="r","e"
+option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled." flag on
