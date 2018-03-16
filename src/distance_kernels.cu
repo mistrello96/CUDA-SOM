@@ -79,7 +79,7 @@ __global__ void compute_distance_sum_squares_normalized(double* k_matrix, double
 	}
 }
 
-__global__ void compute_distance_manhattan_(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_manhattan(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;

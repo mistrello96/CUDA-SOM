@@ -1,13 +1,13 @@
-#include <ctime>
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
 #include <thrust/extrema.h>
 #include <unistd.h>
 #include <fstream>
 #include <sstream>
-#include <float.h>
 #include <algorithm>
 #include <iostream>
+#include <random>
+#include <float.h>
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
@@ -67,21 +67,30 @@ int main(int argc, char **argv)
     bool randomizeDataset = ai.randomize_flag;
     // declaration of some usefull variables
     double min_neuronValue, max_neuronValue;
+    // number of lines in the input file
     int nSamples;
+    // total number of neurons in the SOM
     int nNeurons;
+    // total length of the matrix vector
     int totalLength;
+    // number of features per read
+    int nElements;
+    // number of blocks that needs to be launched
     int nblocks;
+    // actual learning rate
     double lr;
+    // actual radius
     double radius;
+    // actual accuracy
 	double accuracy;
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
     std::vector <double> Samples;
     // retrive the number of features readed from the file
-    int nElements = readSamplesfromFile(Samples, filePath);
+    nElements = readSamplesfromFile(Samples, filePath);
 
-    // EXTRACTING THE MIN/MAX FROM SAMPLES
+    // EXTRACTING THE MIN/MAX FROM SAMPLES(only used for random initialization)
     if (initializationType == 'r'){
 	    // creating the thrust vector
 	    thrust::device_vector<double> t_Samples(Samples);
@@ -138,8 +147,6 @@ int main(int argc, char **argv)
     double *h_ActualSample = (double *)malloc(sizeof(double) * nElements);
     // host distance array, used to find BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
-    // host BMU distance array
-    double *h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
     // device SOM
     double *d_Matrix;
     // device sample array
@@ -153,19 +160,20 @@ int main(int argc, char **argv)
 
     // SOM INIZIALIZATION
     // generating random seed
-    srand(time(NULL));
+    std::random_device rd;
+    std::mt19937 e2(rd());
     if (initializationType == 'r'){
+    	std::uniform_real_distribution<> dist(min_neuronValue, max_neuronValue);
 	    for(int i = 0; i < totalLength; i++)
 	    {
-	        double tmp = rand() / (float) RAND_MAX;
-	    	tmp = min_neuronValue + tmp * (max_neuronValue - min_neuronValue);
-	    	h_Matrix[i] = tmp; 
+	    	h_Matrix[i] = dist(e2); 
 	    }
     }
     else if (initializationType == 'c'){
+    	std::uniform_int_distribution<> dist(0, nSamples);
 	    for (int i = 0; i < nNeurons; i++)
 	    {
-	        int r = rand() % nSamples;
+	        int r = dist(e2);
 	        for (int k = i * nElements, j = 0; j < nElements; k++, j++)
 	        {
 	             h_Matrix[k] = Samples[r*nElements + j];
@@ -179,11 +187,10 @@ int main(int argc, char **argv)
     if (debug | print){
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
-	// inizializing the learnig rate
+
+	// inizializing actual values
     lr = ilr;
-    // initializiang the radius of the updating function
     radius = initialRadius;
-    // initializing accuracy of the first iteration with a fake value
 	accuracy = DBL_MAX;
 
     // debug print
@@ -197,6 +204,8 @@ int main(int argc, char **argv)
     {
     	randIndexes[i] = i;
     }
+
+    thrust::device_vector<double> d_DistanceHistory;
 
     while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter)){
     	// randomize indexes of samples
@@ -212,11 +221,6 @@ int main(int argc, char **argv)
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++){
 
-		    // distance array inizialization
-		    for(int i = 0; i < nNeurons; i++){
-		    	h_Distance[i] = 0;
-		    }
-
 		    // copy the s sample in the actual sample vector
 		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++){
 		    	h_ActualSample[j] = Samples[i];
@@ -225,10 +229,21 @@ int main(int argc, char **argv)
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
 			CUDA_CHECK_RETURN(cudaMemcpy(d_ActualSample, h_ActualSample, sizeof(double) * nElements, cudaMemcpyHostToDevice));
-			CUDA_CHECK_RETURN(cudaMemcpy(d_Distance, h_Distance, sizeof(double) * nNeurons, cudaMemcpyHostToDevice));	
 			
 		    // parallel search launch
-		    compute_distance_euclidean_normalized<<<nblocks,1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements);
+		    if (normalizeFlag){
+		    	switch(distanceType){
+		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    	}
+		    }else{
+		    	switch(distanceType){
+		    		case 'e' : compute_distance_euclidean<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    	}
+		    }
 
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
@@ -248,8 +263,9 @@ int main(int argc, char **argv)
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
 			double BMU_distance = *iter;
+
 			// adding the found value in the distance history array
-			h_DistanceHistory[s] = BMU_distance;
+			d_DistanceHistory.push_back(BMU_distance);
 
 			// debug print
 		    if(debug)
@@ -279,19 +295,18 @@ int main(int argc, char **argv)
 	                }
 	            }
         	}	         
-		
         }
 
         // END OF SAMPLES ITERATION. UPDATING VALUES
         // updating accuracy
-        thrust::device_vector<double> d_DistanceHistory(h_DistanceHistory, h_DistanceHistory + nSamples);
-        double meansum = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
-        accuracy = meansum / ((double)nSamples);
+        accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
+        d_DistanceHistory.clear();
+
         if (verbose | debug)
         {
             std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
         }
-
+        
 		// updating the counter iteration
 		nIter ++;
         // updating radius and learning rate
@@ -310,6 +325,5 @@ int main(int argc, char **argv)
     free(h_Matrix);
     free(h_Distance);
     free(h_ActualSample);
-
 }
 
