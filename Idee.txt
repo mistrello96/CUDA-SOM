@@ -2,14 +2,12 @@ Problems:
 
 Ottimizzare prestazioni update(Questione uso thread e blocchi dinamico)
 
-Aggiungere gestione vicinato multiplo
+Aggiungere gestione, aggiungere gestione vicinato multiplo
 
 TODO:
 
 Possibilità di caricare la SOM da file??
 
-Matrice esagonale(solo nel calcolo distanze)
+Matrice esagonale
 
 Inizializzazione PCA
-
-Nuove distanze
