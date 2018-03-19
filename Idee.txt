@@ -2,8 +2,6 @@ Problems:
 
 Ottimizzare prestazioni update(Questione uso thread e blocchi dinamico)
 
-Aggiungere gestione, aggiungere gestione vicinato multiplo
-
 TODO:
 
 Possibilità di caricare la SOM da file??
@@ -11,3 +9,6 @@ Possibilità di caricare la SOM da file??
 Matrice esagonale
 
 Inizializzazione PCA
+
+Decrescita esponenziale del raggio?
+

@@ -25,7 +25,8 @@ int main(int argc, char **argv)
 {
 	// reading passed params
 	gengetopt_args_info ai;
-    if (cmdline_parser (argc, argv, &ai) != 0) {
+    if (cmdline_parser (argc, argv, &ai) != 0)
+    {
         exit(1);
     }
 	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
@@ -91,7 +92,8 @@ int main(int argc, char **argv)
     nElements = readSamplesfromFile(Samples, filePath);
 
     // EXTRACTING THE MIN/MAX FROM SAMPLES(only used for random initialization)
-    if (initializationType == 'r'){
+    if (initializationType == 'r')
+    {
 	    // creating the thrust vector
 	    thrust::device_vector<double> t_Samples(Samples);
 	    // extract the minimum
@@ -162,14 +164,16 @@ int main(int argc, char **argv)
     // generating random seed
     std::random_device rd;
     std::mt19937 e2(rd());
-    if (initializationType == 'r'){
+    if (initializationType == 'r')
+    {
     	std::uniform_real_distribution<> dist(min_neuronValue, max_neuronValue);
 	    for(int i = 0; i < totalLength; i++)
 	    {
 	    	h_Matrix[i] = dist(e2); 
 	    }
     }
-    else if (initializationType == 'c'){
+    else if (initializationType == 'c')
+    {
     	std::uniform_int_distribution<> dist(0, nSamples);
 	    for (int i = 0; i < nNeurons; i++)
 	    {
@@ -180,13 +184,14 @@ int main(int argc, char **argv)
 	        }
 	    }
 	}
-	else {
+	else
+    {
 		// TODO PCA
 	}
 
-    if (debug | print){
+    if (debug | print)
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
-    }
+    
 
 	// inizializing actual values
     lr = ilr;
@@ -194,9 +199,9 @@ int main(int argc, char **argv)
 	accuracy = DBL_MAX;
 
     // debug print
-    if(verbose | debug){
+    if(verbose | debug)
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, "  << std::endl;
-    }
+    
 
     // initializing indexes to shuffle the Samples vector
     int randIndexes[nSamples];
@@ -207,7 +212,8 @@ int main(int argc, char **argv)
 
     thrust::device_vector<double> d_DistanceHistory;
 
-    while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter)){
+    while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter))
+    {
     	// randomize indexes of samples
     	if(randomizeDataset)
     		std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
@@ -219,10 +225,12 @@ int main(int argc, char **argv)
         }
 
         // ITERATE ON EACH SAMPLE TO FIND BMU
-	    for(int s=0; s < nSamples ; s++){
+	    for(int s=0; s < nSamples ; s++)
+        {
 
 		    // copy the s sample in the actual sample vector
-		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++){
+		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++)
+            {
 		    	h_ActualSample[j] = Samples[i];
 		    } 
 
@@ -231,14 +239,19 @@ int main(int argc, char **argv)
 			CUDA_CHECK_RETURN(cudaMemcpy(d_ActualSample, h_ActualSample, sizeof(double) * nElements, cudaMemcpyHostToDevice));
 			
 		    // parallel search launch
-		    if (normalizeFlag){
-		    	switch(distanceType){
+		    if (normalizeFlag)
+            {
+		    	switch(distanceType)
+                {
 		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
-		    }else{
-		    	switch(distanceType){
+		    }
+            else
+            {
+		    	switch(distanceType)
+                {
 		    		case 'e' : compute_distance_euclidean<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 's' : compute_distance_sum_squares<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 'm' : compute_distance_manhattan<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
@@ -249,7 +262,8 @@ int main(int argc, char **argv)
 		    cudaDeviceSynchronize();
 
 		    // CHECK AVAILABLE MEMORY
-	    	if (sizeof(double) * nNeurons * nElements >= checkFreeGpuMem()){
+	    	if (sizeof(double) * nNeurons * nElements >= checkFreeGpuMem())
+            {
 		    	std::cout << "Out of memory, try to reduce the neurons number" << std::endl;
 		    	exit(-1);
 			}
@@ -275,7 +289,8 @@ int main(int argc, char **argv)
 			// if radius is 0, update only BMU 
 	        if (radius == 0)
 	        {
-	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++){
+	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
+                {
 	        		h_Matrix[i] = h_Matrix[i] + lr * (h_ActualSample[j] - h_Matrix[i]);
 	        	}
 	        }
@@ -286,11 +301,19 @@ int main(int argc, char **argv)
 	                int x = i / nColumns;
 	                int y = i % nColumns;
 	                int distance = sqrt((x - BMU_x)*(x - BMU_x) + (y - BMU_y)*(y - BMU_y));
-	                if (distance <= radius){
-	                    double g = gaussian(distance, radius);
-	                    int b = bubble(distance, radius);
-	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++){
-	                        h_Matrix[k] = h_Matrix[k] + g * lr * (h_ActualSample[j] - h_Matrix[k]);
+	                if (distance <= radius)
+                    {
+                        double neigh = 0.0;
+                        switch (neighborsType)
+                        {
+                            case 'g' : neigh = gaussian(distance, radius); break;
+                            case 'b' : neigh = bubble(distance, radius); break;
+                            case 'm' : neigh = mexican_hat(distance, radius); break;
+                        } 
+
+	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++)
+                        {
+	                        h_Matrix[k] = h_Matrix[k] + neigh * lr * (h_ActualSample[j] - h_Matrix[k]);
 	                    }
 	                }
 	            }
@@ -309,12 +332,16 @@ int main(int argc, char **argv)
         
 		// updating the counter iteration
 		nIter ++;
+
         // updating radius and learning rate
         radius =(int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
         lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
+
+ 
     }
 
-    if (debug | print){
+    if (debug | print)
+    {
         saveSOMtoFile("outputSOM.out",h_Matrix, nRows, nColumns, nElements);
     }
 
