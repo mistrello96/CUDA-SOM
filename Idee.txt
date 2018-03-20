@@ -1,4 +1,12 @@
 Problems:
+Esecuzione classica: 36-40
+Esecizione senza update : 36-40
+Esecuzione senza thrust BMU: 16 - 19
+
+No problema nel ciclo di update.
+Evidenti problemi nell'utilizzo delle thrust. Possibilità di utilizzo solo con certo numero di neuroni??
+
+
 
 Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, viene generato un solo blocco... molto molto male):
 	
