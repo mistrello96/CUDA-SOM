@@ -124,8 +124,8 @@ int main(int argc, char **argv)
     nNeurons = nRows * nColumns;
     // total length of the serialized matrix
     totalLength = nRows * nColumns * nElements;
+    
     // number of block used in the computation
-
     nblocks = (nNeurons / getnThreads()) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
@@ -192,7 +192,6 @@ int main(int argc, char **argv)
     if (debug | print)
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     
-
 	// inizializing actual values
     lr = ilr;
     radius = initialRadius;
@@ -201,7 +200,6 @@ int main(int argc, char **argv)
     // debug print
     if(verbose | debug)
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, "  << std::endl;
-    
 
     // initializing indexes to shuffle the Samples vector
     int randIndexes[nSamples];
@@ -210,6 +208,7 @@ int main(int argc, char **argv)
     	randIndexes[i] = i;
     }
 
+    // thrust vector used to store the BMU distances of each iteration
     thrust::device_vector<double> d_DistanceHistory;
 
     while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter))
@@ -294,13 +293,15 @@ int main(int argc, char **argv)
 	        		h_Matrix[i] = h_Matrix[i] + lr * (h_ActualSample[j] - h_Matrix[i]);
 	        	}
 	        }
-	        // possible to transfer on the gpu
+	        // possible to transfer on the gpu?
+            // update also the neighbors
 	        else
 	        {
 	            for (int i = 0; i < nNeurons; i++){
 	                int x = i / nColumns;
 	                int y = i % nColumns;
-	                int distance = sqrt((x - BMU_x)*(x - BMU_x) + (y - BMU_y)*(y - BMU_y));
+	                int distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
+                    // update only if...
 	                if (distance <= radius)
                     {
                         double neigh = 0.0;
@@ -335,9 +336,7 @@ int main(int argc, char **argv)
 
         // updating radius and learning rate
         radius =(int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
-        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
-
- 
+        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter); 
     }
 
     if (debug | print)
@@ -353,4 +352,3 @@ int main(int argc, char **argv)
     free(h_Distance);
     free(h_ActualSample);
 }
-

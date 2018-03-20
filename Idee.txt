@@ -1,14 +1,14 @@
 Problems:
 
-Ottimizzare prestazioni update(Questione uso thread e blocchi dinamico)
+Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, viene generato un solo blocco... molto molto male):
+	
 
 TODO:
 
-Possibilità di caricare la SOM da file??
-
-Matrice esagonale
+Matrice esagonale(vedi file SOMGRID.R)
 
 Inizializzazione PCA
 
 Decrescita esponenziale del raggio?
 
+Possibilità di caricare la SOM da file??
