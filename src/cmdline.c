@@ -53,6 +53,7 @@ const char *gengetopt_args_info_help[] = {
   "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization,\n                                  c for random vector from the input file, p\n                                  for PCA  (possible values=\"r\", \"c\", \"p\"\n                                  default=`c')",
   "      --lactice=STRING          allows to choose what tipy of lactice is used.\n                                  Use s for square lactice or e for exagonal\n                                  lactice  (possible values=\"s\", \"e\"\n                                  default=`e')",
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
+  "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and the radius. Use l for learning rate,\n                                  r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
     0
 };
 
@@ -79,6 +80,7 @@ const char *cmdline_parser_distance_values[] = {"e", "s", "m", 0}; /*< Possible 
 const char *cmdline_parser_neighbors_values[] = {"b", "g", "m", 0}; /*< Possible values for neighbors. */
 const char *cmdline_parser_initialization_values[] = {"r", "c", "p", 0}; /*< Possible values for initialization. */
 const char *cmdline_parser_lactice_values[] = {"s", "e", 0}; /*< Possible values for lactice. */
+const char *cmdline_parser_exponential_values[] = {"n", "l", "r", "b", 0}; /*< Possible values for exponential. */
 
 static char *
 gengetopt_strdup (const char *s);
@@ -105,6 +107,7 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->initialization_given = 0 ;
   args_info->lactice_given = 0 ;
   args_info->randomize_given = 0 ;
+  args_info->exponential_given = 0 ;
 }
 
 static
@@ -138,6 +141,8 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->lactice_arg = gengetopt_strdup ("e");
   args_info->lactice_orig = NULL;
   args_info->randomize_flag = 1;
+  args_info->exponential_arg = gengetopt_strdup ("n");
+  args_info->exponential_orig = NULL;
   
 }
 
@@ -165,6 +170,7 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->initialization_help = gengetopt_args_info_help[16] ;
   args_info->lactice_help = gengetopt_args_info_help[17] ;
   args_info->randomize_help = gengetopt_args_info_help[18] ;
+  args_info->exponential_help = gengetopt_args_info_help[19] ;
   
 }
 
@@ -265,6 +271,8 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->initialization_orig));
   free_string_field (&(args_info->lactice_arg));
   free_string_field (&(args_info->lactice_orig));
+  free_string_field (&(args_info->exponential_arg));
+  free_string_field (&(args_info->exponential_orig));
   
   
 
@@ -374,6 +382,8 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "lactice", args_info->lactice_orig, cmdline_parser_lactice_values);
   if (args_info->randomize_given)
     write_into_file(outfile, "randomize", 0, 0 );
+  if (args_info->exponential_given)
+    write_into_file(outfile, "exponential", args_info->exponential_orig, cmdline_parser_exponential_values);
   
 
   i = EXIT_SUCCESS;
@@ -696,6 +706,7 @@ cmdline_parser_internal (
         { "initialization",	1, NULL, 0 },
         { "lactice",	1, NULL, 0 },
         { "randomize",	0, NULL, 0 },
+        { "exponential",	1, NULL, 0 },
         { 0,  0, 0, 0 }
       };
 
@@ -921,6 +932,20 @@ cmdline_parser_internal (
             if (update_arg((void *)&(args_info->randomize_flag), 0, &(args_info->randomize_given),
                 &(local_args_info.randomize_given), optarg, 0, 0, ARG_FLAG,
                 check_ambiguity, override, 1, 0, "randomize", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both.  */
+          else if (strcmp (long_options[option_index].name, "exponential") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->exponential_arg), 
+                 &(args_info->exponential_orig), &(args_info->exponential_given),
+                &(local_args_info.exponential_given), optarg, cmdline_parser_exponential_values, "n", ARG_STRING,
+                check_ambiguity, override, 0, 0,
+                "exponential", '-',
                 additional_error))
               goto failure;
           

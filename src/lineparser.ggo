@@ -21,3 +21,4 @@ option "neighbors" - "allows to specify the neighbors function used in the learn
 option "initialization" - "allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA" string optional default="c" values="r","c","p"
 option "lactice" - "allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice" string optional default="e" values="s","e"
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled." flag on
+option "exponential" - "enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both" string optional default="n" values="n","l","r","b"

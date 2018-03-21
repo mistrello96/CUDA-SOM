@@ -64,6 +64,8 @@ int main(int argc, char **argv)
     char initializationType = ai.initialization_arg[0];
     // type of lactice used
     char lacticeType = ai.lactice_arg[0];
+    // exponential decay for radius and lr
+    char exponential = ai.exponential_arg[0];
     // dataset presentation methon
     bool randomizeDataset = ai.randomize_flag;
     // declaration of some usefull variables
@@ -340,13 +342,18 @@ int main(int argc, char **argv)
 		nIter ++;
 
         // updating radius and learning rate
-        radius =(int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
-        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter); 
+        radius = (int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
+        if (exponential== 'r' | exponential == 'b')
+        	radius = (int) (initialRadius * exp(-(double)nIter/(sqrt(maxnIter)))) ;
+
+        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
+        if (exponential== 'l' | exponential == 'b')
+        	lr = ilr * exp(- (double)nIter/sqrt(maxnIter)) + flr;
     }
 
     if (debug | print)
     {
-        saveSOMtoFile("outputSOM.out",h_Matrix, nRows, nColumns, nElements);
+        saveSOMtoFile("outputSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
 
 	//freeing all allocated memory

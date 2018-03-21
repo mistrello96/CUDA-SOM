@@ -85,6 +85,9 @@ struct gengetopt_args_info
   const char *lactice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */
   const char *randomize_help; /**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. help description.  */
+  char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both (default='n').  */
+  char * exponential_orig;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both original value given at command line.  */
+  const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
@@ -105,6 +108,7 @@ struct gengetopt_args_info
   unsigned int initialization_given ;	/**< @brief Whether initialization was given.  */
   unsigned int lactice_given ;	/**< @brief Whether lactice was given.  */
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
+  unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
 
 } ;
 
@@ -233,6 +237,7 @@ extern const char *cmdline_parser_distance_values[];  /**< @brief Possible value
 extern const char *cmdline_parser_neighbors_values[];  /**< @brief Possible values for neighbors. */
 extern const char *cmdline_parser_initialization_values[];  /**< @brief Possible values for initialization. */
 extern const char *cmdline_parser_lactice_values[];  /**< @brief Possible values for lactice. */
+extern const char *cmdline_parser_exponential_values[];  /**< @brief Possible values for exponential. */
 
 
 #ifdef __cplusplus
