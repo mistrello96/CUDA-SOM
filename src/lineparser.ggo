@@ -19,5 +19,5 @@ option "distance" - "allows to chose different types of distance function. Use e
 option "normalize" - "Enable the normalization of the distance function" flag on
 option "neighbors" - "allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat" string optional default="g" values="b","g","m"
 option "initialization" - "allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA" string optional default="c" values="r","c","p"
-option "lactice" - "allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice" string optional default="r" values="r","e"
+option "lactice" - "allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice" string optional default="e" values="s","e"
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled." flag on

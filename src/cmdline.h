@@ -80,7 +80,7 @@ struct gengetopt_args_info
   char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA (default='c').  */
   char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA original value given at command line.  */
   const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA help description.  */
-  char * lactice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='r').  */
+  char * lactice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='e').  */
   char * lactice_orig;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice original value given at command line.  */
   const char *lactice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */

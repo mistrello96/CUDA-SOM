@@ -95,3 +95,40 @@ void loadMatrixfromFile(std::string filePath, double* h_Matrix, int* &nRows, int
 }
 */
 
+int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
+{
+  // compute distance as we would on a normal grid
+  int xdist = ax - bx;
+  int ydist = ay - by;
+
+  // compensate for grid deformation
+  // grid is stretched along (-n, n) line so points along that line have
+  // a distance of 2 between them instead of 1
+
+  // to calculate the shortest path, we decompose it into one diagonal movement(shortcut)
+  // and one straight movement along an axis
+
+  int lesserCoord = abs(xdist) < abs(ydist) ? abs(xdist) : abs(ydist);
+  int diagx = (xdist < 0) ? -lesserCoord : lesserCoord; // keep the sign 
+  int diagy = (ydist < 0) ? -lesserCoord : lesserCoord; // keep the sign
+
+  // one of x or y should always be 0 because we are calculating a straight
+  // line along one of the axis
+  int strx = xdist - diagx;
+  int stry = ydist - diagy;
+
+  // calculate distance
+  int straightDistance = abs(strx) + abs(stry);
+  int diagonalDistance = abs(diagx);
+
+  // if we are traveling diagonally along the stretch deformation we double
+  // the diagonal distance
+  if ( (diagx > 0 && diagy < 0) || 
+       (diagx < 0 && diagy > 0) )
+  {
+    diagonalDistance *= 2;
+  }
+
+  return straightDistance + diagonalDistance;
+}
+

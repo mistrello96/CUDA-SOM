@@ -300,7 +300,12 @@ int main(int argc, char **argv)
 	            for (int i = 0; i < nNeurons; i++){
 	                int x = i / nColumns;
 	                int y = i % nColumns;
-	                int distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
+                    int distance = 0;
+                    if (lacticeType == 's')
+	                   distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
+                    else
+                        distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);
+                    
                     // update only if...
 	                if (distance <= radius)
                     {

@@ -12,8 +12,6 @@ Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, vi
 
 TODO:
 
-Matrice esagonale(vedi file SOMGRID.R)
-
 Inizializzazione PCA
 
 Decrescita esponenziale del raggio e lr
