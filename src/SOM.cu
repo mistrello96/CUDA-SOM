@@ -252,6 +252,7 @@ int main(int argc, char **argv)
 		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
@@ -261,6 +262,7 @@ int main(int argc, char **argv)
 		    		case 'e' : compute_distance_euclidean<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 's' : compute_distance_sum_squares<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 'm' : compute_distance_manhattan<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+				    case 't' : compute_distance_tanimoto<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
 

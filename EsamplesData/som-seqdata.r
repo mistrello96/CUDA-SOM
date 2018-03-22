@@ -46,57 +46,58 @@ get_best_k_wss <- function(seqdata) {
 #setwd("C:\\Users\\aresio\\Documents\\PythonCode\\clustering")
 
 # read and format files
-#input_file = "dati_bicocca_leucemia.txt" # dati raw
+input_file = "dati_bicocca_leucemia.txt" # dati raw
 input_file = "dati_bicocca_melanoma.txt" # dati raw
 test_name = "Leukemia"
 test_name = "Melanoma"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
 seqdata <- as.matrix(scale(seqdata_original))
 #best_clustering <- get_best_k(seqdata);
-best_clustering <- NbClust(seqdata, distance="euclidean", min.nc=2, max.nc=10, method="complete", index="all")
+#best_clustering <- NbClust(seqdata, distance="euclidean", min.nc=2, max.nc=10, method="complete", index="all")
 
-for (best_clustering in c(2,3,4,5,6,7,8,9,10)) {
+#for (best_clustering in c(2,3,4,5,6,7,8,9,10)) {
   
   # main plot
   D <- optimal_som(seqdata);
-  som_model <- som(seqdata, rlen=1000 , alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F), mode="online" ,keep.data=T ) 
+  debug(supersom)
+  som_model <- supersom(seqdata, rlen=1000 , radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"rectangular",toroidal = F), normalizeDataLayers = FALSE ,keep.data=T, dist.fcts="euclidean") 
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
-  cluster = hclust(object.distances(som_model, "codes"))
+ # cluster = hclust(object.distances(som_model, "codes"))
   # som.hc <- cutree(cluster, k=2);
-  som.hc <- cutree(cluster, k=2); 
-  add.cluster.boundaries(som_model, som.hc);
+  #som.hc <- cutree(cluster, k=2); 
+  #add.cluster.boundaries(som_model, som.hc);
   
   # extract cluster data
-  write(NULL, file = paste("outputnew_", test_name, "k", best_clustering));
-  for (c in 1:best_clustering)  {
-    name <- paste("cluster", c);
-    print (name);
-    write(name, file = paste("outputnew_", test_name, "k", best_clustering), append=T);
-    tmp <- which(som.hc==c);
+  #write(NULL, file = paste("outputnew_", test_name, "k", best_clustering));
+  #for (c in 1:best_clustering)  {
+   # name <- paste("cluster", c);
+    #print (name);
+   # write(name, file = paste("outputnew_", test_name, "k", best_clustering), append=T);
+  #  tmp <- which(som.hc==c);
     #print (tmp);
-    result_extr <- which(som_model$unit.classif %in% tmp);
-    print (result_extr);
-    write(result_extr, file = paste("outputnew_", test_name, "k", best_clustering), append=T);
-  }
+    #result_extr <- which(som_model$unit.classif %in% tmp);
+    #print (result_extr);
+   # write(result_extr, file = paste("outputnew_", test_name, "k", best_clustering), append=T);
+  #}
 
 
-}
+#}
 
 ######################################################################################
 
 # extract codes for each neuron
-for (n in 1:nrow(seqdata)) {
-  cat("Element number: ");  print(n);
-  cat("Neuron (unit classificator): "); print(som_model$unit.classif[n]);
-  for (m in 1:ncol(seqdata)) {
-    cat(seqdata_original[n,m]) ;
-    cat(", ");
-  }
-  cat("\n\n");
-}
+#for (n in 1:nrow(seqdata)) {
+#  cat("Element number: ");  print(n);
+#  cat("Neuron (unit classificator): "); print(som_model$unit.classif[n]);
+#  for (m in 1:ncol(seqdata)) {
+#    cat(seqdata_original[n,m]) ;
+#    cat(", ");
+#  }
+#  cat("\n\n");
+#}
 
 # further tests
-plot(som_model, type="mapping", shape="straight", main=paste("Mapping - ", test_name))
+#plot(som_model, type="mapping", shape="straight", main=paste("Mapping - ", test_name))
 plot(som_model, type="changes")
-plot(som_model, type="count",  shape="straight", main=paste("Counts - ", test_name))
+#plot(som_model, type="count",  shape="straight", main=paste("Counts - ", test_name))

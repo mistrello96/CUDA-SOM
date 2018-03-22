@@ -10,13 +10,14 @@ Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, vi
 
 
 
-
-
 TODO:
 
-Inizializzazione PCA
+Inizializzazione PCA:
+	pesi dei neuroni scelti dal sottospazio attraversato dalle prime n componenti principali. I pesi sono presi come una griglia regolare sulla prima componente principale.
 
 Attività post learning?
 
-FIxare la distanza esagonale
+Fixare la distanza esagonale(solo capire e commenti)
+
+
 

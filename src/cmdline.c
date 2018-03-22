@@ -47,10 +47,10 @@ const char *gengetopt_args_info_help[] = {
   "  -v, --verbose                 enables debug print  (default=off)",
   "      --save                    save the input and output SOM in files\n                                  (default=off)",
   "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
-  "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan  (possible\n                                  values=\"e\", \"s\", \"m\" default=`e')",
+  "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
   "      --normalize               Enable the normalization of the distance\n                                  function  (default=on)",
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
-  "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization,\n                                  c for random vector from the input file, p\n                                  for PCA  (possible values=\"r\", \"c\", \"p\"\n                                  default=`c')",
+  "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for random vector from the input file\n                                  (possible values=\"r\", \"c\" default=`c')",
   "      --lactice=STRING          allows to choose what tipy of lactice is used.\n                                  Use s for square lactice or e for exagonal\n                                  lactice  (possible values=\"s\", \"e\"\n                                  default=`e')",
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
   "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and the radius. Use l for learning rate,\n                                  r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
@@ -76,9 +76,9 @@ cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args
 static int
 cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
-const char *cmdline_parser_distance_values[] = {"e", "s", "m", 0}; /*< Possible values for distance. */
+const char *cmdline_parser_distance_values[] = {"e", "s", "m", "t", 0}; /*< Possible values for distance. */
 const char *cmdline_parser_neighbors_values[] = {"b", "g", "m", 0}; /*< Possible values for neighbors. */
-const char *cmdline_parser_initialization_values[] = {"r", "c", "p", 0}; /*< Possible values for initialization. */
+const char *cmdline_parser_initialization_values[] = {"r", "c", 0}; /*< Possible values for initialization. */
 const char *cmdline_parser_lactice_values[] = {"s", "e", 0}; /*< Possible values for lactice. */
 const char *cmdline_parser_exponential_values[] = {"n", "l", "r", "b", 0}; /*< Possible values for exponential. */
 
@@ -856,7 +856,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan.  */
+          /* allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto.  */
           else if (strcmp (long_options[option_index].name, "distance") == 0)
           {
           
@@ -896,7 +896,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA.  */
+          /* allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file.  */
           else if (strcmp (long_options[option_index].name, "initialization") == 0)
           {
           

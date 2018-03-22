@@ -15,10 +15,10 @@ option "debug" d "enables advanced debug prints" flag off
 option "verbose" v "enables debug print" flag off
 option "save" - "save the input and output SOM in files" flag off
 option "radius" r "allows to chose the initial radius of the updating function" int optional default= "0"
-option "distance" - "allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan" string optional default="e" values="e","s","m"
+option "distance" - "allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto" string optional default="e" values="e","s","m","t"
 option "normalize" - "Enable the normalization of the distance function" flag on
 option "neighbors" - "allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat" string optional default="g" values="b","g","m"
-option "initialization" - "allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA" string optional default="c" values="r","c","p"
+option "initialization" - "allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file" string optional default="c" values="r","c"
 option "lactice" - "allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice" string optional default="e" values="s","e"
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled." flag on
 option "exponential" - "enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both" string optional default="n" values="n","l","r","b"

@@ -35,7 +35,7 @@ __global__ void compute_distance_euclidean(double* k_matrix, double* k_ActualSam
 		}
 
 		// save the distance of the neuron in distance vector
-		k_distance[index] = sqrtf(tmp)/nElements;
+		k_distance[index] = sqrtf(tmp);
 	}
 }
 
@@ -116,5 +116,29 @@ __global__ void compute_distance_manhattan_normalized(double* k_matrix, double* 
 
 		// save the distance of the neuron in distance vector
 		k_distance[index] = tmp/nElements;
+	}
+}
+
+__global__ void compute_distance_tanimoto(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+{
+	// getting the index of the thread
+	int index = threadIdx.x + blockDim.x * blockIdx.x;
+	if (index < nNeuron)
+	{
+		// computing the corresponding index in the matrix
+		int matrixindex = index * nElements;
+		double prodottovettoriale = 0;
+		double norma1 = 0;
+		double norma2 = 0;
+		for(int i = 0; i < nElements; i++)
+		{
+			prodottovettoriale = prodottovettoriale + (k_matrix[matrixindex+i] * k_ActualSample[i]);
+			norma1 = norma1 + powf(k_matrix[matrixindex+i] , 2.0);
+			norma2 = norma2 + powf(k_ActualSample[i] , 2.0);
+
+		}
+		prodottovettoriale = fabs(prodottovettoriale);
+		// save the distance of the neuron in distance vector
+		k_distance[index] = prodottovettoriale / (norma1+norma2-prodottovettoriale);
 	}
 }

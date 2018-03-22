@@ -69,17 +69,17 @@ struct gengetopt_args_info
   int radius_arg;	/**< @brief allows to chose the initial radius of the updating function (default='0').  */
   char * radius_orig;	/**< @brief allows to chose the initial radius of the updating function original value given at command line.  */
   const char *radius_help; /**< @brief allows to chose the initial radius of the updating function help description.  */
-  char * distance_arg;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan (default='e').  */
-  char * distance_orig;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan original value given at command line.  */
-  const char *distance_help; /**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan help description.  */
+  char * distance_arg;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto (default='e').  */
+  char * distance_orig;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto original value given at command line.  */
+  const char *distance_help; /**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto help description.  */
   int normalize_flag;	/**< @brief Enable the normalization of the distance function (default=on).  */
   const char *normalize_help; /**< @brief Enable the normalization of the distance function help description.  */
   char * neighbors_arg;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat (default='g').  */
   char * neighbors_orig;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat original value given at command line.  */
   const char *neighbors_help; /**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat help description.  */
-  char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA (default='c').  */
-  char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA original value given at command line.  */
-  const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization, c for random vector from the input file, p for PCA help description.  */
+  char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file (default='c').  */
+  char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file original value given at command line.  */
+  const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file help description.  */
   char * lactice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='e').  */
   char * lactice_orig;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice original value given at command line.  */
   const char *lactice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
