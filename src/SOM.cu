@@ -50,8 +50,6 @@ int main(int argc, char **argv)
     int maxnIter = ai.iteration_arg;
     // accuracy threshold
     double accuracyTreshold = ai.accuracy_arg;
-    // counter for times of Samples vector is presented to the SOM
-    int nIter = 0;
     // Initial radius of the update
     double initialRadius = ai.radius_arg;
     // type of distance used
@@ -68,6 +66,8 @@ int main(int argc, char **argv)
     char exponential = ai.exponential_arg[0];
     // dataset presentation methon
     bool randomizeDataset = ai.randomize_flag;
+    // counter for times of Samples vector is presented to the SOM
+    int nIter = 0;
     // declaration of some usefull variables
     double min_neuronValue, max_neuronValue;
     // number of lines in the input file
@@ -201,7 +201,12 @@ int main(int argc, char **argv)
 
     // debug print
     if(verbose | debug)
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, "  << std::endl;
+    {
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, ";
+        std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
+        std::cout << initializationType << " initialization teqnique, " << lacticeType << " lactice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file" << nblocks << "blocks will be launched on the GPU" << std::endl;
+    
+    }
 
     // initializing indexes to shuffle the Samples vector
     int randIndexes[nSamples];

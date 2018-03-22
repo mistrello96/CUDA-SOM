@@ -94,7 +94,8 @@ void loadMatrixfromFile(std::string filePath, double* h_Matrix, int* &nRows, int
     }
 }
 */
-
+	
+// taken from Stack, TO FIX
 int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
 {
   // compute distance as we would on a normal grid
