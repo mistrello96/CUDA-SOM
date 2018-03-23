@@ -286,12 +286,21 @@ int main(int argc, char **argv)
             unsigned int BMU_y = BMU_index % nColumns;
 			double BMU_distance = *iter;
 
+            double tmp = 0;
+            double dist = 0;
+            for(int u = 0; u < nElements; u++)
+            {
+                tmp = h_Matrix[BMU_index*nElements + u] - h_ActualSample[u];
+                dist += tmp * tmp; 
+            }
+
+
 			// adding the found value in the distance history array
-			d_DistanceHistory.push_back(BMU_distance);
+			d_DistanceHistory.push_back(dist);
 
 			// debug print
 		    if(debug)
-			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
+			   std::cout << "The minimum distance is " << dist << " at position " << BMU_index << std::endl;
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
@@ -337,7 +346,10 @@ int main(int argc, char **argv)
 
         // END OF SAMPLES ITERATION. UPDATING VALUES
         // updating accuracy
-        accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
+        //accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
+        //d_DistanceHistory.clear();
+        accuracy = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
+        accuracy = sqrt(accuracy/nElements)/nSamples;
         d_DistanceHistory.clear();
 
         if (verbose | debug)
