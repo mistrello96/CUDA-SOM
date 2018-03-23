@@ -285,7 +285,10 @@ int main(int argc, char **argv)
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
 			double BMU_distance = *iter;
+            // adding the found value in the distance history array
+            d_DistanceHistory.push_back(BMU_distance);
 
+            /*
             double tmp = 0;
             double dist = 0;
             for(int u = 0; u < nElements; u++)
@@ -293,10 +296,9 @@ int main(int argc, char **argv)
                 tmp = h_Matrix[BMU_index*nElements + u] - h_ActualSample[u];
                 dist += tmp * tmp; 
             }
-
-
-			// adding the found value in the distance history array
-			d_DistanceHistory.push_back(dist);
+            // adding the found value in the distance history array
+            d_DistanceHistory.push_back(dist);
+            */
 
 			// debug print
 		    if(debug)
