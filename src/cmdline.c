@@ -48,12 +48,13 @@ const char *gengetopt_args_info_help[] = {
   "      --save                    save the input and output SOM in files\n                                  (default=off)",
   "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
   "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
-  "      --normalize               Enable the normalization of the distance\n                                  function  (default=on)",
+  "      --normalize               Enable the normalization of the distance\n                                  function  (default=off)",
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
   "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for random vector from the input file\n                                  (possible values=\"r\", \"c\" default=`c')",
-  "      --lactice=STRING          allows to choose what tipy of lactice is used.\n                                  Use s for square lactice or e for exagonal\n                                  lactice  (possible values=\"s\", \"e\"\n                                  default=`e')",
+  "      --lacttice=STRING         allows to choose what tipy of lactice is used.\n                                  Use s for square lactice or e for exagonal\n                                  lactice  (possible values=\"s\", \"e\"\n                                  default=`e')",
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
   "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and the radius. Use l for learning rate,\n                                  r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
+  "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
     0
 };
 
@@ -79,7 +80,7 @@ cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *pro
 const char *cmdline_parser_distance_values[] = {"e", "s", "m", "t", 0}; /*< Possible values for distance. */
 const char *cmdline_parser_neighbors_values[] = {"b", "g", "m", 0}; /*< Possible values for neighbors. */
 const char *cmdline_parser_initialization_values[] = {"r", "c", 0}; /*< Possible values for initialization. */
-const char *cmdline_parser_lactice_values[] = {"s", "e", 0}; /*< Possible values for lactice. */
+const char *cmdline_parser_lacttice_values[] = {"s", "e", 0}; /*< Possible values for lacttice. */
 const char *cmdline_parser_exponential_values[] = {"n", "l", "r", "b", 0}; /*< Possible values for exponential. */
 
 static char *
@@ -105,9 +106,10 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->normalize_given = 0 ;
   args_info->neighbors_given = 0 ;
   args_info->initialization_given = 0 ;
-  args_info->lactice_given = 0 ;
+  args_info->lacttice_given = 0 ;
   args_info->randomize_given = 0 ;
   args_info->exponential_given = 0 ;
+  args_info->normalizedistance_given = 0 ;
 }
 
 static
@@ -133,16 +135,17 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->radius_orig = NULL;
   args_info->distance_arg = gengetopt_strdup ("e");
   args_info->distance_orig = NULL;
-  args_info->normalize_flag = 1;
+  args_info->normalize_flag = 0;
   args_info->neighbors_arg = gengetopt_strdup ("g");
   args_info->neighbors_orig = NULL;
   args_info->initialization_arg = gengetopt_strdup ("c");
   args_info->initialization_orig = NULL;
-  args_info->lactice_arg = gengetopt_strdup ("e");
-  args_info->lactice_orig = NULL;
+  args_info->lacttice_arg = gengetopt_strdup ("e");
+  args_info->lacttice_orig = NULL;
   args_info->randomize_flag = 1;
   args_info->exponential_arg = gengetopt_strdup ("n");
   args_info->exponential_orig = NULL;
+  args_info->normalizedistance_flag = 0;
   
 }
 
@@ -168,9 +171,10 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->normalize_help = gengetopt_args_info_help[14] ;
   args_info->neighbors_help = gengetopt_args_info_help[15] ;
   args_info->initialization_help = gengetopt_args_info_help[16] ;
-  args_info->lactice_help = gengetopt_args_info_help[17] ;
+  args_info->lacttice_help = gengetopt_args_info_help[17] ;
   args_info->randomize_help = gengetopt_args_info_help[18] ;
   args_info->exponential_help = gengetopt_args_info_help[19] ;
+  args_info->normalizedistance_help = gengetopt_args_info_help[20] ;
   
 }
 
@@ -269,8 +273,8 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->neighbors_orig));
   free_string_field (&(args_info->initialization_arg));
   free_string_field (&(args_info->initialization_orig));
-  free_string_field (&(args_info->lactice_arg));
-  free_string_field (&(args_info->lactice_orig));
+  free_string_field (&(args_info->lacttice_arg));
+  free_string_field (&(args_info->lacttice_orig));
   free_string_field (&(args_info->exponential_arg));
   free_string_field (&(args_info->exponential_orig));
   
@@ -378,12 +382,14 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "neighbors", args_info->neighbors_orig, cmdline_parser_neighbors_values);
   if (args_info->initialization_given)
     write_into_file(outfile, "initialization", args_info->initialization_orig, cmdline_parser_initialization_values);
-  if (args_info->lactice_given)
-    write_into_file(outfile, "lactice", args_info->lactice_orig, cmdline_parser_lactice_values);
+  if (args_info->lacttice_given)
+    write_into_file(outfile, "lacttice", args_info->lacttice_orig, cmdline_parser_lacttice_values);
   if (args_info->randomize_given)
     write_into_file(outfile, "randomize", 0, 0 );
   if (args_info->exponential_given)
     write_into_file(outfile, "exponential", args_info->exponential_orig, cmdline_parser_exponential_values);
+  if (args_info->normalizedistance_given)
+    write_into_file(outfile, "normalizedistance", 0, 0 );
   
 
   i = EXIT_SUCCESS;
@@ -704,9 +710,10 @@ cmdline_parser_internal (
         { "normalize",	0, NULL, 0 },
         { "neighbors",	1, NULL, 0 },
         { "initialization",	1, NULL, 0 },
-        { "lactice",	1, NULL, 0 },
+        { "lacttice",	1, NULL, 0 },
         { "randomize",	0, NULL, 0 },
         { "exponential",	1, NULL, 0 },
+        { "normalizedistance",	0, NULL, 0 },
         { 0,  0, 0, 0 }
       };
 
@@ -911,15 +918,15 @@ cmdline_parser_internal (
           
           }
           /* allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice.  */
-          else if (strcmp (long_options[option_index].name, "lactice") == 0)
+          else if (strcmp (long_options[option_index].name, "lacttice") == 0)
           {
           
           
-            if (update_arg( (void *)&(args_info->lactice_arg), 
-                 &(args_info->lactice_orig), &(args_info->lactice_given),
-                &(local_args_info.lactice_given), optarg, cmdline_parser_lactice_values, "e", ARG_STRING,
+            if (update_arg( (void *)&(args_info->lacttice_arg), 
+                 &(args_info->lacttice_orig), &(args_info->lacttice_given),
+                &(local_args_info.lacttice_given), optarg, cmdline_parser_lacttice_values, "e", ARG_STRING,
                 check_ambiguity, override, 0, 0,
-                "lactice", '-',
+                "lacttice", '-',
                 additional_error))
               goto failure;
           
@@ -946,6 +953,18 @@ cmdline_parser_internal (
                 &(local_args_info.exponential_given), optarg, cmdline_parser_exponential_values, "n", ARG_STRING,
                 check_ambiguity, override, 0, 0,
                 "exponential", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* enables the normalized mean distance of the iteration.  */
+          else if (strcmp (long_options[option_index].name, "normalizedistance") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->normalizedistance_flag), 0, &(args_info->normalizedistance_given),
+                &(local_args_info.normalizedistance_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "normalizedistance", '-',
                 additional_error))
               goto failure;
           

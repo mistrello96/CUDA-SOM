@@ -1,4 +1,4 @@
-Problems:
+STATISTICHE:
 Esecuzione classica: 36-40
 Esecizione senza update : 36-40
 Esecuzione senza thrust BMU: 16 - 19
@@ -6,15 +6,8 @@ Esecuzione senza thrust BMU: 16 - 19
 No problema nel ciclo di update.
 Evidenti problemi nell'utilizzo delle thrust. Possibilità di utilizzo solo con certo numero di neuroni??
 
-Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, viene generato un solo blocco... molto molto male):
-
-
 
 TODO:
-
-Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples
-
-Attività post learning?
 
 Capire come funziona distanza esagonale
 
@@ -22,8 +15,23 @@ Questione Toroidale
 
 Aggiunta ouput debug ultima iterazione
 
+
+OTTIMIZZAZIONE:
+
+Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples e usare indici interni
+
 Stringa compilazione con 
-	ottimizzazioni del compilatore
-	Funzion intrinseche matematiche
-	Specificare architettura
+	Specificare architettura??
+
+
+nvcc -gencode arch=compute_20,code=sm_21 -Xptxas -O3,-v -use_fast_math  -std=c++11 ./src/SOM.cu ./src/cmdline.c 
+nvcc -Xptxas -O3,-v -use_fast_math  -std=c++11 ./src/SOM.cu ./src/cmdline.c 
+./a.out -i ./EsamplesData/leucemia_scaled.txt -s 0.1 -f 0.001 -n 1000 -r 5 
+
+BUGS:
+usefastmath rompe i kernel
+
+
+
+
 

@@ -72,7 +72,7 @@ struct gengetopt_args_info
   char * distance_arg;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto (default='e').  */
   char * distance_orig;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto original value given at command line.  */
   const char *distance_help; /**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto help description.  */
-  int normalize_flag;	/**< @brief Enable the normalization of the distance function (default=on).  */
+  int normalize_flag;	/**< @brief Enable the normalization of the distance function (default=off).  */
   const char *normalize_help; /**< @brief Enable the normalization of the distance function help description.  */
   char * neighbors_arg;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat (default='g').  */
   char * neighbors_orig;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat original value given at command line.  */
@@ -80,14 +80,16 @@ struct gengetopt_args_info
   char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file (default='c').  */
   char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file original value given at command line.  */
   const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file help description.  */
-  char * lactice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='e').  */
-  char * lactice_orig;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice original value given at command line.  */
-  const char *lactice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
+  char * lacttice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='e').  */
+  char * lacttice_orig;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice original value given at command line.  */
+  const char *lacttice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */
   const char *randomize_help; /**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. help description.  */
   char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both (default='n').  */
   char * exponential_orig;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both original value given at command line.  */
   const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both help description.  */
+  int normalizedistance_flag;	/**< @brief enables the normalized mean distance of the iteration (default=off).  */
+  const char *normalizedistance_help; /**< @brief enables the normalized mean distance of the iteration help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
@@ -106,9 +108,10 @@ struct gengetopt_args_info
   unsigned int normalize_given ;	/**< @brief Whether normalize was given.  */
   unsigned int neighbors_given ;	/**< @brief Whether neighbors was given.  */
   unsigned int initialization_given ;	/**< @brief Whether initialization was given.  */
-  unsigned int lactice_given ;	/**< @brief Whether lactice was given.  */
+  unsigned int lacttice_given ;	/**< @brief Whether lacttice was given.  */
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
   unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
+  unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
 
 } ;
 
@@ -236,7 +239,7 @@ int cmdline_parser_required (struct gengetopt_args_info *args_info,
 extern const char *cmdline_parser_distance_values[];  /**< @brief Possible values for distance. */
 extern const char *cmdline_parser_neighbors_values[];  /**< @brief Possible values for neighbors. */
 extern const char *cmdline_parser_initialization_values[];  /**< @brief Possible values for initialization. */
-extern const char *cmdline_parser_lactice_values[];  /**< @brief Possible values for lactice. */
+extern const char *cmdline_parser_lacttice_values[];  /**< @brief Possible values for lacttice. */
 extern const char *cmdline_parser_exponential_values[];  /**< @brief Possible values for exponential. */
 
 

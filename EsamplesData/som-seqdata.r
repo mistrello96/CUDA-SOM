@@ -60,7 +60,7 @@ seqdata <- as.matrix(scale(seqdata_original))
   # main plot
   D <- optimal_som(seqdata);
   #debug(supersom)
-  som_model <- supersom(seqdata, rlen=1000 , radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean") 
+  som_model <- supersom(seqdata, rlen=1000 , radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1) 
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
  # cluster = hclust(object.distances(som_model, "codes"))

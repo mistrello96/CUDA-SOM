@@ -60,12 +60,14 @@ int main(int argc, char **argv)
     char neighborsType = ai.neighbors_arg[0];
     // type of initialization
     char initializationType = ai.initialization_arg[0];
-    // type of lactice used
-    char lacticeType = ai.lactice_arg[0];
+    // type of lacttice used
+    char lactticeType = ai.lacttice_arg[0];
     // exponential decay for radius and lr
     char exponential = ai.exponential_arg[0];
     // dataset presentation methon
     bool randomizeDataset = ai.randomize_flag;
+    // normalize the mean distance of each iteration
+    bool normalizedistance = ai.normalizedistance_flag;
     // counter for times of Samples vector is presented to the SOM
     int nIter = 0;
     // declaration of some usefull variables
@@ -128,7 +130,7 @@ int main(int argc, char **argv)
     totalLength = nRows * nColumns * nElements;
     
     // number of block used in the computation
-    nblocks = (nNeurons / getnThreads()) + 1;
+    nblocks = (nNeurons / 32) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535)
@@ -200,7 +202,7 @@ int main(int argc, char **argv)
     {
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, ";
         std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
-        std::cout << initializationType << " initialization teqnique, " << lacticeType << " lactice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file" << nblocks << "blocks will be launched on the GPU" << std::endl;
+        std::cout << initializationType << " initialization teqnique, " << lactticeType << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
     
     }
 
@@ -245,20 +247,20 @@ int main(int argc, char **argv)
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-				    case 't' : compute_distance_tanimoto<<<nblocks, 1024>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+				    case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
 
@@ -271,7 +273,7 @@ int main(int argc, char **argv)
 		    	std::cout << "Out of memory, try to reduce the neurons number" << std::endl;
 		    	exit(-1);
 			}
-				
+
 			// create thrust vector to find BMU  in parallel
 			thrust::device_vector<double> d_vec_Distance(d_Distance, d_Distance + nNeurons);
 			// extract the first matching BMU
@@ -280,25 +282,29 @@ int main(int argc, char **argv)
 			unsigned int BMU_index = iter - d_vec_Distance.begin();
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
-			//double BMU_distance = *iter;
-            // adding the found value in the distance history array
-            //d_DistanceHistory.push_back(BMU_distance);
-
-            
-            double tmp = 0;
-            double dist = 0;
-            for(int u = 0; u < nElements; u++)
+            double BMU_distance;
+            if(!normalizedistance)
             {
-                tmp = h_Matrix[BMU_index*nElements + u] - h_ActualSample[u];
-                dist += tmp * tmp; 
+    			BMU_distance = *iter;
+                // adding the found value in the distance history array
+                d_DistanceHistory.push_back(BMU_distance);
+            } 
+            else
+            {
+                double tmp = 0;
+                BMU_distance = 0;
+                for(int u = 0; u < nElements; u++)
+                {
+                    tmp = h_Matrix[BMU_index*nElements + u] - h_ActualSample[u];
+                    BMU_distance += tmp * tmp; 
+                }
+                // adding the found value in the distance history array
+                d_DistanceHistory.push_back(BMU_distance);
             }
-            // adding the found value in the distance history array
-            d_DistanceHistory.push_back(dist);
             
-
 			// debug print
 		    if(debug)
-			   std::cout << "The minimum distance is " << dist << " at position " << BMU_index << std::endl;
+			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
@@ -317,7 +323,7 @@ int main(int argc, char **argv)
 	                int x = i / nColumns;
 	                int y = i % nColumns;
                     int distance = 0;
-                    if (lacticeType == 's')
+                    if (lactticeType == 's')
 	                   distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
                     else
                         distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);
@@ -344,11 +350,16 @@ int main(int argc, char **argv)
 
         // END OF SAMPLES ITERATION. UPDATING VALUES
         // updating accuracy
-        //accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
-        //d_DistanceHistory.clear();
-        accuracy = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
-        accuracy = sqrt(accuracy/nElements)/nSamples;
-        d_DistanceHistory.clear();
+        if(!normalizedistance){
+            accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
+            d_DistanceHistory.clear();
+        }
+        else
+        {
+            accuracy = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
+            accuracy = sqrt(accuracy/nElements)/nSamples;
+            d_DistanceHistory.clear();
+        }
 
         if (verbose | debug)
         {
