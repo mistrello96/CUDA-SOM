@@ -12,9 +12,18 @@ Ottimizzare prestazioni(Questione uso thread e blocchi dinamico| attualmente, vi
 
 TODO:
 
+Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples
+
 Attività post learning?
 
-Fixare la distanza esagonale(solo capire e commenti)
+Capire come funziona distanza esagonale
 
+Questione Toroidale
 
+Aggiunta ouput debug ultima iterazione
+
+Stringa compilazione con 
+	ottimizzazioni del compilatore
+	Funzion intrinseche matematiche
+	Specificare architettura
 

@@ -174,7 +174,7 @@ int main(int argc, char **argv)
 	    	h_Matrix[i] = dist(e2); 
 	    }
     }
-    else if (initializationType == 'c')
+    else
     {
     	std::uniform_int_distribution<> dist(0, nSamples);
 	    for (int i = 0; i < nNeurons; i++)
@@ -185,10 +185,6 @@ int main(int argc, char **argv)
 	             h_Matrix[k] = Samples[r*nElements + j];
 	        }
 	    }
-	}
-	else
-    {
-		// TODO PCA
 	}
 
     if (debug | print)
@@ -214,7 +210,7 @@ int main(int argc, char **argv)
     {
     	randIndexes[i] = i;
     }
-
+    
     // thrust vector used to store the BMU distances of each iteration
     thrust::device_vector<double> d_DistanceHistory;
 
@@ -284,11 +280,11 @@ int main(int argc, char **argv)
 			unsigned int BMU_index = iter - d_vec_Distance.begin();
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
-			double BMU_distance = *iter;
+			//double BMU_distance = *iter;
             // adding the found value in the distance history array
-            d_DistanceHistory.push_back(BMU_distance);
+            //d_DistanceHistory.push_back(BMU_distance);
 
-            /*
+            
             double tmp = 0;
             double dist = 0;
             for(int u = 0; u < nElements; u++)
@@ -298,7 +294,7 @@ int main(int argc, char **argv)
             }
             // adding the found value in the distance history array
             d_DistanceHistory.push_back(dist);
-            */
+            
 
 			// debug print
 		    if(debug)

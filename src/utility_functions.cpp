@@ -70,30 +70,6 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
     }
     myfile.close();
 }
-
-/*
-void loadMatrixfromFile(std::string filePath, double* h_Matrix, int* &nRows, int* &nColumns){
-    int counter = 0;
-    std::string line;
-    std::ifstream file (filePath.c_str());
-    if (file.is_open())
-    {
-        std::getline (file, line);
-        std::getline (file, line);
-        *nRows = strtoi((line).c_str(),0);
-        std::getline (file, line);
-        std::getline (file, line);
-        *nRows = strtoi((line).c_str(),0);
-        while (std::getline (file, line))
-        {
-            h_Matrix[counter] = strtoi((line).c_str(),0);
-            counter ++;
-        }
-        file.close();
-        return counter;
-    }
-}
-*/
 	
 // taken from Stack, TO FIX
 int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
