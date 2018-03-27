@@ -189,16 +189,17 @@ int main(int argc, char **argv)
 	    }
 	}
 
+    // save the initial SOM to file
     if (debug | print)
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     
-	// inizializing actual values
+	// inizializing actual values of lr, radius and accuracy
     lr = ilr;
     radius = initialRadius;
 	accuracy = DBL_MAX;
 
     // debug print
-    if(verbose | debug)
+    if(verbose | debug | print)
     {
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, ";
         std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
@@ -215,23 +216,38 @@ int main(int argc, char **argv)
     
     // thrust vector used to store the BMU distances of each iteration
     thrust::device_vector<double> d_DistanceHistory;
+    // bool to check the last iteration, used to print the result of the training
+    bool lastIter = false;
 
-    while((accuracy >= accuracyTreshold) && (lr >= flr) && (nIter < maxnIter))
+    // ITERATE FOR EACH EPOCH OR UNTILL ACCURACY IS REACHED
+    while(!lastIter)
     {
-    	// randomize indexes of samples
-    	if(randomizeDataset)
+        // check the constraints and eventualy set the lastIter flag
+        if((accuracy <= accuracyTreshold) | (lr < flr) | (nIter >= maxnIter))
+        {
+            // if last iter, set to 0 lr and radius
+            lastIter = true;
+            lr=0;
+            radius=0;
+        }
+
+    	// randomize indexes of samples if required
+    	if(randomizeDataset && !lastIter )
     		std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
 
-        if (debug | verbose)
+        // debug print
+        if ((debug | verbose) && !lastIter)
         {
             std::cout << "Learning rate of this iteration is " << lr << std::endl;
             std::cout << "Radius of this iteration is " << radius << std::endl;
         }
+        else if ((lastIter && print))
+            std::cout << "\n TRAINING RESULTS \n" << std::endl;
+
 
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++)
         {
-
 		    // copy the s sample in the actual sample vector
 		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++)
             {
@@ -250,7 +266,7 @@ int main(int argc, char **argv)
 		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
@@ -283,6 +299,7 @@ int main(int argc, char **argv)
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
             double BMU_distance;
+            // compute BMU distance as requested
             if(!normalizedistance)
             {
     			BMU_distance = *iter;
@@ -303,12 +320,12 @@ int main(int argc, char **argv)
             }
             
 			// debug print
-		    if(debug)
+		    if(debug | (lastIter & print))
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
-	        if (radius == 0)
+	        if (radius == 0 && !lastIter)
 	        {
 	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
                 {
@@ -317,7 +334,7 @@ int main(int argc, char **argv)
 	        }
 	        // possible to transfer on the gpu?
             // update also the neighbors
-	        else
+	        else if (!lastIter)
 	        {
 	            for (int i = 0; i < nNeurons; i++){
 	                int x = i / nColumns;
@@ -349,7 +366,7 @@ int main(int argc, char **argv)
         }
 
         // END OF SAMPLES ITERATION. UPDATING VALUES
-        // updating accuracy
+        // updating accuracy as requested
         if(!normalizedistance){
             accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
             d_DistanceHistory.clear();
@@ -361,24 +378,29 @@ int main(int argc, char **argv)
             d_DistanceHistory.clear();
         }
 
-        if (verbose | debug)
+        // debug print
+        if ((verbose | debug) && !lastIter)
         {
             std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
-        }
+        } else if (lastIter)
+            std::cout << "\nMean distance of the sample to the trained SOM is " << accuracy << std::endl;
         
 		// updating the counter iteration
 		nIter ++;
 
         // updating radius and learning rate
-        radius = (int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
         if (exponential== 'r' | exponential == 'b')
-        	radius = (int) (initialRadius * exp(-(double)nIter/(sqrt(maxnIter)))) ;
+        	radius = (int) (initialRadius * exp(-(double)nIter/(sqrt(maxnIter))));
+        else
+            radius = (int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
 
-        lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
         if (exponential== 'l' | exponential == 'b')
         	lr = ilr * exp(- (double)nIter/sqrt(maxnIter)) + flr;
+        else 
+            lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
     }
 
+    // save trainde SOM to file
     if (debug | print)
     {
         saveSOMtoFile("outputSOM.out", h_Matrix, nRows, nColumns, nElements);
