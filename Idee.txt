@@ -2,8 +2,9 @@ STATISTICHE:
 Esecuzione classica: 30
 
 
-No problema nel ciclo di update.
-Evidenti problemi nell'utilizzo delle thrust. Possibilità di utilizzo solo con certo numero di neuroni??
+OTTIMIZZAZIONE:
+
+Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples e usare indici interni
 
 
 TODO:
@@ -13,12 +14,7 @@ TODO:
 -Questione Toroidale
 
 
-OTTIMIZZAZIONE:
-
-Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples e usare indici interni
-
-
-
+STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
