@@ -1,7 +1,6 @@
 STATISTICHE:
-Esecuzione classica: 36-40
-Esecizione senza update : 36-40
-Esecuzione senza thrust BMU: 16 - 19
+Esecuzione classica: 30
+
 
 No problema nel ciclo di update.
 Evidenti problemi nell'utilizzo delle thrust. Possibilità di utilizzo solo con certo numero di neuroni??
@@ -9,24 +8,19 @@ Evidenti problemi nell'utilizzo delle thrust. Possibilità di utilizzo solo con 
 
 TODO:
 
--Capire come funziona distanza esagonale
+(Capire come funziona distanza esagonale)
 
 -Questione Toroidale
-
--Aggiunta ouput debug ultima iterazione
 
 
 OTTIMIZZAZIONE:
 
 Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples e usare indici interni
 
-Stringa compilazione con 
-	Specificare architettura??
 
 
-nvcc -gencode arch=compute_20,code=sm_21 -Xptxas -O3,-v -use_fast_math  -std=c++11 ./src/SOM.cu ./src/cmdline.c 
-nvcc -Xptxas -O3,-v -use_fast_math -std=c++11 ./src/SOM.cu ./src/cmdline.c 
-./a.out -i ./EsamplesData/leucemia_scaled.txt -s 0.1 -f 0.001 -n 1000 -r 5 
+
+nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
 
 
