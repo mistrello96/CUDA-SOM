@@ -4,9 +4,7 @@ Esecuzione classica: 30
 
 OTTIMIZZAZIONE:
 
-Aggiornare i singoli pesi della matrice, caricare ua singola volta i samples e usare indici interni
-
-
+Utilizzando meno memcopy facci solo danni.
 TODO:
 
 (Capire come funziona distanza esagonale)
