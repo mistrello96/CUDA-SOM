@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     // type of initialization
     char initializationType = ai.initialization_arg[0];
     // type of lacttice used
-    char lactticeType = ai.lacttice_arg[0];
+    char lattice = ai.lattice_arg[0];
     // exponential decay for radius and lr
     char exponential = ai.exponential_arg[0];
     // dataset presentation methon
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
     {
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, ";
         std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
-        std::cout << initializationType << " initialization teqnique, " << lactticeType << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
+        std::cout << initializationType << " initialization teqnique, " << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
     
     }
 
@@ -340,7 +340,7 @@ int main(int argc, char **argv)
 	                int x = i / nColumns;
 	                int y = i % nColumns;
                     int distance = 0;
-                    if (lactticeType == 's')
+                    if (lattice == 's')
 	                   distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
                     else
                         distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);

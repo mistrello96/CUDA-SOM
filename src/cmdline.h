@@ -31,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "0.1"
+#define CMDLINE_PARSER_VERSION "0.5"
 #endif
 
 /** @brief Where the command line options are stored */
@@ -80,9 +80,9 @@ struct gengetopt_args_info
   char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file (default='c').  */
   char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file original value given at command line.  */
   const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file help description.  */
-  char * lacttice_arg;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice (default='e').  */
-  char * lacttice_orig;	/**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice original value given at command line.  */
-  const char *lacttice_help; /**< @brief allows to choose what tipy of lactice is used. Use s for square lactice or e for exagonal lactice help description.  */
+  char * lattice_arg;	/**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice (default='e').  */
+  char * lattice_orig;	/**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice original value given at command line.  */
+  const char *lattice_help; /**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */
   const char *randomize_help; /**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. help description.  */
   char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both (default='n').  */
@@ -108,7 +108,7 @@ struct gengetopt_args_info
   unsigned int normalize_given ;	/**< @brief Whether normalize was given.  */
   unsigned int neighbors_given ;	/**< @brief Whether neighbors was given.  */
   unsigned int initialization_given ;	/**< @brief Whether initialization was given.  */
-  unsigned int lacttice_given ;	/**< @brief Whether lacttice was given.  */
+  unsigned int lattice_given ;	/**< @brief Whether lattice was given.  */
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
   unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
   unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
@@ -239,7 +239,7 @@ int cmdline_parser_required (struct gengetopt_args_info *args_info,
 extern const char *cmdline_parser_distance_values[];  /**< @brief Possible values for distance. */
 extern const char *cmdline_parser_neighbors_values[];  /**< @brief Possible values for neighbors. */
 extern const char *cmdline_parser_initialization_values[];  /**< @brief Possible values for initialization. */
-extern const char *cmdline_parser_lacttice_values[];  /**< @brief Possible values for lacttice. */
+extern const char *cmdline_parser_lattice_values[];  /**< @brief Possible values for lattice. */
 extern const char *cmdline_parser_exponential_values[];  /**< @brief Possible values for exponential. */
 
 
