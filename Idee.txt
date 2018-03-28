@@ -1,15 +1,23 @@
 STATISTICHE:
-Esecuzione classica: 30
 
-
-OTTIMIZZAZIONE:
 
 Utilizzando meno memcopy facci solo danni.
+
+
+
+
+
 TODO:
 
 (Capire come funziona distanza esagonale)
 
 -Questione Toroidale
+
+
+
+
+
+
 
 
 STRINGA DI COMPILAZIONE:

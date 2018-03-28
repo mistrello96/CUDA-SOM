@@ -13,14 +13,6 @@
 #include "distance_kernels.cu"
 #include "cmdline.h"
 
-#define CUDA_CHECK_RETURN(value) {											\
-		cudaError_t _m_cudaStat = value;										\
-		if (_m_cudaStat != cudaSuccess) {										\
-			fprintf(stderr, "Error %s at line %d in file %s\n",					\
-					cudaGetErrorString(_m_cudaStat), __LINE__, __FILE__);		\
-					exit(-13);															\
-} }
-
 int main(int argc, char **argv)
 {
 	// reading passed params
@@ -139,13 +131,6 @@ int main(int argc, char **argv)
     	exit(-1);
     }
 
-    // CHECK AVAILABLE MEMORY
-    if (sizeof(double) * nNeurons * nElements >= checkFreeGpuMem())
-    {
-	    	std::cout << "Not enougth memory on the GPU, try to reduce neurons' number" << std::endl;
-	    	exit(-1);
-	}
-
     // ALLOCATION OF THE STRUCTURES
     // host SOM
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
@@ -157,11 +142,11 @@ int main(int argc, char **argv)
     double *d_Distance;
     // device malloc
     double *d_Samples;
-    CUDA_CHECK_RETURN(cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength));
-    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons));
-    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size()));
+    cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength);
+    cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons);
+    cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size());
     // memcopy to the device
-    CUDA_CHECK_RETURN(cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice));
+    cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice);
 
     // SOM INIZIALIZATION
     // generating random seed
@@ -214,7 +199,7 @@ int main(int argc, char **argv)
     }
     
     // thrust vector used to store the BMU distances of each iteration
-    thrust::device_vector<double> d_DistanceHistory;
+    thrust::host_vector<double> h_DistanceHistory;
     // bool to check the last iteration, used to print the result of the training
     bool lastIter = false;
 
@@ -249,9 +234,9 @@ int main(int argc, char **argv)
         {
             //computing the Sample index for this iteration
             int currentIndex = randIndexes[s]*nElements;
-
-			// copy from host to device matrix, actual sample and distance
-			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
+            
+			// copy from host to device matrix
+			cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
 			
 		    // parallel search launch
 		    if (normalizeFlag)
@@ -277,29 +262,44 @@ int main(int argc, char **argv)
 
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
-
-		    // CHECK AVAILABLE MEMORY
-	    	if (sizeof(double) * nNeurons * nElements >= checkFreeGpuMem())
-            {
-		    	std::cout << "Out of memory, try to reduce the neurons number" << std::endl;
-		    	exit(-1);
-			}
-
+            
+            cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
 			// create thrust vector to find BMU  in parallel
-			thrust::device_vector<double> d_vec_Distance(d_Distance, d_Distance + nNeurons);
+			thrust::host_vector<double> d_vec_Distance(h_Distance, h_Distance + nNeurons);
 			// extract the first matching BMU
-			thrust::device_vector<double>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
+			thrust::host_vector<double>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
 			// extract index and value of BMU
 			unsigned int BMU_index = iter - d_vec_Distance.begin();
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
             double BMU_distance;
+                        
+            /*
+            cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
+            int BMU_index = 0;
+            double BMU_distance = h_Distance[0];
+            for(int c = 0; c < nNeurons; c++){
+                if (h_Distance[c]< h_Distance[BMU_index]){
+                    BMU_index = c;
+                    BMU_distance = h_Distance[c];
+                }
+            }
+            int BMU_x = BMU_index / nColumns;
+            int BMU_y = BMU_index % nColumns;
+            */
+            /*
+            int BMU_x = 5;
+            int BMU_y = 6;
+            int BMU_index = 7;
+            double BMU_distance = 2;
+            */
+
             // compute BMU distance as requested
             if(!normalizedistance)
             {
     			BMU_distance = *iter;
                 // adding the found value in the distance history array
-                d_DistanceHistory.push_back(BMU_distance);
+                h_DistanceHistory.push_back(BMU_distance);
             } 
             else
             {
@@ -311,9 +311,9 @@ int main(int argc, char **argv)
                     BMU_distance += tmp * tmp; 
                 }
                 // adding the found value in the distance history array
-                d_DistanceHistory.push_back(BMU_distance);
+                h_DistanceHistory.push_back(BMU_distance);
             }
-            
+
 			// debug print
 		    if(debug | (lastIter & print))
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
@@ -357,20 +357,21 @@ int main(int argc, char **argv)
 	                    }
 	                }
 	            }
-        	}	         
+        	}
+                    
         }
 
         // END OF SAMPLES ITERATION. UPDATING VALUES
         // updating accuracy as requested
         if(!normalizedistance){
-            accuracy = thrust::reduce(d_DistanceHistory.begin(),d_DistanceHistory.end())/ ((double)nSamples);
-            d_DistanceHistory.clear();
+            accuracy = thrust::reduce(h_DistanceHistory.begin(),h_DistanceHistory.end()) / ((double)nSamples);
+            h_DistanceHistory.clear();
         }
         else
         {
-            accuracy = thrust::reduce(d_DistanceHistory.begin(), d_DistanceHistory.end());
+            accuracy = thrust::reduce(h_DistanceHistory.begin(), h_DistanceHistory.end());
             accuracy = sqrt(accuracy/nElements)/nSamples;
-            d_DistanceHistory.clear();
+            h_DistanceHistory.clear();
         }
 
         // debug print
