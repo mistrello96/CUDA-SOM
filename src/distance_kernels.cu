@@ -1,5 +1,5 @@
 // kernel to find the distance of each neuron from the sample vector
-__global__ void compute_distance_euclidean_normalized(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_euclidean_normalized(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -11,7 +11,7 @@ __global__ void compute_distance_euclidean_normalized(double* k_matrix, double* 
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[matrixindex+i] - k_ActualSample[i]) * (k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]) * (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -19,7 +19,7 @@ __global__ void compute_distance_euclidean_normalized(double* k_matrix, double* 
 	}
 }
 
-__global__ void compute_distance_sum_squares_normalized(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_sum_squares_normalized(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -31,7 +31,7 @@ __global__ void compute_distance_sum_squares_normalized(double* k_matrix, double
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[matrixindex+i] - k_ActualSample[i]) * (k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]) * (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -39,7 +39,7 @@ __global__ void compute_distance_sum_squares_normalized(double* k_matrix, double
 	}
 }
 
-__global__ void compute_distance_manhattan_normalized(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_manhattan_normalized(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -51,7 +51,7 @@ __global__ void compute_distance_manhattan_normalized(double* k_matrix, double* 
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + fabs(k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + fabs(k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -59,7 +59,7 @@ __global__ void compute_distance_manhattan_normalized(double* k_matrix, double* 
 	}
 }
 
-__global__ void compute_distance_tanimoto_normalized(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_tanimoto_normalized(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -72,9 +72,9 @@ __global__ void compute_distance_tanimoto_normalized(double* k_matrix, double* k
 		double norm2 = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			crossproduct = crossproduct + (k_matrix[matrixindex+i] * k_ActualSample[i]);
+			crossproduct = crossproduct + (k_matrix[matrixindex+i] * k_Samples[currentIndex + i]);
 			norm1 = norm1 + (k_matrix[matrixindex+i] * k_matrix[matrixindex+i]);
-			norm2 = norm2 + (k_ActualSample[i] * k_ActualSample[i]);
+			norm2 = norm2 + (k_Samples[currentIndex + i] * k_Samples[currentIndex + i]);
 
 		}
 		crossproduct = fabs(crossproduct);
@@ -83,7 +83,7 @@ __global__ void compute_distance_tanimoto_normalized(double* k_matrix, double* k
 	}
 }
 
-__global__ void compute_distance_euclidean(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_euclidean(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -95,7 +95,7 @@ __global__ void compute_distance_euclidean(double* k_matrix, double* k_ActualSam
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[matrixindex+i] - k_ActualSample[i]) * (k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]) * (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -103,7 +103,7 @@ __global__ void compute_distance_euclidean(double* k_matrix, double* k_ActualSam
 	}
 }
 
-__global__ void compute_distance_sum_squares(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_sum_squares(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -115,7 +115,7 @@ __global__ void compute_distance_sum_squares(double* k_matrix, double* k_ActualS
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[matrixindex+i] - k_ActualSample[i]) * (k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]) * (k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -123,7 +123,7 @@ __global__ void compute_distance_sum_squares(double* k_matrix, double* k_ActualS
 	}
 }
 
-__global__ void compute_distance_manhattan(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_manhattan(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -135,7 +135,7 @@ __global__ void compute_distance_manhattan(double* k_matrix, double* k_ActualSam
 		double tmp = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + fabs(k_matrix[matrixindex+i] - k_ActualSample[i]);
+			tmp = tmp + fabs(k_matrix[matrixindex+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
@@ -143,7 +143,7 @@ __global__ void compute_distance_manhattan(double* k_matrix, double* k_ActualSam
 	}
 }
 
-__global__ void compute_distance_tanimoto(double* k_matrix, double* k_ActualSample, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance_tanimoto(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -156,9 +156,9 @@ __global__ void compute_distance_tanimoto(double* k_matrix, double* k_ActualSamp
 		double norm2 = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			crossproduct = crossproduct + (k_matrix[matrixindex+i] * k_ActualSample[i]);
+			crossproduct = crossproduct + (k_matrix[matrixindex+i] * k_Samples[currentIndex + i]);
 			norm1 = norm1 + (k_matrix[matrixindex+i] * k_matrix[matrixindex+i]);
-			norm2 = norm2 + (k_ActualSample[i] * k_ActualSample[i]);
+			norm2 = norm2 + (k_Samples[currentIndex + i] * k_Samples[currentIndex + i]);
 
 		}
 		crossproduct = fabs(crossproduct);

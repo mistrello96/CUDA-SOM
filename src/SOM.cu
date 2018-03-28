@@ -149,20 +149,19 @@ int main(int argc, char **argv)
     // ALLOCATION OF THE STRUCTURES
     // host SOM
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
-    // host sample array
-    double *h_ActualSample = (double *)malloc(sizeof(double) * nElements);
     // host distance array, used to find BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
     // device SOM
     double *d_Matrix;
-    // device sample array
-    double *d_ActualSample;
     // device distance array, 
     double *d_Distance;
     // device malloc
+    double *d_Samples;
     CUDA_CHECK_RETURN(cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength));
-    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_ActualSample, sizeof(double) * nElements));
     CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons));
+    CUDA_CHECK_RETURN(cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size()));
+    // memcopy to the device
+    CUDA_CHECK_RETURN(cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice));
 
     // SOM INIZIALIZATION
     // generating random seed
@@ -248,35 +247,31 @@ int main(int argc, char **argv)
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++)
         {
-		    // copy the s sample in the actual sample vector
-		    for(int i = randIndexes[s]*nElements, j = 0; i < randIndexes[s]*nElements+nElements; i++, j++)
-            {
-		    	h_ActualSample[j] = Samples[i];
-		    } 
+            //computing the Sample index for this iteration
+            int currentIndex = randIndexes[s]*nElements;
 
 			// copy from host to device matrix, actual sample and distance
 			CUDA_CHECK_RETURN(cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice));
-			CUDA_CHECK_RETURN(cudaMemcpy(d_ActualSample, h_ActualSample, sizeof(double) * nElements, cudaMemcpyHostToDevice));
 			
 		    // parallel search launch
 		    if (normalizeFlag)
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
-				    case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_ActualSample, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+				    case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
 
@@ -312,7 +307,7 @@ int main(int argc, char **argv)
                 BMU_distance = 0;
                 for(int u = 0; u < nElements; u++)
                 {
-                    tmp = h_Matrix[BMU_index*nElements + u] - h_ActualSample[u];
+                    tmp = h_Matrix[BMU_index*nElements + u] - Samples[currentIndex + u];
                     BMU_distance += tmp * tmp; 
                 }
                 // adding the found value in the distance history array
@@ -329,7 +324,7 @@ int main(int argc, char **argv)
 	        {
 	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
                 {
-	        		h_Matrix[i] = h_Matrix[i] + lr * (h_ActualSample[j] - h_Matrix[i]);
+	        		h_Matrix[i] = h_Matrix[i] + lr * (Samples[currentIndex + j] - h_Matrix[i]);
 	        	}
 	        }
 	        // possible to transfer on the gpu?
@@ -358,7 +353,7 @@ int main(int argc, char **argv)
 
 	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++)
                         {
-	                        h_Matrix[k] = h_Matrix[k] + neigh * lr * (h_ActualSample[j] - h_Matrix[k]);
+	                        h_Matrix[k] = h_Matrix[k] + neigh * lr * (Samples[currentIndex + j] - h_Matrix[k]);
 	                    }
 	                }
 	            }
@@ -408,9 +403,8 @@ int main(int argc, char **argv)
 
 	//freeing all allocated memory
     cudaFree(d_Matrix);
-    cudaFree(d_ActualSample);
+    cudaFree(d_Samples);
     cudaFree(d_Distance);
     free(h_Matrix);
     free(h_Distance);
-    free(h_ActualSample);
 }
