@@ -1,9 +1,5 @@
 STATISTICHE:
-
-
-Utilizzando meno memcopy facci solo danni.
-
-
+Run classica 55
 
 
 
@@ -14,9 +10,11 @@ TODO:
 -Questione Toroidale
 
 
+OTTIMIZZAZIONE:
 
+-Aggiungere kernel update per non effettuare memcopy
 
-
+-Studiare come fare reduce per evitare le thrust 
 
 
 

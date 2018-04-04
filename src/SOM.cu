@@ -114,7 +114,9 @@ int main(int argc, char **argv)
 
     // estimate the radius if not given (covering 2/3 of the matrix)
     if (initialRadius == 0)
+    {
     	initialRadius = 1 + (max(nRows, nColumns)/2) * 2 / 3;
+    }
 
     // total number of neurons in the SOM
     nNeurons = nRows * nColumns;
@@ -154,6 +156,7 @@ int main(int argc, char **argv)
     std::mt19937 e2(rd());
     if (initializationType == 'r')
     {
+        // uniform distribution of values
     	std::uniform_real_distribution<> dist(min_neuronValue, max_neuronValue);
 	    for(int i = 0; i < totalLength; i++)
 	    {
@@ -161,7 +164,8 @@ int main(int argc, char **argv)
 	    }
     }
     else
-    {
+    {   
+        // uniform distribution of indexes fromthe Samples
     	std::uniform_int_distribution<> dist(0, nSamples);
 	    for (int i = 0; i < nNeurons; i++)
 	    {
@@ -191,7 +195,7 @@ int main(int argc, char **argv)
     
     }
 
-    // initializing indexes to shuffle the Samples vector
+    // initializing indexes used to shuffle the Samples vector
     int randIndexes[nSamples];
     for (int i = 0; i < nSamples; i++)
     {
@@ -200,10 +204,12 @@ int main(int argc, char **argv)
     
     // thrust vector used to store the BMU distances of each iteration
     thrust::host_vector<double> h_DistanceHistory;
+    // index of the Samples picked for the iteration
+    int currentIndex;
     // bool to check the last iteration, used to print the result of the training
     bool lastIter = false;
 
-    // ITERATE FOR EACH EPOCH OR UNTILL ACCURACY IS REACHED
+    // ITERATE UNTILL LAST ITERATION IS REACHED OR UNTILL ACCURACY IS REACHED
     while(!lastIter)
     {
         // check the constraints and eventualy set the lastIter flag
@@ -233,12 +239,12 @@ int main(int argc, char **argv)
 	    for(int s=0; s < nSamples ; s++)
         {
             //computing the Sample index for this iteration
-            int currentIndex = randIndexes[s]*nElements;
+            currentIndex = randIndexes[s]*nElements;
             
 			// copy from host to device matrix
 			cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
 			
-		    // parallel search launch
+		    // parallel search of BMU launch
 		    if (normalizeFlag)
             {
 		    	switch(distanceType)
@@ -263,6 +269,7 @@ int main(int argc, char **argv)
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
             
+            // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
 			// create thrust vector to find BMU  in parallel
 			thrust::host_vector<double> d_vec_Distance(h_Distance, h_Distance + nNeurons);
@@ -273,26 +280,6 @@ int main(int argc, char **argv)
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
             double BMU_distance;
-                        
-            /*
-            cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
-            int BMU_index = 0;
-            double BMU_distance = h_Distance[0];
-            for(int c = 0; c < nNeurons; c++){
-                if (h_Distance[c]< h_Distance[BMU_index]){
-                    BMU_index = c;
-                    BMU_distance = h_Distance[c];
-                }
-            }
-            int BMU_x = BMU_index / nColumns;
-            int BMU_y = BMU_index % nColumns;
-            */
-            /*
-            int BMU_x = 5;
-            int BMU_y = 6;
-            int BMU_index = 7;
-            double BMU_distance = 2;
-            */
 
             // compute BMU distance as requested
             if(!normalizedistance)
@@ -327,8 +314,7 @@ int main(int argc, char **argv)
 	        		h_Matrix[i] = h_Matrix[i] + lr * (Samples[currentIndex + j] - h_Matrix[i]);
 	        	}
 	        }
-	        // possible to transfer on the gpu?
-            // update also the neighbors
+            // else update also the neighbors
 	        else if (!lastIter)
 	        {
 	            for (int i = 0; i < nNeurons; i++){

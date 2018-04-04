@@ -109,3 +109,11 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
   return straightDistance + diagonalDistance;
 }
 
+// kernel to find the distance of each neuron from the sample vector
+__global__ void update_neuron(double* k_matrix, double* k_Samples, double lr, int currentIndex, int nElements, int index, double distance)
+{
+    int tid = threadIdx.x + blockDim.x * blockIdx.x;
+    int matrixindex = index * nElements + tid;
+    k_matrix[matrixindex] = k_matrix[matrixindex] + distance * lr * (k_Samples[currentIndex + tid] - k_matrix[matrixindex]);
+}
+
