@@ -5,15 +5,13 @@ Run classica 55
 
 TODO:
 
-(Capire come funziona distanza esagonale)
-
 -Questione Toroidale
 
 -Stima blocchi e threads
 
 OTTIMIZZAZIONE:
 
--Aggiungere kernel update per non effettuare memcopy
+-Aggiungere kernel update per non effettuare memcopy(Nessuno da host accede alla matrice.)
 
 -Dimensionalità entro cui ha senso, 30000 va bene?
 
