@@ -9,12 +9,13 @@ TODO:
 
 -Questione Toroidale
 
+-Stima blocchi e threads
 
 OTTIMIZZAZIONE:
 
 -Aggiungere kernel update per non effettuare memcopy
 
--Studiare come fare reduce per evitare le thrust 
+-Dimensionalità entro cui ha senso, 30000 va bene?
 
 
 
@@ -27,3 +28,20 @@ nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=comput
 
 
 
+ROBE:
+            
+
+            thrust::device_ptr<double> dptr(d_Distance);
+            thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + nNeurons);
+			unsigned int BMU_index = dresptr - dptr;
+            unsigned int BMU_x = BMU_index / nColumns;
+            unsigned int BMU_y = BMU_index % nColumns;
+            double BMU_distance;
+
+            // compute BMU distance as requested
+            if(!normalizedistance)
+            {
+    			BMU_distance = dresptr[0];
+                // adding the found value in the distance history array
+                h_DistanceHistory.push_back(BMU_distance);
+            }

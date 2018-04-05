@@ -133,6 +133,13 @@ int main(int argc, char **argv)
     	exit(-1);
     }
 
+    // CHECKING PARAMS COMPATIBILITY
+    if(normalizedistance && ((distanceType=='t') || (distanceType=='m')))
+    {
+        std::cout << "NormalizeDistance option not avaiable with Manhattan or Tanimoto Distance" << std::endl;
+        exit(-1);
+    }
+
     // ALLOCATION OF THE STRUCTURES
     // host SOM
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
@@ -196,12 +203,11 @@ int main(int argc, char **argv)
     }
 
     // initializing indexes used to shuffle the Samples vector
-    int randIndexes[nSamples];
+    int* randIndexes = new int[nSamples];
     for (int i = 0; i < nSamples; i++)
     {
     	randIndexes[i] = i;
     }
-    
     // thrust vector used to store the BMU distances of each iteration
     thrust::host_vector<double> h_DistanceHistory;
     // index of the Samples picked for the iteration
@@ -269,6 +275,23 @@ int main(int argc, char **argv)
 			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
             
+            /*
+            thrust::device_ptr<double> dptr(d_Distance);
+            thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + nNeurons);
+            unsigned int BMU_index = dresptr - dptr;
+            unsigned int BMU_x = BMU_index / nColumns;
+            unsigned int BMU_y = BMU_index % nColumns;
+            double BMU_distance;
+
+            // compute BMU distance as requested
+            if(!normalizedistance)
+            {
+                BMU_distance = dresptr[0];
+                // adding the found value in the distance history array
+                h_DistanceHistory.push_back(BMU_distance);
+            }
+            */
+            
             // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
 			// create thrust vector to find BMU  in parallel
@@ -287,18 +310,19 @@ int main(int argc, char **argv)
     			BMU_distance = *iter;
                 // adding the found value in the distance history array
                 h_DistanceHistory.push_back(BMU_distance);
-            } 
+            }
             else
             {
-                double tmp = 0;
-                BMU_distance = 0;
-                for(int u = 0; u < nElements; u++)
+                if(distanceType=='s')
                 {
-                    tmp = h_Matrix[BMU_index*nElements + u] - Samples[currentIndex + u];
-                    BMU_distance += tmp * tmp; 
+                    BMU_distance = *iter;
+                    h_DistanceHistory.push_back(BMU_distance);
                 }
-                // adding the found value in the distance history array
-                h_DistanceHistory.push_back(BMU_distance);
+                else if (distanceType=='e')
+                {
+                    BMU_distance = (*iter) * (*iter);
+                    h_DistanceHistory.push_back(BMU_distance); 
+                }
             }
 
 			// debug print
@@ -312,6 +336,7 @@ int main(int argc, char **argv)
 	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
                 {
 	        		h_Matrix[i] = h_Matrix[i] + lr * (Samples[currentIndex + j] - h_Matrix[i]);
+
 	        	}
 	        }
             // else update also the neighbors
@@ -394,4 +419,5 @@ int main(int argc, char **argv)
     cudaFree(d_Distance);
     free(h_Matrix);
     free(h_Distance);
+    free(randIndexes);
 }
