@@ -1,5 +1,6 @@
 STATISTICHE:
-Run classica 55
+Run classica 4.1 / 55
+Dist media 0.018 / 0.002
 
 
 

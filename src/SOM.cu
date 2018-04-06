@@ -209,11 +209,11 @@ int main(int argc, char **argv)
     	randIndexes[i] = i;
     }
     // thrust vector used to store the BMU distances of each iteration
-    thrust::host_vector<double> h_DistanceHistory;
+    //thrust::host_vector<double> h_DistanceHistory;
     // array used to store the BMU distances of each iteration
-    ////double* h_DistanceHistory = new double(nSamples);
-    ////double* d_DistanceHistory;
-    ////cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
+    double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
+    double* d_DistanceHistory;
+    cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
 
 
     // index of the Samples picked for the iteration
@@ -289,14 +289,6 @@ int main(int argc, char **argv)
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
             double BMU_distance;
-
-            // compute BMU distance as requested
-            if(!normalizedistance)
-            {
-                BMU_distance = dresptr[0];
-                // adding the found value in the distance history array
-                h_DistanceHistory.push_back(BMU_distance);
-            }
             */
 
             //HOST IMPLEMENTATION TO FIND BMU
@@ -319,8 +311,8 @@ int main(int argc, char **argv)
     			BMU_distance = *iter;
                 ////BMU_distance = dresptr[0];
                 // adding the found value in the distance history array
-                h_DistanceHistory.push_back(BMU_distance);
-                ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
+                ////h_DistanceHistory.push_back(BMU_distance);
+                h_DistanceHistory[randIndexes[s]] = BMU_distance;
             }
             else
             {
@@ -328,15 +320,15 @@ int main(int argc, char **argv)
                 {
                     BMU_distance = *iter;
                     ////BMU_distance = dresptr[0];
-                    h_DistanceHistory.push_back(BMU_distance);
-                    ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
+                    ////h_DistanceHistory.push_back(BMU_distance);
+                    h_DistanceHistory[randIndexes[s]] = BMU_distance;
                 }
                 else if (distanceType=='e')
                 {
                     BMU_distance = (*iter) * (*iter);
                     ////BMU_distance = dresptr[0] * dresptr[0];
-                    h_DistanceHistory.push_back(BMU_distance); 
-                    ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
+                    ////h_DistanceHistory.push_back(BMU_distance); 
+                    h_DistanceHistory[s] = BMU_distance;
                 }
             }
 
@@ -391,32 +383,32 @@ int main(int argc, char **argv)
         // updating accuracy as requested
         if(!normalizedistance){
             // CPU implementation
-            accuracy = thrust::reduce(h_DistanceHistory.begin(),h_DistanceHistory.end()) / ((double)nSamples);
-            h_DistanceHistory.clear();
+            //accuracy = thrust::reduce(h_DistanceHistory.begin(),h_DistanceHistory.end()) / ((double)nSamples);
+            //h_DistanceHistory.clear();
 
             // GPU implementation
-            /*
+            
             cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            thrust::device_ptr<double> acc = thrust::reduce(dptr, dptr + nSamples);
-            accuracy = acc[0];
-            */
+            double acc = thrust::reduce(dptr, dptr + nSamples);
+            accuracy = acc;
+            
         }
         else
         {
             // CPU implementation
-            accuracy = thrust::reduce(h_DistanceHistory.begin(), h_DistanceHistory.end());
-            accuracy = sqrt(accuracy/nElements)/nSamples;
-            h_DistanceHistory.clear();
+            //accuracy = thrust::reduce(h_DistanceHistory.begin(), h_DistanceHistory.end());
+            //accuracy = sqrt(accuracy/nElements)/nSamples;
+            //h_DistanceHistory.clear();
 
             // GPU implementation
-            /*
+            
             cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            thrust::device_ptr<double> acc = thrust::reduce(dptr, dptr + nSamples);
-            accuracy = acc[0];
+            double acc = thrust::reduce(dptr, dptr + nSamples);
+            accuracy = acc;
             accuracy = sqrt(accuracy/nElements)/nSamples;
-            */
+            
         }
 
         // debug print
@@ -451,9 +443,9 @@ int main(int argc, char **argv)
     cudaFree(d_Matrix);
     cudaFree(d_Samples);
     cudaFree(d_Distance);
-    //// cudaFree(d_DistanceHistory);
+    cudaFree(d_DistanceHistory);
     free(h_Matrix);
     free(h_Distance);
     free(randIndexes);
-    ////free(h_DistanceHistory);
+    free(h_DistanceHistory);
 }
