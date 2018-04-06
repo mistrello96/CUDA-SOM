@@ -22,3 +22,9 @@ STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
+Tempo
+
+	auto start_time = std::chrono::high_resolution_clock::now();
+	auto end_time = std::chrono::high_resolution_clock::now();
+	auto time = end_time - start_time;
+	std::cout << "!!!!!! " << std::chrono::duration_cast<std::chrono::microseconds>(time).count() << std::endl;

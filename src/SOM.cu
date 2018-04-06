@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <float.h>
+#include <chrono>
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
