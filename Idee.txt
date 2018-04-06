@@ -21,25 +21,3 @@ STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
-
-
-
-
-
-ROBE:
-            
-
-            thrust::device_ptr<double> dptr(d_Distance);
-            thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + nNeurons);
-			unsigned int BMU_index = dresptr - dptr;
-            unsigned int BMU_x = BMU_index / nColumns;
-            unsigned int BMU_y = BMU_index % nColumns;
-            double BMU_distance;
-
-            // compute BMU distance as requested
-            if(!normalizedistance)
-            {
-    			BMU_distance = dresptr[0];
-                // adding the found value in the distance history array
-                h_DistanceHistory.push_back(BMU_distance);
-            }

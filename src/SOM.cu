@@ -210,6 +210,12 @@ int main(int argc, char **argv)
     }
     // thrust vector used to store the BMU distances of each iteration
     thrust::host_vector<double> h_DistanceHistory;
+    // array used to store the BMU distances of each iteration
+    ////double* h_DistanceHistory = new double(nSamples);
+    ////double* d_DistanceHistory;
+    ////cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
+
+
     // index of the Samples picked for the iteration
     int currentIndex;
     // bool to check the last iteration, used to print the result of the training
@@ -272,9 +278,10 @@ int main(int argc, char **argv)
 		    	}
 		    }
 
-			//wait for all block to complete the computation
 		    cudaDeviceSynchronize();
             
+
+            //DEVICE IMPLEMENTATION TO FIND BMU
             /*
             thrust::device_ptr<double> dptr(d_Distance);
             thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + nNeurons);
@@ -291,7 +298,8 @@ int main(int argc, char **argv)
                 h_DistanceHistory.push_back(BMU_distance);
             }
             */
-            
+
+            //HOST IMPLEMENTATION TO FIND BMU
             // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
 			// create thrust vector to find BMU  in parallel
@@ -304,24 +312,31 @@ int main(int argc, char **argv)
             unsigned int BMU_y = BMU_index % nColumns;
             double BMU_distance;
 
+
             // compute BMU distance as requested
             if(!normalizedistance)
             {
     			BMU_distance = *iter;
+                ////BMU_distance = dresptr[0];
                 // adding the found value in the distance history array
                 h_DistanceHistory.push_back(BMU_distance);
+                ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
             }
             else
             {
                 if(distanceType=='s')
                 {
                     BMU_distance = *iter;
+                    ////BMU_distance = dresptr[0];
                     h_DistanceHistory.push_back(BMU_distance);
+                    ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
                 }
                 else if (distanceType=='e')
                 {
                     BMU_distance = (*iter) * (*iter);
+                    ////BMU_distance = dresptr[0] * dresptr[0];
                     h_DistanceHistory.push_back(BMU_distance); 
+                    ////h_DistanceHistory[randIndexes[s]] = BMU_distance;
                 }
             }
 
@@ -372,17 +387,36 @@ int main(int argc, char **argv)
                     
         }
 
-        // END OF SAMPLES ITERATION. UPDATING VALUES
+        // END OF EPOCH. UPDATING VALUES
         // updating accuracy as requested
         if(!normalizedistance){
+            // CPU implementation
             accuracy = thrust::reduce(h_DistanceHistory.begin(),h_DistanceHistory.end()) / ((double)nSamples);
             h_DistanceHistory.clear();
+
+            // GPU implementation
+            /*
+            cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
+            thrust::device_ptr<double> dptr(d_DistanceHistory);
+            thrust::device_ptr<double> acc = thrust::reduce(dptr, dptr + nSamples);
+            accuracy = acc[0];
+            */
         }
         else
         {
+            // CPU implementation
             accuracy = thrust::reduce(h_DistanceHistory.begin(), h_DistanceHistory.end());
             accuracy = sqrt(accuracy/nElements)/nSamples;
             h_DistanceHistory.clear();
+
+            // GPU implementation
+            /*
+            cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
+            thrust::device_ptr<double> dptr(d_DistanceHistory);
+            thrust::device_ptr<double> acc = thrust::reduce(dptr, dptr + nSamples);
+            accuracy = acc[0];
+            accuracy = sqrt(accuracy/nElements)/nSamples;
+            */
         }
 
         // debug print
@@ -417,7 +451,9 @@ int main(int argc, char **argv)
     cudaFree(d_Matrix);
     cudaFree(d_Samples);
     cudaFree(d_Distance);
+    //// cudaFree(d_DistanceHistory);
     free(h_Matrix);
     free(h_Distance);
     free(randIndexes);
+    ////free(h_DistanceHistory);
 }
