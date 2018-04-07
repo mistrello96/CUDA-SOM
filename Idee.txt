@@ -1,7 +1,24 @@
-STATISTICHE:
-Run classica 4.1 / 55
-Dist media 0.018 / 0.002
+STATISTICHE
+Tante reads
+	Time for memcopy1.9774e-05 seconds
+	Time to compute BMU on kernel 4.6461e-05 seconds
+	Time to find BMU distance 9.8777e-05 seconds
+	Time elapsed for the update 7.4958e-05 seconds
+	Time elapsed for ITERATION ON A SINGLE READ  0.000258153 seconds
+	Time elapsed for the params/accuracy(end EPOCH)0.000356568 seconds
+	!!!Time elapsed for the entire EPOCH 8.44222 seconds
 
+
+Poche reads
+	Time for memcopy6.431e-06 seconds
+	Time to compute BMU on kernel 1.2335e-05 seconds
+	Time to find BMU distance 1.438e-05 seconds
+	Time elapsed for the update 4.249e-06 seconds
+	Time elapsed for ITERATION ON A SINGLE READ  5.3191e-05 seconds
+	Time elapsed for the params/accuracy(end EPOCH)4.0807e-05 seconds
+	!!!Time elapsed for the entire EPOCH 0.00660921 seconds
+
+Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads
 
 
 TODO:
@@ -10,11 +27,7 @@ TODO:
 
 -Stima blocchi e threads
 
-OTTIMIZZAZIONE:
-
--Aggiungere kernel update per non effettuare memcopy(Nessuno da host accede alla matrice.)
-
--Dimensionalità entro cui ha senso, 30000 va bene?
+-Aggiungere kernel update per non effettuare memcopy(Nessuno da host accede alla matrice.
 
 
 
@@ -22,9 +35,14 @@ STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
-Tempo
 
-	auto start_time = std::chrono::high_resolution_clock::now();
-	auto end_time = std::chrono::high_resolution_clock::now();
-	auto time = end_time - start_time;
-	std::cout << "!!!!!! " << std::chrono::duration_cast<std::chrono::microseconds>(time).count() << std::endl;
+
+
+TEMPI
+
+	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+	std::cout << "!!!!!! " << (double)std::chrono::duration_cast<std::chrono::microseconds>( end - start ).count() / 1000000 << " seconds" <<std::endl;
+
+
+
