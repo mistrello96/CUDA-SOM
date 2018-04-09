@@ -8,7 +8,6 @@
 #include <iostream>
 #include <random>
 #include <float.h>
-#include <chrono>
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
@@ -22,6 +21,7 @@ int main(int argc, char **argv)
     {
         exit(1);
     }
+
 	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
 	// path of the input file
 	std::string filePath = ai.inputfile_arg;
@@ -209,9 +209,7 @@ int main(int argc, char **argv)
     {
     	randIndexes[i] = i;
     }
-    // thrust vector used to store the BMU distances of each iteration
-    //thrust::host_vector<double> h_DistanceHistory;
-    // array used to store the BMU distances of each iteration
+
     double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
     double* d_DistanceHistory;
     cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
@@ -251,12 +249,13 @@ int main(int argc, char **argv)
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++)
         {
+            
             //computing the Sample index for this iteration
             currentIndex = randIndexes[s]*nElements;
             
 			// copy from host to device matrix
 			cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
-			
+
 		    // parallel search of BMU launch
 		    if (normalizeFlag)
             {
@@ -280,55 +279,36 @@ int main(int argc, char **argv)
 		    }
 
 		    cudaDeviceSynchronize();
-            
-
-            //DEVICE IMPLEMENTATION TO FIND BMU
-            /*
-            thrust::device_ptr<double> dptr(d_Distance);
-            thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + nNeurons);
-            unsigned int BMU_index = dresptr - dptr;
-            unsigned int BMU_x = BMU_index / nColumns;
-            unsigned int BMU_y = BMU_index % nColumns;
-            double BMU_distance;
-            */
 
             //HOST IMPLEMENTATION TO FIND BMU
             // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
-			// create thrust vector to find BMU  in parallel
-			thrust::host_vector<double> d_vec_Distance(h_Distance, h_Distance + nNeurons);
-			// extract the first matching BMU
-			thrust::host_vector<double>::iterator iter = thrust::min_element(d_vec_Distance.begin(), d_vec_Distance.end());
-			// extract index and value of BMU
-			unsigned int BMU_index = iter - d_vec_Distance.begin();
+            double BMU_distance = h_Distance[0];
+            unsigned int BMU_index = 0;
+            for (int m = 1; m < nNeurons; m++){
+                if(BMU_distance > h_Distance[m]){
+                    BMU_distance = h_Distance[m];
+                    BMU_index = m;
+                }
+
+            }
             unsigned int BMU_x = BMU_index / nColumns;
             unsigned int BMU_y = BMU_index % nColumns;
-            double BMU_distance;
-
 
             // compute BMU distance as requested
             if(!normalizedistance)
             {
-    			BMU_distance = *iter;
-                ////BMU_distance = dresptr[0];
-                // adding the found value in the distance history array
-                ////h_DistanceHistory.push_back(BMU_distance);
                 h_DistanceHistory[randIndexes[s]] = BMU_distance;
             }
             else
             {
                 if(distanceType=='s')
                 {
-                    BMU_distance = *iter;
-                    ////BMU_distance = dresptr[0];
-                    ////h_DistanceHistory.push_back(BMU_distance);
                     h_DistanceHistory[randIndexes[s]] = BMU_distance;
                 }
                 else if (distanceType=='e')
                 {
-                    BMU_distance = (*iter) * (*iter);
-                    ////BMU_distance = dresptr[0] * dresptr[0];
-                    ////h_DistanceHistory.push_back(BMU_distance); 
+                    BMU_distance = (BMU_distance) * (BMU_distance);
                     h_DistanceHistory[s] = BMU_distance;
                 }
             }
@@ -336,6 +316,7 @@ int main(int argc, char **argv)
 			// debug print
 		    if(debug | (lastIter & print))
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
+
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
@@ -376,20 +357,13 @@ int main(int argc, char **argv)
 	                    }
 	                }
 	            }
-        	}
-                    
+        	}        
         }
 
         // END OF EPOCH. UPDATING VALUES
         // updating accuracy as requested
         if(!normalizedistance){
-            // CPU implementation
-            //accuracy = thrust::reduce(h_DistanceHistory.begin(),h_DistanceHistory.end()) / ((double)nSamples);
-            //h_DistanceHistory.clear();
-
-            // GPU implementation
-            
-            cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
+        	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
             double acc = thrust::reduce(dptr, dptr + nSamples);
             accuracy = acc;
@@ -397,13 +371,6 @@ int main(int argc, char **argv)
         }
         else
         {
-            // CPU implementation
-            //accuracy = thrust::reduce(h_DistanceHistory.begin(), h_DistanceHistory.end());
-            //accuracy = sqrt(accuracy/nElements)/nSamples;
-            //h_DistanceHistory.clear();
-
-            // GPU implementation
-            
             cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
             double acc = thrust::reduce(dptr, dptr + nSamples);
@@ -432,7 +399,7 @@ int main(int argc, char **argv)
         	lr = ilr * exp(- (double)nIter/sqrt(maxnIter)) + flr;
         else 
             lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
-    }
+}
 
     // save trainde SOM to file
     if (debug | print)

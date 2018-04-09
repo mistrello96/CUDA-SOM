@@ -46,12 +46,12 @@ get_best_k_wss <- function(seqdata) {
 #setwd("C:\\Users\\aresio\\Documents\\PythonCode\\clustering")
 
 # read and format files
-input_file = "dati_bicocca_leucemia.txt" # dati raw
+input_file = "bigData.txt" # dati raw
 input_file = "dati_bicocca_melanoma.txt" # dati raw
 test_name = "Leukemia"
 test_name = "Melanoma"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
-seqdata <- as.matrix(scale(seqdata_original))
+seqdata <- as.matrix(seqdata_original)
 #best_clustering <- get_best_k(seqdata);
 #best_clustering <- NbClust(seqdata, distance="euclidean", min.nc=2, max.nc=10, method="complete", index="all")
 
@@ -59,8 +59,8 @@ seqdata <- as.matrix(scale(seqdata_original))
   
   # main plot
   D <- optimal_som(seqdata);
-  #debug(supersom)
-  som_model <- supersom(seqdata, rlen=1000 , radius=5, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1) 
+  debug(supersom);
+  system.time(om_model <- supersom2(seqdata, rlen=1, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1))
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
  # cluster = hclust(object.distances(som_model, "codes"))

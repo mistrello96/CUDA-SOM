@@ -18,7 +18,9 @@ Poche reads
 	Time elapsed for the params/accuracy(end EPOCH)4.0807e-05 seconds
 	!!!Time elapsed for the entire EPOCH 0.00660921 seconds
 
-Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads
+Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads. La differenza di prestazioni cala mano a mano che le reads crescono, su eso 30000 reads sono 6 volte + lento
+
+Ha senso usare thrust sulla media della accuracy(numerosità come le reads), non ha senso sulla BMU distance.
 
 
 TODO:
