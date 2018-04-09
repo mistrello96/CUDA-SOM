@@ -47,7 +47,8 @@ get_best_k_wss <- function(seqdata) {
 
 # read and format files
 input_file = "bigData.txt" # dati raw
-input_file = "dati_bicocca_melanoma.txt" # dati raw
+input_file = "leucemia_scaled.txt" # dati raw
+input_file = "melanoma_scaled.txt" # dati raw
 test_name = "Leukemia"
 test_name = "Melanoma"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
@@ -59,8 +60,8 @@ seqdata <- as.matrix(seqdata_original)
   
   # main plot
   D <- optimal_som(seqdata);
-  debug(supersom);
-  system.time(om_model <- supersom2(seqdata, rlen=1, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1))
+  #debug(supersom);
+  system.time(om_model <- supersom(seqdata, rlen=1000, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1))
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
  # cluster = hclust(object.distances(som_model, "codes"))
