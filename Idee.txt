@@ -1,27 +1,6 @@
-STATISTICHE
-Tante reads
-	Time for memcopy1.9774e-05 seconds
-	Time to compute BMU on kernel 4.6461e-05 seconds
-	Time to find BMU distance 9.8777e-05 seconds
-	Time elapsed for the update 7.4958e-05 seconds
-	Time elapsed for ITERATION ON A SINGLE READ  0.000258153 seconds
-	Time elapsed for the params/accuracy(end EPOCH)0.000356568 seconds
-	!!!Time elapsed for the entire EPOCH 8.44222 seconds
-
-
-Poche reads
-	Time for memcopy6.431e-06 seconds
-	Time to compute BMU on kernel 1.2335e-05 seconds
-	Time to find BMU distance 1.438e-05 seconds
-	Time elapsed for the update 4.249e-06 seconds
-	Time elapsed for ITERATION ON A SINGLE READ  5.3191e-05 seconds
-	Time elapsed for the params/accuracy(end EPOCH)4.0807e-05 seconds
-	!!!Time elapsed for the entire EPOCH 0.00660921 seconds
-
-Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads. La differenza di prestazioni cala mano a mano che le reads crescono, su eso 30000 reads sono 6 volte + lento
+Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu per cercare il minimo BMU, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads. La differenza di prestazioni cala mano a mano che le reads crescono, su 30000 reads sono 3 volte + lento
 
 Ha senso usare thrust sulla media della accuracy(numerosità come le reads), non ha senso sulla BMU distance.
-
 
 TODO:
 
@@ -30,7 +9,6 @@ TODO:
 -Stima blocchi e threads
 
 -Aggiungere kernel update per non effettuare memcopy(Nessuno da host accede alla matrice.
-
 
 
 STRINGA DI COMPILAZIONE:

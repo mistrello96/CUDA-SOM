@@ -146,15 +146,17 @@ int main(int argc, char **argv)
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
     // host distance array, used to find BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
-    // device SOM
-    double *d_Matrix;
-    // device distance array, 
+    // host distance history array, used to compute accuracy
+    double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
+    double *d_Matrix; 
     double *d_Distance;
-    // device malloc
     double *d_Samples;
+    double* d_DistanceHistory;
+    cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
     cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength);
     cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons);
     cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size());
+
     // memcopy to the device
     cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice);
 
@@ -210,15 +212,12 @@ int main(int argc, char **argv)
     	randIndexes[i] = i;
     }
 
-    double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
-    double* d_DistanceHistory;
-    cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
-
-
     // index of the Samples picked for the iteration
     int currentIndex;
     // bool to check the last iteration, used to print the result of the training
     bool lastIter = false;
+    double BMU_distance;
+    unsigned int BMU_index, BMU_x, BMU_y;
 
     // ITERATE UNTILL LAST ITERATION IS REACHED OR UNTILL ACCURACY IS REACHED
     while(!lastIter)
@@ -280,11 +279,12 @@ int main(int argc, char **argv)
 
 		    cudaDeviceSynchronize();
 
+
             //HOST IMPLEMENTATION TO FIND BMU
             // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
-            double BMU_distance = h_Distance[0];
-            unsigned int BMU_index = 0;
+            BMU_distance = h_Distance[0];
+            BMU_index = 0;
             for (int m = 1; m < nNeurons; m++){
                 if(BMU_distance > h_Distance[m]){
                     BMU_distance = h_Distance[m];
@@ -292,8 +292,8 @@ int main(int argc, char **argv)
                 }
 
             }
-            unsigned int BMU_x = BMU_index / nColumns;
-            unsigned int BMU_y = BMU_index % nColumns;
+            BMU_x = BMU_index / nColumns;
+            BMU_y = BMU_index % nColumns;
 
             // compute BMU distance as requested
             if(!normalizedistance)
@@ -360,22 +360,20 @@ int main(int argc, char **argv)
         	}        
         }
 
+
         // END OF EPOCH. UPDATING VALUES
         // updating accuracy as requested
         if(!normalizedistance){
         	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            double acc = thrust::reduce(dptr, dptr + nSamples);
-            accuracy = acc;
+            accuracy = thrust::reduce(dptr, dptr + nSamples);
             
         }
         else
         {
             cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            double acc = thrust::reduce(dptr, dptr + nSamples);
-            accuracy = acc;
-            accuracy = sqrt(accuracy/nElements)/nSamples;
+            accuracy = sqrt(thrust::reduce(dptr, dptr + nSamples) / nElements) / nSamples;
             
         }
 
