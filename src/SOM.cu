@@ -214,35 +214,23 @@ int main(int argc, char **argv)
 
     // index of the Samples picked for the iteration
     int currentIndex;
-    // bool to check the last iteration, used to print the result of the training
-    bool lastIter = false;
     double BMU_distance;
     unsigned int BMU_index, BMU_x, BMU_y;
 
     // ITERATE UNTILL LAST ITERATION IS REACHED OR UNTILL ACCURACY IS REACHED
-    while(!lastIter)
+    while((accuracy >= accuracyTreshold) && (lr > flr) && (nIter < maxnIter))
     {
-        // check the constraints and eventualy set the lastIter flag
-        if((accuracy <= accuracyTreshold) | (lr < flr) | (nIter >= maxnIter))
-        {
-            // if last iter, set to 0 lr and radius
-            lastIter = true;
-            lr=0;
-            radius=0;
-        }
-
     	// randomize indexes of samples if required
-    	if(randomizeDataset && !lastIter )
+    	if(randomizeDataset)
     		std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
 
         // debug print
-        if ((debug | verbose) && !lastIter)
+        if (debug | verbose)
         {
             std::cout << "Learning rate of this iteration is " << lr << std::endl;
             std::cout << "Radius of this iteration is " << radius << std::endl;
         }
-        else if ((lastIter && print))
-            std::cout << "\n TRAINING RESULTS \n" << std::endl;
+            
 
 
         // ITERATE ON EACH SAMPLE TO FIND BMU
@@ -314,13 +302,13 @@ int main(int argc, char **argv)
             }
 
 			// debug print
-		    if(debug | (lastIter & print))
+		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
 
 			// UPDATE THE NEIGHBORS
 			// if radius is 0, update only BMU 
-	        if (radius == 0 && !lastIter)
+	        if (radius == 0)
 	        {
 	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
                 {
@@ -329,7 +317,7 @@ int main(int argc, char **argv)
 	        	}
 	        }
             // else update also the neighbors
-	        else if (!lastIter)
+	        else
 	        {
 	            for (int i = 0; i < nNeurons; i++){
 	                int x = i / nColumns;
@@ -366,23 +354,20 @@ int main(int argc, char **argv)
         if(!normalizedistance){
         	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            accuracy = thrust::reduce(dptr, dptr + nSamples);
-            
+            accuracy = thrust::reduce(dptr, dptr + nSamples);            
         }
         else
         {
             cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
-            accuracy = sqrt(thrust::reduce(dptr, dptr + nSamples) / nElements) / nSamples;
-            
+            accuracy = sqrt(thrust::reduce(dptr, dptr + nSamples) / nElements) / nSamples;  
         }
 
         // debug print
-        if ((verbose | debug) && !lastIter)
+        if (verbose | debug)
         {
             std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
-        } else if (lastIter)
-            std::cout << "\nMean distance of the sample to the trained SOM is " << accuracy << std::endl;
+        }
         
 		// updating the counter iteration
 		nIter ++;
@@ -398,6 +383,9 @@ int main(int argc, char **argv)
         else 
             lr = ilr - (ilr - flr) * ((double)nIter/maxnIter);
 }
+
+	std::cout << "\n\n TRAINING RESULTS" << std::endl;
+	std::cout << "\nMean distance of the sample to the trained SOM is " << accuracy << std::endl;
 
     // save trainde SOM to file
     if (debug | print)
