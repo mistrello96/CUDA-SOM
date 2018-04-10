@@ -2,6 +2,8 @@ Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computaz
 
 Ha senso usare thrust sulla media della accuracy(numerosità come le reads), non ha senso sulla BMU distance.
 
+La simulazione ci mette 3,7 per ogni epoch su normal data.
+
 TODO:
 
 -Questione Toroidale
@@ -26,3 +28,9 @@ TEMPI
 
 
 
+            if(radius == 0){
+                update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index);
+            }
+            else{
+                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons);
+            }

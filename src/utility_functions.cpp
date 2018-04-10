@@ -71,49 +71,72 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
     myfile.close();
 }
 	
-// taken from Stack, TO FIX
+    // taken from Stack, TO FIX
 int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
 {
-  // compute distance as we would on a normal grid
-  int xdist = ax - bx;
-  int ydist = ay - by;
+    // compute distance as we would on a normal grid
+    int xdist = ax - bx;
+    int ydist = ay - by;
 
-  // compensate for grid deformation
-  // grid is stretched along (-n, n) line so points along that line have
-  // a distance of 2 between them instead of 1
+    // compensate for grid deformation
+    // grid is stretched along (-n, n) line so points along that line have
+    // a distance of 2 between them instead of 1
 
-  // to calculate the shortest path, we decompose it into one diagonal movement(shortcut)
-  // and one straight movement along an axis
+    // to calculate the shortest path, we decompose it into one diagonal movement(shortcut)
+    // and one straight movement along an axis
 
-  int lesserCoord = abs(xdist) < abs(ydist) ? abs(xdist) : abs(ydist);
-  int diagx = (xdist < 0) ? -lesserCoord : lesserCoord; // keep the sign 
-  int diagy = (ydist < 0) ? -lesserCoord : lesserCoord; // keep the sign
+    int lesserCoord = abs(xdist) < abs(ydist) ? abs(xdist) : abs(ydist);
+    int diagx = (xdist < 0) ? -lesserCoord : lesserCoord; // keep the sign 
+    int diagy = (ydist < 0) ? -lesserCoord : lesserCoord; // keep the sign
 
-  // one of x or y should always be 0 because we are calculating a straight
-  // line along one of the axis
-  int strx = xdist - diagx;
-  int stry = ydist - diagy;
+    // one of x or y should always be 0 because we are calculating a straight
+    // line along one of the axis
+    int strx = xdist - diagx;
+    int stry = ydist - diagy;
 
-  // calculate distance
-  int straightDistance = abs(strx) + abs(stry);
-  int diagonalDistance = abs(diagx);
+    // calculate distance
+    int straightDistance = abs(strx) + abs(stry);
+    int diagonalDistance = abs(diagx);
 
-  // if we are traveling diagonally along the stretch deformation we double
-  // the diagonal distance
-  if ( (diagx > 0 && diagy < 0) || 
-       (diagx < 0 && diagy > 0) )
-  {
-    diagonalDistance *= 2;
-  }
+    // if we are traveling diagonally along the stretch deformation we double
+    // the diagonal distance
+    if ( (diagx > 0 && diagy < 0) || (diagx < 0 && diagy > 0) )
+    {
+        diagonalDistance *= 2;
+    }
 
-  return straightDistance + diagonalDistance;
+    return straightDistance + diagonalDistance;
 }
 
-// kernel to find the distance of each neuron from the sample vector
-__global__ void update_neuron(double* k_matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int neuronIndex, double distance)
+    // kernel to update the SOM after the BMU has been found
+__global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex)
 {
-    int tid = threadIdx.x + blockDim.x * blockIdx.x;
-    int matrixindex = neuronIndex * nElements + tid;
-    k_matrix[matrixindex] = k_matrix[matrixindex] + distance * lr * (k_Samples[samplesIndex + tid] - k_matrix[matrixindex]);
+    int matrixindex = BMUIndex * nElements;
+    for (int i = 0; i < nElements; i++){
+        k_Matrix[matrixindex+i] = k_Matrix[matrixindex+i] + lr * (k_Samples[samplesIndex + i] - k_Matrix[matrixindex+i]); 
+    }
 }
+
+__global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron)
+{
+    int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
+    if (threadindex < nNeuron){
+        int matrixindex = threadindex * nElements;
+        int x = matrixindex / nColumns;
+        int y = matrixindex % nColumns;
+        int BMU_x = BMUIndex / nColumns;
+        int BMU_y = BMUIndex % nColumns;
+        int distance = 0;
+        distance = (int)sqrtf((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
+        if (distance <= radius){
+            double neigh = exp(- (double)(distance * distance)/(double)(2 * radius * radius));
+            for (int i = 0; i < nElements; i++)
+            {
+                printf("%f\t%f", neigh, lr);
+                k_Matrix[matrixindex+i] = k_Matrix[matrixindex+i] + neigh * lr * (k_Samples[samplesIndex + i] - k_Matrix[matrixindex+i]); 
+            }
+        }
+    }
+}
+
 
