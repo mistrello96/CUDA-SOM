@@ -130,7 +130,7 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
         distance = (x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y);
         if (distance <= (radius * radius)){
             // to change, various types of neigh
-            double neigh = exp(- (double)(distance * distance)/(double)(2 * radius * radius));
+            double neigh = exp(- (double)(distance)/(double)(2 * radius * radius));
             for (int i = matrixindex, j=0; j < nElements; i++,j++)
             {
                 k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);

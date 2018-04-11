@@ -9,10 +9,29 @@ TODO:
 
 -Stima blocchi e threads
 
+-Flessibilità con parametri al kernel
+
 
 STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
+
+
+RISULTATI GIUSTI(VERSIONE SU CPU)
+Radius of this iteration is 25
+Mean distance of this iteration is 0.00243666
+Learning rate of this iteration is 0.0802
+Radius of this iteration is 20
+Mean distance of this iteration is 0.00191578
+Learning rate of this iteration is 0.0604
+Radius of this iteration is 15
+Mean distance of this iteration is 0.00151178
+Learning rate of this iteration is 0.0406
+Radius of this iteration is 10
+Mean distance of this iteration is 0.0011603
+Learning rate of this iteration is 0.0208
+Radius of this iteration is 5
+Mean distance of this iteration is 0.000557406
 
 RISULTATI SBAGLIATI
 Learning rate of this iteration is 0.1
