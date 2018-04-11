@@ -306,10 +306,10 @@ int main(int argc, char **argv)
 
             // UPDATE THE NEIGHBORS
             if(radius == 0){
-                update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index);
+                update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, neighborsType);
             }
             else{
-                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons);
+                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
             }
             cudaDeviceSynchronize();      
         }
