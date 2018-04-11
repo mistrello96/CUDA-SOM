@@ -111,9 +111,8 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
     // kernel to update the SOM after the BMU has been found
 __global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex)
 {
-    int matrixindex = BMUIndex * nElements;
-    for (int i = 0; i < nElements; i++){
-        k_Matrix[matrixindex+i] = k_Matrix[matrixindex+i] + lr * (k_Samples[samplesIndex + i] - k_Matrix[matrixindex+i]); 
+    for (int i = BMUIndex * nElements, j=0; j < nElements; i++, j++){
+        k_Matrix[i] = k_Matrix[i] + lr * (k_Samples[samplesIndex + j] - k_Matrix[i]); 
     }
 }
 
@@ -122,18 +121,19 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
         int matrixindex = threadindex * nElements;
-        int x = matrixindex / nColumns;
-        int y = matrixindex % nColumns;
+        int x = threadindex / nColumns;
+        int y = threadindex % nColumns;
         int BMU_x = BMUIndex / nColumns;
         int BMU_y = BMUIndex % nColumns;
         int distance = 0;
-        distance = (int)sqrtf((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
-        if (distance <= radius){
+        // to change, various type of distancs
+        distance = (x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y);
+        if (distance <= (radius * radius)){
+            // to change, various types of neigh
             double neigh = exp(- (double)(distance * distance)/(double)(2 * radius * radius));
-            for (int i = 0; i < nElements; i++)
+            for (int i = matrixindex, j=0; j < nElements; i++,j++)
             {
-                printf("%f\t%f", neigh, lr);
-                k_Matrix[matrixindex+i] = k_Matrix[matrixindex+i] + neigh * lr * (k_Samples[samplesIndex + i] - k_Matrix[matrixindex+i]); 
+                k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
             }
         }
     }

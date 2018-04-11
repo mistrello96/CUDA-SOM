@@ -27,10 +27,11 @@ TEMPI
 	std::cout << "!!!!!! " << (double)std::chrono::duration_cast<std::chrono::microseconds>( end - start ).count() / 1000000 << " seconds" <<std::endl;
 
 
-
+			// UPDATE THE NEIGHBORS
             if(radius == 0){
                 update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index);
             }
             else{
                 update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons);
             }
+            cudaDeviceSynchronize(); 
