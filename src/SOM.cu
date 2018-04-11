@@ -215,7 +215,10 @@ int main(int argc, char **argv)
     // index of the Samples picked for the iteration
     int currentIndex;
     double BMU_distance;
-    unsigned int BMU_index, BMU_x, BMU_y;
+    unsigned int BMU_index;
+    // copy from host to device matrix
+    cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
+
 
     // ITERATE UNTILL LAST ITERATION IS REACHED OR UNTILL ACCURACY IS REACHED
     while((accuracy >= accuracyTreshold) && (lr > flr) && (nIter < maxnIter))
@@ -232,17 +235,15 @@ int main(int argc, char **argv)
         }
             
 
-
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++)
         {
-            
+            // copy from host to device matrix
+            ////cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
+
             //computing the Sample index for this iteration
             currentIndex = randIndexes[s]*nElements;
-            
-			// copy from host to device matrix
-			cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
-
+    
 		    // parallel search of BMU launch
 		    if (normalizeFlag)
             {
@@ -280,8 +281,6 @@ int main(int argc, char **argv)
                 }
 
             }
-            BMU_x = BMU_index / nColumns;
-            BMU_y = BMU_index % nColumns;
 
             // compute BMU distance as requested
             if(!normalizedistance)
@@ -305,47 +304,14 @@ int main(int argc, char **argv)
 		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
-
-			// UPDATE THE NEIGHBORS
-			// if radius is 0, update only BMU 
-	        if (radius == 0)
-	        {
-	        	for (int i = BMU_index * nElements, j = 0; j < nElements; i++, j++)
-                {
-	        		h_Matrix[i] = h_Matrix[i] + lr * (Samples[currentIndex + j] - h_Matrix[i]);
-
-	        	}
-	        }
-            // else update also the neighbors
-	        else
-	        {
-	            for (int i = 0; i < nNeurons; i++){
-	                int x = i / nColumns;
-	                int y = i % nColumns;
-                    int distance = 0;
-                    if (lattice == 's')
-	                   distance = sqrt((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
-                    else
-                        distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);
-                    
-                    // update only if...
-	                if (distance <= radius)
-                    {
-                        double neigh = 0.0;
-                        switch (neighborsType)
-                        {
-                            case 'g' : neigh = gaussian(distance, radius); break;
-                            case 'b' : neigh = bubble(distance, radius); break;
-                            case 'm' : neigh = mexican_hat(distance, radius); break;
-                        } 
-
-	                    for (int k = i * nElements, j = 0; j < nElements; k++, j++)
-                        {
-	                        h_Matrix[k] = h_Matrix[k] + neigh * lr * (Samples[currentIndex + j] - h_Matrix[k]);
-	                    }
-	                }
-	            }
-        	}        
+            // UPDATE THE NEIGHBORS
+            if(radius == 0){
+                update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index);
+            }
+            else{
+                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons);
+            }
+            cudaDeviceSynchronize();      
         }
 
 

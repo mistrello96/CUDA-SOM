@@ -2,7 +2,6 @@ Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computaz
 
 Ha senso usare thrust sulla media della accuracy(numerosità come le reads), non ha senso sulla BMU distance.
 
-La simulazione ci mette 3,7 per ogni epoch su normal data.
 
 TODO:
 
@@ -10,28 +9,24 @@ TODO:
 
 -Stima blocchi e threads
 
--Aggiungere kernel update per non effettuare memcopy(Nessuno da host accede alla matrice.
-
 
 STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
 
-
-
-
-TEMPI
-
-	std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
-	std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
-	std::cout << "!!!!!! " << (double)std::chrono::duration_cast<std::chrono::microseconds>( end - start ).count() / 1000000 << " seconds" <<std::endl;
-
-
-			// UPDATE THE NEIGHBORS
-            if(radius == 0){
-                update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index);
-            }
-            else{
-                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons);
-            }
-            cudaDeviceSynchronize(); 
+RISULTATI SBAGLIATI
+Learning rate of this iteration is 0.1
+Radius of this iteration is 25
+Mean distance of this iteration is 0.000901124
+Learning rate of this iteration is 0.0802
+Radius of this iteration is 20
+Mean distance of this iteration is 0.000753676
+Learning rate of this iteration is 0.0604
+Radius of this iteration is 15
+Mean distance of this iteration is 0.000554812
+Learning rate of this iteration is 0.0406
+Radius of this iteration is 10
+Mean distance of this iteration is 0.000286698
+Learning rate of this iteration is 0.0208
+Radius of this iteration is 5
+Mean distance of this iteration is 6.78593e-05
