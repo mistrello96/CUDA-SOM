@@ -11,6 +11,7 @@
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
+#include "update_kernels.cu"
 #include "cmdline.h"
 
 int main(int argc, char **argv)
@@ -81,6 +82,12 @@ int main(int argc, char **argv)
     double radius;
     // actual accuracy
 	double accuracy;
+	// index of the Samples picked for the iteration
+    int currentIndex;
+    // BMU distance
+    double BMU_distance;
+    // BMU index
+    unsigned int BMU_index;
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
@@ -142,12 +149,13 @@ int main(int argc, char **argv)
     }
 
     // ALLOCATION OF THE STRUCTURES
-    // host SOM
+    // host SOM representation(linearized matrix)
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
-    // host distance array, used to find BMU
+    // host distance array, store each neuron's distance, uset to search BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
-    // host distance history array, used to compute accuracy
+    // host distance history array,store BMU distance for each read of the iteration, used to compute accuracy
     double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
+    // device variables
     double *d_Matrix; 
     double *d_Distance;
     double *d_Samples;
@@ -164,6 +172,7 @@ int main(int argc, char **argv)
     // generating random seed
     std::random_device rd;
     std::mt19937 e2(rd());
+    // random values initializatoin between min and max values inluded in reads
     if (initializationType == 'r')
     {
         // uniform distribution of values
@@ -173,6 +182,7 @@ int main(int argc, char **argv)
 	    	h_Matrix[i] = dist(e2); 
 	    }
     }
+    // initialization with random reads choosen from reads
     else
     {   
         // uniform distribution of indexes fromthe Samples
@@ -212,16 +222,12 @@ int main(int argc, char **argv)
     	randIndexes[i] = i;
     }
 
-    // index of the Samples picked for the iteration
-    int currentIndex;
-    double BMU_distance;
-    unsigned int BMU_index;
-    // copy from host to device matrix
+    // copy host SOM to device
     cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
 
 
-    // ITERATE UNTILL LAST ITERATION IS REACHED OR UNTILL ACCURACY IS REACHED
-    while((accuracy >= accuracyTreshold) && (lr > flr) && (nIter < maxnIter))
+    // ITERATE UNTILL ACCURACY IS REACHED OR ITERATION ARE FINISHED
+    while((accuracy >= accuracyTreshold) && (nIter < maxnIter))
     {
     	// randomize indexes of samples if required
     	if(randomizeDataset)
@@ -238,10 +244,7 @@ int main(int argc, char **argv)
         // ITERATE ON EACH SAMPLE TO FIND BMU
 	    for(int s=0; s < nSamples ; s++)
         {
-            // copy from host to device matrix
-            ////cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
-
-            //computing the Sample index for this iteration
+              //computing the Sample index for this iteration
             currentIndex = randIndexes[s]*nElements;
     
 		    // parallel search of BMU launch
@@ -269,9 +272,10 @@ int main(int argc, char **argv)
 		    cudaDeviceSynchronize();
 
 
-            //HOST IMPLEMENTATION TO FIND BMU
+            // HOST IMPLEMENTATION TO FIND BMU
             // copy the distance array back to host
             cudaMemcpy(h_Distance, d_Distance, sizeof(double) * nNeurons, cudaMemcpyDeviceToHost);
+            // minimum search
             BMU_distance = h_Distance[0];
             BMU_index = 0;
             for (int m = 1; m < nNeurons; m++){
@@ -279,7 +283,6 @@ int main(int argc, char **argv)
                     BMU_distance = h_Distance[m];
                     BMU_index = m;
                 }
-
             }
 
             // compute BMU distance as requested
@@ -304,6 +307,7 @@ int main(int argc, char **argv)
 		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
+
             // UPDATE THE NEIGHBORS
             if(radius == 0){
                 update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, neighborsType);
@@ -311,12 +315,13 @@ int main(int argc, char **argv)
             else{
                 update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
             }
+
             cudaDeviceSynchronize();      
         }
 
 
         // END OF EPOCH. UPDATING VALUES
-        // updating accuracy as requested
+        // computing accuracy as requested
         if(!normalizedistance){
         	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);

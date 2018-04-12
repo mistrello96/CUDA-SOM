@@ -1,15 +1,14 @@
-Anche con 30000 reads, ho 1200 neuroni, quindi non ha senso spostare la computazione su gpu per cercare il minimo BMU, overhead troppo elevato, servirebbero 30000 neuroni per attutire l'overhead, quindi 36000000 reads. La differenza di prestazioni cala mano a mano che le reads crescono, su 30000 reads sono 3 volte + lento
-
-Ha senso usare thrust sulla media della accuracy(numerosità come le reads), non ha senso sulla BMU distance.
-
-
 TODO:
 
 -Questione Toroidale
 
--Stima blocchi e threads
+-sistemare min max per inizializzazione random
+
+--euristica scegliere cpu/gpu
+
+(-Stima blocchi e threads)
 
 
 STRINGA DI COMPILAZIONE:
 
-nvcc -std=c++11 -Xptxas -O3 --use_fast_math -gencode arch=compute_20,code=compute_20 -gencode arch=compute_30,code=compute_30 -gencode arch=compute_35,code=compute_35 -gencode arch=compute_50,code=compute_50 ./src/SOM.cu ./src/cmdline.c 
+nvcc -std=c++11 -Xptxas= -O3 --use_fast_math -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_61,code=sm_61 -gencode arch=compute_61,code=compute_61 ./src/SOM.cu ./src/cmdline.c 

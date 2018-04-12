@@ -1,21 +1,4 @@
-__device__
-double gaussian(double distance, int radius){
-    return exp(- (double)(distance * distance)/(double)(2 * radius * radius));
-}
-
-__device__
-int bubble(double distance, int radius){
-    if (distance <= radius)
-        return 1;
-    return 0;
-}
-
-__device__
-double mexican_hat(double distance, int radius){
-    return ((1 - (double)(distance*distance)/(double)(radius*radius)) * gaussian(distance, radius));
-}
-
-// returns the number of features per line
+// returns the number of features per line. Save reads in samples vector
 int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 {
 	int counter = 0;
@@ -45,6 +28,7 @@ int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 	}
 }
 
+// same the SOM to a file. First two lines are nRows and Ncolumns. Neurons are \n separated, features are \t separated
 void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements){
     std::ofstream myfile;
     myfile.open (filePath.c_str());
@@ -54,6 +38,26 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
         myfile << matrix[i] << "\n";  
     }
     myfile.close();
+}
+
+// gaussian distance between two neurons
+__device__
+double gaussian(double distance, int radius){
+    return exp(- (double)(distance * distance)/(double)(2 * radius * radius));
+}
+
+// bubble distance between two neurons
+__device__
+int bubble(double distance, int radius){
+    if (distance <= radius)
+        return 1;
+    return 0;
+}
+
+// mexican hat distance between two neurons
+__device__
+double mexican_hat(double distance, int radius){
+    return ((1 - (double)(distance*distance)/(double)(radius*radius)) * gaussian(distance, radius));
 }
 	
  __device__ 
@@ -92,64 +96,3 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
 
     return straightDistance + diagonalDistance;
 }
-
-    // kernel to update the SOM after the BMU has been found
-__global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, char neighborsType)
-{
-    for (int i = BMUIndex * nElements, j=0; j < nElements; i++, j++){
-        k_Matrix[i] = k_Matrix[i] + lr * (k_Samples[samplesIndex + j] - k_Matrix[i]); 
-    }
-}
-
-__global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron, char neighborsType)
-{
-    int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
-        int matrixindex = threadindex * nElements;
-        int x = threadindex / nColumns;
-        int y = threadindex % nColumns;
-        int BMU_x = BMUIndex / nColumns;
-        int BMU_y = BMUIndex % nColumns;
-        int distance = sqrtf((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
-        if (distance <= radius){
-            double neigh = 0;
-            switch (neighborsType)
-            {
-                case 'g' : neigh = gaussian(distance, radius); break;
-                case 'b' : neigh = bubble(distance, radius); break;
-                case 'm' : neigh = mexican_hat(distance, radius); break;
-            }
-            for (int i = matrixindex, j=0; j < nElements; i++,j++)
-            {
-                k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
-            }
-        }
-    }
-}
-__global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron, char neighborsType)
-{
-    int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
-        int matrixindex = threadindex * nElements;
-        int x = threadindex / nColumns;
-        int y = threadindex % nColumns;
-        int BMU_x = BMUIndex / nColumns;
-        int BMU_y = BMUIndex % nColumns;
-        int distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);
-        if (distance <= radius){
-            double neigh =0;
-            switch (neighborsType)
-            {
-                case 'g' : neigh = gaussian(distance, radius); break;
-                case 'b' : neigh = bubble(distance, radius); break;
-                case 'm' : neigh = mexican_hat(distance, radius); break;
-            }
-            for (int i = matrixindex, j=0; j < nElements; i++,j++)
-            {
-                k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
-            }
-        }
-    }
-}
-
-
