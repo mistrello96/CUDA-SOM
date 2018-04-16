@@ -48,7 +48,7 @@ struct gengetopt_args_info
   int nColumns_arg;	/**< @brief allows to provide the number of columns in the neuron's matrix (default='0').  */
   char * nColumns_orig;	/**< @brief allows to provide the number of columns in the neuron's matrix original value given at command line.  */
   const char *nColumns_help; /**< @brief allows to provide the number of columns in the neuron's matrix help description.  */
-  double initial_learning_rate_arg;	/**< @brief allows to provide initial learning rate.  */
+  double initial_learning_rate_arg;	/**< @brief allows to provide initial learning rate (default='-1').  */
   char * initial_learning_rate_orig;	/**< @brief allows to provide initial learning rate original value given at command line.  */
   const char *initial_learning_rate_help; /**< @brief allows to provide initial learning rate help description.  */
   double final_learning_rate_arg;	/**< @brief allows to provide final learning rate (default='0').  */
@@ -57,7 +57,7 @@ struct gengetopt_args_info
   double accuracy_arg;	/**< @brief allows to provide accuracy threshold (default='0').  */
   char * accuracy_orig;	/**< @brief allows to provide accuracy threshold original value given at command line.  */
   const char *accuracy_help; /**< @brief allows to provide accuracy threshold help description.  */
-  int iteration_arg;	/**< @brief number of times the dataset is presented to the SOM.  */
+  int iteration_arg;	/**< @brief number of times the dataset is presented to the SOM (default='-1').  */
   char * iteration_orig;	/**< @brief number of times the dataset is presented to the SOM original value given at command line.  */
   const char *iteration_help; /**< @brief number of times the dataset is presented to the SOM help description.  */
   int debug_flag;	/**< @brief enables advanced debug prints (default=off).  */
@@ -90,6 +90,8 @@ struct gengetopt_args_info
   const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both help description.  */
   int normalizedistance_flag;	/**< @brief enables the normalized mean distance of the iteration (default=off).  */
   const char *normalizedistance_help; /**< @brief enables the normalized mean distance of the iteration help description.  */
+  int benchmark_flag;	/**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous (default=off).  */
+  const char *benchmark_help; /**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous help description.  */
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
@@ -112,6 +114,7 @@ struct gengetopt_args_info
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
   unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
   unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
+  unsigned int benchmark_given ;	/**< @brief Whether benchmark was given.  */
 
 } ;
 

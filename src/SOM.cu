@@ -8,6 +8,7 @@
 #include <iostream>
 #include <random>
 #include <float.h>
+#include <chrono>
 
 #include "utility_functions.cpp"
 #include "distance_kernels.cu"
@@ -20,6 +21,10 @@ int main(int argc, char **argv)
 	gengetopt_args_info ai;
     if (cmdline_parser (argc, argv, &ai) != 0)
     {
+        exit(1);
+    }
+    if(ai.benchmark_flag){
+        run_benchmark();
         exit(1);
     }
 
@@ -88,24 +93,37 @@ int main(int argc, char **argv)
     double BMU_distance;
     // BMU index
     unsigned int BMU_index;
+    if(ilr == -1 || maxnIter == -1)
+    {
+        std::cout << "./a.out: '--initial_learning_rate' ('-s') option required" << std::endl;
+        std::cout << "./a.out: '--iteration' ('-n') option required " << std::endl;
+        exit(-1);
+
+    }
 
     // READ THE INPUT FILE
     // vector of samples to be analized from the SOM
     std::vector <double> Samples;
     // retrive the number of features readed from the file
     nElements = readSamplesfromFile(Samples, filePath);
+    // device copy of samples
+    double *d_Samples;
+    cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size());
+    // memcopy to the device
+    cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice);
+
 
     // EXTRACTING THE MIN/MAX FROM SAMPLES(only used for random initialization)
     if (initializationType == 'r')
     {
 	    // creating the thrust vector
-	    thrust::device_vector<double> t_Samples(Samples);
+	    thrust::device_ptr<double> dptr(d_Samples);
 	    // extract the minimum
-	    thrust::device_vector<double>::iterator it = thrust::min_element(t_Samples.begin(), t_Samples.end());
-	    min_neuronValue = *it;
+	    thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + Samples.size());
+	    min_neuronValue = dresptr[0];
 	    // extract maximum
-	    thrust::device_vector<double>::iterator it2 = thrust::max_element(t_Samples.begin(), t_Samples.end());
-	    max_neuronValue = *it2;
+	    dresptr = thrust::max_element(dptr, dptr + Samples.size());
+	    max_neuronValue = dresptr[0];
 	}
 
     // COMPUTE VALUES FOR THE SOM INITIALIZATION
@@ -132,7 +150,7 @@ int main(int argc, char **argv)
     totalLength = nRows * nColumns * nElements;
     
     // number of block used in the computation
-    nblocks = (nNeurons / 32) + 1;
+    nblocks = (nNeurons / 64) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535)
@@ -158,15 +176,11 @@ int main(int argc, char **argv)
     // device variables
     double *d_Matrix; 
     double *d_Distance;
-    double *d_Samples;
     double* d_DistanceHistory;
     cudaMalloc((void**)&d_DistanceHistory, sizeof(double) * nSamples);
     cudaMalloc((void **)&d_Matrix, sizeof(double) * totalLength);
     cudaMalloc((void**)&d_Distance, sizeof(double) * nNeurons);
-    cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size());
 
-    // memcopy to the device
-    cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice);
 
     // SOM INIZIALIZATION
     // generating random seed
@@ -252,20 +266,20 @@ int main(int argc, char **argv)
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-				    case 't' : compute_distance_tanimoto<<<nblocks, 32>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+				    case 't' : compute_distance_tanimoto<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
 
@@ -313,7 +327,7 @@ int main(int argc, char **argv)
                 update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, neighborsType);
             }
             else{
-                update_SOM<<<nblocks, 32>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                update_SOM<<<nblocks, 64>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
             }
 
             cudaDeviceSynchronize();      

@@ -96,3 +96,49 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
 
     return straightDistance + diagonalDistance;
 }
+
+void run_benchmark(){
+    int dimension=5000;
+    bool again = true;
+    while(again)
+    {
+        double *host_array = (double *) malloc(sizeof(double) * dimension);
+        std::random_device rd;
+        std::mt19937 e2(rd());
+        std::uniform_real_distribution<> dist(-1, 1);
+        for(int i = 0; i < dimension; i++)
+        {
+            host_array[i] = dist(e2); 
+        }
+        
+        double *device_array;
+        cudaMalloc((void**)&device_array, sizeof(double) * dimension);
+        cudaMemcpy(device_array, host_array, sizeof(double) * dimension, cudaMemcpyHostToDevice);
+
+
+        std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
+        // minimum search
+        double BMU_distance =0;
+        for (int m = 0; m < dimension; m++){
+            BMU_distance += host_array[m];
+        }
+        std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
+        auto elapsedCPU = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
+        std::cout << "CPU reduce on " << dimension << " array of double; " << elapsedCPU << " nanoseconds to compute " << BMU_distance <<std::endl;
+
+
+        std::chrono::high_resolution_clock::time_point start2 = std::chrono::high_resolution_clock::now();
+        thrust::device_ptr<double> dptr(device_array);
+        BMU_distance = thrust::reduce(dptr, dptr + dimension);
+
+        std::chrono::high_resolution_clock::time_point end2 = std::chrono::high_resolution_clock::now();
+        auto elapsedGPU = (double)std::chrono::duration_cast<std::chrono::nanoseconds>( end2 - start2 ).count();
+        std::cout << "GPU reduce on " << dimension << " array of double; " << elapsedGPU << " nanoseconds to compute " << BMU_distance <<std::endl;
+        if(elapsedCPU < elapsedGPU)
+            dimension = dimension * 2;
+        else
+            again = false;
+
+    }
+    std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_features * number_of_reads) is greater than " << dimension << "\n\n" << std::endl;
+}

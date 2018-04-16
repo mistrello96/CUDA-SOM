@@ -39,10 +39,10 @@ const char *gengetopt_args_info_help[] = {
   "  -i, --inputfile=STRING        PATH to the input file  (default=`./')",
   "  -x, --nRows=INT               allows to provide the number of rows in the\n                                  neuron's matrix  (default=`0')",
   "  -y, --nColumns=INT            allows to provide the number of columns in the\n                                  neuron's matrix  (default=`0')",
-  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate",
+  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate\n                                  (default=`-1')",
   "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate\n                                  (default=`0')",
   "  -a, --accuracy=DOUBLE         allows to provide accuracy threshold\n                                  (default=`0')",
-  "  -n, --iteration=INT           number of times the dataset is presented to the\n                                  SOM",
+  "  -n, --iteration=INT           number of times the dataset is presented to the\n                                  SOM  (default=`-1')",
   "  -d, --debug                   enables advanced debug prints  (default=off)",
   "  -v, --verbose                 enables debug print  (default=off)",
   "      --save                    save the input and output SOM in files\n                                  (default=off)",
@@ -55,6 +55,7 @@ const char *gengetopt_args_info_help[] = {
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
   "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and the radius. Use l for learning rate,\n                                  r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
   "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
+  "  -b, --benchmark               Run a benchmark to find out the minimum\n                                  dimension of the input file to make GPU\n                                  computation advantageous  (default=off)",
     0
 };
 
@@ -74,8 +75,6 @@ static int
 cmdline_parser_internal (int argc, char **argv, struct gengetopt_args_info *args_info,
                         struct cmdline_parser_params *params, const char *additional_error);
 
-static int
-cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error);
 
 const char *cmdline_parser_distance_values[] = {"e", "s", "m", "t", 0}; /*< Possible values for distance. */
 const char *cmdline_parser_neighbors_values[] = {"b", "g", "m", 0}; /*< Possible values for neighbors. */
@@ -110,6 +109,7 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->randomize_given = 0 ;
   args_info->exponential_given = 0 ;
   args_info->normalizedistance_given = 0 ;
+  args_info->benchmark_given = 0 ;
 }
 
 static
@@ -122,11 +122,13 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->nRows_orig = NULL;
   args_info->nColumns_arg = 0;
   args_info->nColumns_orig = NULL;
+  args_info->initial_learning_rate_arg = -1;
   args_info->initial_learning_rate_orig = NULL;
   args_info->final_learning_rate_arg = 0;
   args_info->final_learning_rate_orig = NULL;
   args_info->accuracy_arg = 0;
   args_info->accuracy_orig = NULL;
+  args_info->iteration_arg = -1;
   args_info->iteration_orig = NULL;
   args_info->debug_flag = 0;
   args_info->verbose_flag = 0;
@@ -146,6 +148,7 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->exponential_arg = gengetopt_strdup ("n");
   args_info->exponential_orig = NULL;
   args_info->normalizedistance_flag = 0;
+  args_info->benchmark_flag = 0;
   
 }
 
@@ -175,6 +178,7 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->randomize_help = gengetopt_args_info_help[18] ;
   args_info->exponential_help = gengetopt_args_info_help[19] ;
   args_info->normalizedistance_help = gengetopt_args_info_help[20] ;
+  args_info->benchmark_help = gengetopt_args_info_help[21] ;
   
 }
 
@@ -390,6 +394,8 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "exponential", args_info->exponential_orig, cmdline_parser_exponential_values);
   if (args_info->normalizedistance_given)
     write_into_file(outfile, "normalizedistance", 0, 0 );
+  if (args_info->benchmark_given)
+    write_into_file(outfile, "benchmark", 0, 0 );
   
 
   i = EXIT_SUCCESS;
@@ -485,43 +491,9 @@ cmdline_parser2 (int argc, char **argv, struct gengetopt_args_info *args_info, i
 int
 cmdline_parser_required (struct gengetopt_args_info *args_info, const char *prog_name)
 {
-  int result = EXIT_SUCCESS;
-
-  if (cmdline_parser_required2(args_info, prog_name, 0) > 0)
-    result = EXIT_FAILURE;
-
-  if (result == EXIT_FAILURE)
-    {
-      cmdline_parser_free (args_info);
-      exit (EXIT_FAILURE);
-    }
-  
-  return result;
-}
-
-int
-cmdline_parser_required2 (struct gengetopt_args_info *args_info, const char *prog_name, const char *additional_error)
-{
-  int error_occurred = 0;
-  FIX_UNUSED (additional_error);
-
-  /* checks for required options */
-  if (! args_info->initial_learning_rate_given)
-    {
-      fprintf (stderr, "%s: '--initial_learning_rate' ('-s') option required%s\n", prog_name, (additional_error ? additional_error : ""));
-      error_occurred = 1;
-    }
-  
-  if (! args_info->iteration_given)
-    {
-      fprintf (stderr, "%s: '--iteration' ('-n') option required%s\n", prog_name, (additional_error ? additional_error : ""));
-      error_occurred = 1;
-    }
-  
-  
-  /* checks for dependences among options */
-
-  return error_occurred;
+  FIX_UNUSED (args_info);
+  FIX_UNUSED (prog_name);
+  return EXIT_SUCCESS;
 }
 
 
@@ -714,10 +686,11 @@ cmdline_parser_internal (
         { "randomize",	0, NULL, 0 },
         { "exponential",	1, NULL, 0 },
         { "normalizedistance",	0, NULL, 0 },
+        { "benchmark",	0, NULL, 'b' },
         { 0,  0, 0, 0 }
       };
 
-      c = getopt_long (argc, argv, "hVi:x:y:s:f:a:n:dvr:", long_options, &option_index);
+      c = getopt_long (argc, argv, "hVi:x:y:s:f:a:n:dvr:b", long_options, &option_index);
 
       if (c == -1) break;	/* Exit from `while (1)' loop.  */
 
@@ -774,7 +747,7 @@ cmdline_parser_internal (
         
           if (update_arg( (void *)&(args_info->initial_learning_rate_arg), 
                &(args_info->initial_learning_rate_orig), &(args_info->initial_learning_rate_given),
-              &(local_args_info.initial_learning_rate_given), optarg, 0, 0, ARG_DOUBLE,
+              &(local_args_info.initial_learning_rate_given), optarg, 0, "-1", ARG_DOUBLE,
               check_ambiguity, override, 0, 0,
               "initial_learning_rate", 's',
               additional_error))
@@ -810,7 +783,7 @@ cmdline_parser_internal (
         
           if (update_arg( (void *)&(args_info->iteration_arg), 
                &(args_info->iteration_orig), &(args_info->iteration_given),
-              &(local_args_info.iteration_given), optarg, 0, 0, ARG_INT,
+              &(local_args_info.iteration_given), optarg, 0, "-1", ARG_INT,
               check_ambiguity, override, 0, 0,
               "iteration", 'n',
               additional_error))
@@ -845,6 +818,16 @@ cmdline_parser_internal (
               &(local_args_info.radius_given), optarg, 0, "0", ARG_INT,
               check_ambiguity, override, 0, 0,
               "radius", 'r',
+              additional_error))
+            goto failure;
+        
+          break;
+        case 'b':	/* Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous.  */
+        
+        
+          if (update_arg((void *)&(args_info->benchmark_flag), 0, &(args_info->benchmark_given),
+              &(local_args_info.benchmark_given), optarg, 0, 0, ARG_FLAG,
+              check_ambiguity, override, 1, 0, "benchmark", 'b',
               additional_error))
             goto failure;
         
@@ -983,10 +966,6 @@ cmdline_parser_internal (
 
 
 
-  if (check_required)
-    {
-      error_occurred += cmdline_parser_required2 (args_info, argv[0], additional_error);
-    }
 
   cmdline_parser_release (&local_args_info);
 

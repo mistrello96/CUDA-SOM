@@ -7,10 +7,10 @@ purpose "Cuda implementation of Self Organizing Map"
 option "inputfile" i "PATH to the input file" string optional default="./"
 option "nRows" x "allows to provide the number of rows in the neuron's matrix" int optional default="0"
 option "nColumns" y "allows to provide the number of columns in the neuron's matrix" int optional default="0"
-option "initial_learning_rate" s "allows to provide initial learning rate" double required
+option "initial_learning_rate" s "allows to provide initial learning rate" double optional default = "-1"
 option "final_learning_rate" f "allows to provide final learning rate" double optional default="0"
 option "accuracy" a "allows to provide accuracy threshold" double optional default="0"
-option "iteration" n "number of times the dataset is presented to the SOM" int required
+option "iteration" n "number of times the dataset is presented to the SOM" int optional default = "-1"
 option "debug" d "enables advanced debug prints" flag off
 option "verbose" v "enables debug print" flag off
 option "save" - "save the input and output SOM in files" flag off
@@ -23,3 +23,4 @@ option "lattice" - "allows to choose what tipy of lattice is used. Use s for squ
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled." flag on
 option "exponential" - "enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both" string optional default="n" values="n","l","r","b"
 option "normalizedistance" - "enables the normalized mean distance of the iteration" flag off
+option "benchmark" b "Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous" flag off
