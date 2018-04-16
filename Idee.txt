@@ -1,10 +1,9 @@
 TODO:
 
--Questione Toroidale
+- Questione Toroidale
+- Stamapre su file ultima iterazione(per ogni read, DISTANZA E IN CHE NEURONE È FINITA.)
+- Stima blocchi e threads, usare foglio excell
 
-(-Stima blocchi e threads)
-
---stamapre a debug ultima iterazione?
 
 STRINGA DI COMPILAZIONE:
 

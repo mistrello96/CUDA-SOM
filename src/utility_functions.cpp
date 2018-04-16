@@ -68,18 +68,15 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
     int ydist = ay - by;
 
     // compensate for grid deformation
-    // grid is stretched along (-n, n) line so points along that line have
-    // a distance of 2 between them instead of 1
+    // grid is stretched along (-n, n) line so points along that line havea distance of 2 between them instead of 1
 
-    // to calculate the shortest path, we decompose it into one diagonal movement(shortcut)
-    // and one straight movement along an axis
+    // to calculate the shortest path, we decompose it into one diagonal movement(shortcut and one straight movement along an axis
 
     int lesserCoord = abs(xdist) < abs(ydist) ? abs(xdist) : abs(ydist);
     int diagx = (xdist < 0) ? -lesserCoord : lesserCoord; // keep the sign 
     int diagy = (ydist < 0) ? -lesserCoord : lesserCoord; // keep the sign
 
-    // one of x or y should always be 0 because we are calculating a straight
-    // line along one of the axis
+    // one of x or y should always be 0 because we are calculating a straight line along one of the axis
     int strx = xdist - diagx;
     int stry = ydist - diagy;
 
@@ -87,8 +84,7 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
     int straightDistance = abs(strx) + abs(stry);
     int diagonalDistance = abs(diagx);
 
-    // if we are traveling diagonally along the stretch deformation we double
-    // the diagonal distance
+    // if we are traveling diagonally along the stretch deformation we double the diagonal distance
     if ( (diagx > 0 && diagy < 0) || (diagx < 0 && diagy > 0) )
     {
         diagonalDistance *= 2;
@@ -97,11 +93,15 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
     return straightDistance + diagonalDistance;
 }
 
+// run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous
 void run_benchmark(){
+    // dimension of the array
     int dimension=5000;
+    // flag used to increase the dimension if necessary
     bool again = true;
     while(again)
     {
+        // create a host array and initialize to random number
         double *host_array = (double *) malloc(sizeof(double) * dimension);
         std::random_device rd;
         std::mt19937 e2(rd());
@@ -110,12 +110,12 @@ void run_benchmark(){
         {
             host_array[i] = dist(e2); 
         }
-        
+        // create device array and copy the same values of the host array
         double *device_array;
         cudaMalloc((void**)&device_array, sizeof(double) * dimension);
         cudaMemcpy(device_array, host_array, sizeof(double) * dimension, cudaMemcpyHostToDevice);
 
-
+        // start CPU computation
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
         // minimum search
         double BMU_distance =0;
@@ -126,7 +126,7 @@ void run_benchmark(){
         auto elapsedCPU = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
         std::cout << "CPU reduce on " << dimension << " array of double; " << elapsedCPU << " nanoseconds to compute " << BMU_distance <<std::endl;
 
-
+        // start GPU computation
         std::chrono::high_resolution_clock::time_point start2 = std::chrono::high_resolution_clock::now();
         thrust::device_ptr<double> dptr(device_array);
         BMU_distance = thrust::reduce(dptr, dptr + dimension);
@@ -134,6 +134,7 @@ void run_benchmark(){
         std::chrono::high_resolution_clock::time_point end2 = std::chrono::high_resolution_clock::now();
         auto elapsedGPU = (double)std::chrono::duration_cast<std::chrono::nanoseconds>( end2 - start2 ).count();
         std::cout << "GPU reduce on " << dimension << " array of double; " << elapsedGPU << " nanoseconds to compute " << BMU_distance <<std::endl;
+        // check the results and increment if necessary
         if(elapsedCPU < elapsedGPU)
             dimension = dimension * 2;
         else

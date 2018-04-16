@@ -13,14 +13,12 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
-    	// convert neuron index in matrix index
-        int matrixindex = threadindex * nElements;
-        int x = threadindex / nColumns;
-        int y = threadindex % nColumns;
-        int BMU_x = BMUIndex / nColumns;
-        int BMU_y = BMUIndex % nColumns;
+        //int x = threadindex / nColumns;
+        //int y = threadindex % nColumns;
+        //int BMU_x = BMUIndex / nColumns;
+        //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is square
-        int distance = sqrtf((x - BMU_x) * (x - BMU_x) + (y - BMU_y) * (y - BMU_y));
+        int distance = sqrtf(((threadindex / nColumns) - (BMUIndex / nColumns)) * ((threadindex / nColumns) - (BMUIndex / nColumns)) + ((threadindex % nColumns) - (BMUIndex % nColumns)) * ((threadindex % nColumns) - (BMUIndex % nColumns)));
         if (distance <= radius){
             double neigh = 0;
             // compute neigh param as requested
@@ -31,7 +29,7 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
                 case 'm' : neigh = mexican_hat(distance, radius); break;
             }
             // update all features of the neuron
-            for (int i = matrixindex, j=0; j < nElements; i++,j++)
+            for (int i = threadindex * nElements, j=0; j < nElements; i++,j++)
             {
                 k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
             }
@@ -44,14 +42,12 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
-    	// convert neuron index in matrix index
-        int matrixindex = threadindex * nElements;
-        int x = threadindex / nColumns;
-        int y = threadindex % nColumns;
-        int BMU_x = BMUIndex / nColumns;
-        int BMU_y = BMUIndex % nColumns;
+        //int x = threadindex / nColumns;
+        //int y = threadindex % nColumns;
+        //int BMU_x = BMUIndex / nColumns;
+        //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is exagonal
-        int distance = ComputeDistanceHexGrid(BMU_x, BMU_y, x, y);
+        int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
         if (distance <= radius){
             double neigh =0;
             // compute neigh param as requested
@@ -62,7 +58,7 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
                 case 'm' : neigh = mexican_hat(distance, radius); break;
             }
             // update all features of the neuron
-            for (int i = matrixindex, j=0; j < nElements; i++,j++)
+            for (int i = threadindex * nElements, j=0; j < nElements; i++,j++)
             {
                 k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
             }
