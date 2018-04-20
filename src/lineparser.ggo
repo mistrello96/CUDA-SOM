@@ -9,11 +9,11 @@ option "nRows" x "allows to provide the number of rows in the neuron's matrix" i
 option "nColumns" y "allows to provide the number of columns in the neuron's matrix" int optional default="0"
 option "initial_learning_rate" s "allows to provide initial learning rate" double optional default = "-1"
 option "final_learning_rate" f "allows to provide final learning rate" double optional default="0"
-option "accuracy" a "allows to provide accuracy threshold" double optional default="0"
 option "iteration" n "number of times the dataset is presented to the SOM" int optional default = "-1"
 option "debug" d "enables advanced debug prints" flag off
 option "verbose" v "enables debug print" flag off
-option "save" - "save the input and output SOM in files" flag off
+option "savedistances" - "save the distances between reads and final SOM in a file" flag off
+option "saveall" - "save the input and output SOM in files, save the distances between reads and final SOM in a file" flag off
 option "radius" r "allows to chose the initial radius of the updating function" int optional default= "0"
 option "distance" - "allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto" string optional default="e" values="e","s","m","t"
 option "normalize" - "Enable the normalization of the distance function" flag off

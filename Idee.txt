@@ -1,7 +1,7 @@
 TODO:
 
 - Questione Toroidale
-- Stamapre su file ultima iterazione(per ogni read, DISTANZA E IN CHE NEURONE È FINITA.)
+- fix numero a caso per computazione su cpu del minimo della bmu
 - Stima blocchi e threads, usare foglio excell
 
 

@@ -41,11 +41,11 @@ const char *gengetopt_args_info_help[] = {
   "  -y, --nColumns=INT            allows to provide the number of columns in the\n                                  neuron's matrix  (default=`0')",
   "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate\n                                  (default=`-1')",
   "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate\n                                  (default=`0')",
-  "  -a, --accuracy=DOUBLE         allows to provide accuracy threshold\n                                  (default=`0')",
   "  -n, --iteration=INT           number of times the dataset is presented to the\n                                  SOM  (default=`-1')",
   "  -d, --debug                   enables advanced debug prints  (default=off)",
   "  -v, --verbose                 enables debug print  (default=off)",
-  "      --save                    save the input and output SOM in files\n                                  (default=off)",
+  "      --savedistances           save the distances between reads and final SOM\n                                  in a file  (default=off)",
+  "      --saveall                 save the input and output SOM in files, save\n                                  the distances between reads and final SOM in\n                                  a file  (default=off)",
   "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
   "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
   "      --normalize               Enable the normalization of the distance\n                                  function  (default=off)",
@@ -95,11 +95,11 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->nColumns_given = 0 ;
   args_info->initial_learning_rate_given = 0 ;
   args_info->final_learning_rate_given = 0 ;
-  args_info->accuracy_given = 0 ;
   args_info->iteration_given = 0 ;
   args_info->debug_given = 0 ;
   args_info->verbose_given = 0 ;
-  args_info->save_given = 0 ;
+  args_info->savedistances_given = 0 ;
+  args_info->saveall_given = 0 ;
   args_info->radius_given = 0 ;
   args_info->distance_given = 0 ;
   args_info->normalize_given = 0 ;
@@ -126,13 +126,12 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->initial_learning_rate_orig = NULL;
   args_info->final_learning_rate_arg = 0;
   args_info->final_learning_rate_orig = NULL;
-  args_info->accuracy_arg = 0;
-  args_info->accuracy_orig = NULL;
   args_info->iteration_arg = -1;
   args_info->iteration_orig = NULL;
   args_info->debug_flag = 0;
   args_info->verbose_flag = 0;
-  args_info->save_flag = 0;
+  args_info->savedistances_flag = 0;
+  args_info->saveall_flag = 0;
   args_info->radius_arg = 0;
   args_info->radius_orig = NULL;
   args_info->distance_arg = gengetopt_strdup ("e");
@@ -164,11 +163,11 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->nColumns_help = gengetopt_args_info_help[4] ;
   args_info->initial_learning_rate_help = gengetopt_args_info_help[5] ;
   args_info->final_learning_rate_help = gengetopt_args_info_help[6] ;
-  args_info->accuracy_help = gengetopt_args_info_help[7] ;
-  args_info->iteration_help = gengetopt_args_info_help[8] ;
-  args_info->debug_help = gengetopt_args_info_help[9] ;
-  args_info->verbose_help = gengetopt_args_info_help[10] ;
-  args_info->save_help = gengetopt_args_info_help[11] ;
+  args_info->iteration_help = gengetopt_args_info_help[7] ;
+  args_info->debug_help = gengetopt_args_info_help[8] ;
+  args_info->verbose_help = gengetopt_args_info_help[9] ;
+  args_info->savedistances_help = gengetopt_args_info_help[10] ;
+  args_info->saveall_help = gengetopt_args_info_help[11] ;
   args_info->radius_help = gengetopt_args_info_help[12] ;
   args_info->distance_help = gengetopt_args_info_help[13] ;
   args_info->normalize_help = gengetopt_args_info_help[14] ;
@@ -268,7 +267,6 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->nColumns_orig));
   free_string_field (&(args_info->initial_learning_rate_orig));
   free_string_field (&(args_info->final_learning_rate_orig));
-  free_string_field (&(args_info->accuracy_orig));
   free_string_field (&(args_info->iteration_orig));
   free_string_field (&(args_info->radius_orig));
   free_string_field (&(args_info->distance_arg));
@@ -366,16 +364,16 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "initial_learning_rate", args_info->initial_learning_rate_orig, 0);
   if (args_info->final_learning_rate_given)
     write_into_file(outfile, "final_learning_rate", args_info->final_learning_rate_orig, 0);
-  if (args_info->accuracy_given)
-    write_into_file(outfile, "accuracy", args_info->accuracy_orig, 0);
   if (args_info->iteration_given)
     write_into_file(outfile, "iteration", args_info->iteration_orig, 0);
   if (args_info->debug_given)
     write_into_file(outfile, "debug", 0, 0 );
   if (args_info->verbose_given)
     write_into_file(outfile, "verbose", 0, 0 );
-  if (args_info->save_given)
-    write_into_file(outfile, "save", 0, 0 );
+  if (args_info->savedistances_given)
+    write_into_file(outfile, "savedistances", 0, 0 );
+  if (args_info->saveall_given)
+    write_into_file(outfile, "saveall", 0, 0 );
   if (args_info->radius_given)
     write_into_file(outfile, "radius", args_info->radius_orig, 0);
   if (args_info->distance_given)
@@ -672,11 +670,11 @@ cmdline_parser_internal (
         { "nColumns",	1, NULL, 'y' },
         { "initial_learning_rate",	1, NULL, 's' },
         { "final_learning_rate",	1, NULL, 'f' },
-        { "accuracy",	1, NULL, 'a' },
         { "iteration",	1, NULL, 'n' },
         { "debug",	0, NULL, 'd' },
         { "verbose",	0, NULL, 'v' },
-        { "save",	0, NULL, 0 },
+        { "savedistances",	0, NULL, 0 },
+        { "saveall",	0, NULL, 0 },
         { "radius",	1, NULL, 'r' },
         { "distance",	1, NULL, 0 },
         { "normalize",	0, NULL, 0 },
@@ -690,7 +688,7 @@ cmdline_parser_internal (
         { 0,  0, 0, 0 }
       };
 
-      c = getopt_long (argc, argv, "hVi:x:y:s:f:a:n:dvr:b", long_options, &option_index);
+      c = getopt_long (argc, argv, "hVi:x:y:s:f:n:dvr:b", long_options, &option_index);
 
       if (c == -1) break;	/* Exit from `while (1)' loop.  */
 
@@ -766,18 +764,6 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'a':	/* allows to provide accuracy threshold.  */
-        
-        
-          if (update_arg( (void *)&(args_info->accuracy_arg), 
-               &(args_info->accuracy_orig), &(args_info->accuracy_given),
-              &(local_args_info.accuracy_given), optarg, 0, "0", ARG_DOUBLE,
-              check_ambiguity, override, 0, 0,
-              "accuracy", 'a',
-              additional_error))
-            goto failure;
-        
-          break;
         case 'n':	/* number of times the dataset is presented to the SOM.  */
         
         
@@ -834,14 +820,26 @@ cmdline_parser_internal (
           break;
 
         case 0:	/* Long option with no short option */
-          /* save the input and output SOM in files.  */
-          if (strcmp (long_options[option_index].name, "save") == 0)
+          /* save the distances between reads and final SOM in a file.  */
+          if (strcmp (long_options[option_index].name, "savedistances") == 0)
           {
           
           
-            if (update_arg((void *)&(args_info->save_flag), 0, &(args_info->save_given),
-                &(local_args_info.save_given), optarg, 0, 0, ARG_FLAG,
-                check_ambiguity, override, 1, 0, "save", '-',
+            if (update_arg((void *)&(args_info->savedistances_flag), 0, &(args_info->savedistances_given),
+                &(local_args_info.savedistances_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "savedistances", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* save the input and output SOM in files, save the distances between reads and final SOM in a file.  */
+          else if (strcmp (long_options[option_index].name, "saveall") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->saveall_flag), 0, &(args_info->saveall_given),
+                &(local_args_info.saveall_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "saveall", '-',
                 additional_error))
               goto failure;
           

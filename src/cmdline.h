@@ -54,9 +54,6 @@ struct gengetopt_args_info
   double final_learning_rate_arg;	/**< @brief allows to provide final learning rate (default='0').  */
   char * final_learning_rate_orig;	/**< @brief allows to provide final learning rate original value given at command line.  */
   const char *final_learning_rate_help; /**< @brief allows to provide final learning rate help description.  */
-  double accuracy_arg;	/**< @brief allows to provide accuracy threshold (default='0').  */
-  char * accuracy_orig;	/**< @brief allows to provide accuracy threshold original value given at command line.  */
-  const char *accuracy_help; /**< @brief allows to provide accuracy threshold help description.  */
   int iteration_arg;	/**< @brief number of times the dataset is presented to the SOM (default='-1').  */
   char * iteration_orig;	/**< @brief number of times the dataset is presented to the SOM original value given at command line.  */
   const char *iteration_help; /**< @brief number of times the dataset is presented to the SOM help description.  */
@@ -64,8 +61,10 @@ struct gengetopt_args_info
   const char *debug_help; /**< @brief enables advanced debug prints help description.  */
   int verbose_flag;	/**< @brief enables debug print (default=off).  */
   const char *verbose_help; /**< @brief enables debug print help description.  */
-  int save_flag;	/**< @brief save the input and output SOM in files (default=off).  */
-  const char *save_help; /**< @brief save the input and output SOM in files help description.  */
+  int savedistances_flag;	/**< @brief save the distances between reads and final SOM in a file (default=off).  */
+  const char *savedistances_help; /**< @brief save the distances between reads and final SOM in a file help description.  */
+  int saveall_flag;	/**< @brief save the input and output SOM in files, save the distances between reads and final SOM in a file (default=off).  */
+  const char *saveall_help; /**< @brief save the input and output SOM in files, save the distances between reads and final SOM in a file help description.  */
   int radius_arg;	/**< @brief allows to chose the initial radius of the updating function (default='0').  */
   char * radius_orig;	/**< @brief allows to chose the initial radius of the updating function original value given at command line.  */
   const char *radius_help; /**< @brief allows to chose the initial radius of the updating function help description.  */
@@ -100,11 +99,11 @@ struct gengetopt_args_info
   unsigned int nColumns_given ;	/**< @brief Whether nColumns was given.  */
   unsigned int initial_learning_rate_given ;	/**< @brief Whether initial_learning_rate was given.  */
   unsigned int final_learning_rate_given ;	/**< @brief Whether final_learning_rate was given.  */
-  unsigned int accuracy_given ;	/**< @brief Whether accuracy was given.  */
   unsigned int iteration_given ;	/**< @brief Whether iteration was given.  */
   unsigned int debug_given ;	/**< @brief Whether debug was given.  */
   unsigned int verbose_given ;	/**< @brief Whether verbose was given.  */
-  unsigned int save_given ;	/**< @brief Whether save was given.  */
+  unsigned int savedistances_given ;	/**< @brief Whether savedistances was given.  */
+  unsigned int saveall_given ;	/**< @brief Whether saveall was given.  */
   unsigned int radius_given ;	/**< @brief Whether radius was given.  */
   unsigned int distance_given ;	/**< @brief Whether distance was given.  */
   unsigned int normalize_given ;	/**< @brief Whether normalize was given.  */

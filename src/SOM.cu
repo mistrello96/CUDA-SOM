@@ -37,7 +37,9 @@ int main(int argc, char **argv)
     // advanced debug flag
     bool debug = ai.debug_flag;
     // save SOM to file
-    bool print = ai.save_flag;
+    bool saveall = ai.saveall_flag;
+    // save distances to file
+    bool savedistances = ai.savedistances_flag;
     // number of rows in the martix
     int nRows = ai.nRows_arg;
     // number of column in the martix
@@ -48,8 +50,6 @@ int main(int argc, char **argv)
     double flr = ai.final_learning_rate_arg;
     // max number of iteration
     int maxnIter = ai.iteration_arg;
-    // accuracy threshold
-    double accuracyTreshold = ai.accuracy_arg;
     // Initial radius of the update
     double initialRadius = ai.radius_arg;
     // type of distance used
@@ -216,7 +216,7 @@ int main(int argc, char **argv)
     cudaMemcpy(d_Matrix, h_Matrix, sizeof(double) * totalLength, cudaMemcpyHostToDevice);
 
     // save the initial SOM to file
-    if (debug | print)
+    if (debug | saveall)
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     
 	// inizializing actual values of lr, radius and accuracy
@@ -225,9 +225,9 @@ int main(int argc, char **argv)
 	accuracy = DBL_MAX;
 
     // debug print
-    if(verbose | debug | print)
+    if(verbose | debug)
     {
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << accuracyTreshold<< " required accuracyTreshold, " << radius << " initial radius, ";
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << radius << " initial radius, ";
         std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
         std::cout << initializationType << " initialization teqnique, " << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
     
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 
 
     // ITERATE UNTILL ACCURACY IS REACHED OR ITERATION ARE FINISHED
-    while((accuracy >= accuracyTreshold) && (nIter < maxnIter))
+    while(nIter < maxnIter)
     {
     	// randomize indexes of samples if required
     	if(randomizeDataset)
@@ -253,6 +253,12 @@ int main(int argc, char **argv)
         {
             std::cout << "Learning rate of this iteration is " << lr << std::endl;
             std::cout << "Radius of this iteration is " << radius << std::endl;
+        }
+
+        std::ofstream myfile;
+        if(nIter == (maxnIter-1) && (savedistances || saveall))
+        {   
+            myfile.open("distances.out");
         }
             
 
@@ -313,6 +319,11 @@ int main(int argc, char **argv)
                 BMU_index = dresptr2 - dptr2;
             }
 
+            if (nIter == (maxnIter-1) && (savedistances || saveall))
+            {
+                myfile << "The minimum distance of the "<< currentIndex << " read is " << BMU_distance << " at position " << BMU_index << "\n";
+            }
+
             // compute BMU distance as requested and save in the history array
             if(!normalizedistance)
             {
@@ -331,7 +342,7 @@ int main(int argc, char **argv)
                 }
             }
 
-			// debug print
+			// debug
 		    if(debug)
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
 
@@ -363,7 +374,7 @@ int main(int argc, char **argv)
             accuracy = sqrt(thrust::reduce(dptr, dptr + nSamples) / nElements) / nSamples;  
         }
 
-        // debug print
+        // debug
         if (verbose | debug)
         {
             std::cout << "Mean distance of this iteration is " << accuracy << std::endl;
@@ -388,7 +399,7 @@ int main(int argc, char **argv)
 	std::cout << "\nMean distance of the sample to the trained SOM is " << accuracy << std::endl;
 
     // save trainde SOM to file
-    if (debug | print)
+    if (debug | saveall)
     {
         saveSOMtoFile("outputSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
@@ -402,4 +413,5 @@ int main(int argc, char **argv)
     free(h_Distance);
     free(randIndexes);
     free(h_DistanceHistory);
+
 }
