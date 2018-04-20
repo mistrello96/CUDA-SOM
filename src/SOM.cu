@@ -24,7 +24,8 @@ int main(int argc, char **argv)
         exit(1);
     }
     // checking if benchmark mode is set
-    if(ai.benchmark_flag){
+    if(ai.benchmark_flag)
+    {
         run_benchmark();
         exit(1);
     }
@@ -221,7 +222,9 @@ int main(int argc, char **argv)
 
     // save the initial SOM to file
     if (debug | saveall)
+    {
         saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
+    }
     
 	// inizializing actual values of lr, radius and accuracy
     lr = ilr;
@@ -250,7 +253,9 @@ int main(int argc, char **argv)
     {
     	// randomize indexes of samples if required
     	if(randomizeDataset)
+        {
     		std::random_shuffle(&randIndexes[0], &randIndexes[nSamples-1]);
+        }
 
         // debug print
         if (debug | verbose)
@@ -259,6 +264,7 @@ int main(int argc, char **argv)
             std::cout << "Radius of this iteration is " << radius << std::endl;
         }
 
+        // open file used for saving distances of reads at last iteration
         std::ofstream myfile;
         if(nIter == (maxnIter-1) && (savedistances || saveall))
         {   
@@ -314,8 +320,10 @@ int main(int argc, char **argv)
                 // minimum search
                 BMU_distance = h_Distance[0];
                 BMU_index = 0;
-                for (int m = 1; m < nNeurons; m++){
-                    if(BMU_distance > h_Distance[m]){
+                for (int m = 1; m < nNeurons; m++)
+                {
+                    if(BMU_distance > h_Distance[m])
+                    {
                         BMU_distance = h_Distance[m];
                         BMU_index = m;
                     }
@@ -348,15 +356,19 @@ int main(int argc, char **argv)
 
 			// debug
 		    if(debug)
+            {
 			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
+            }
 
 
             // UPDATE THE NEIGHBORS
             // call the kernel function to update the device SOM
-            if(radius == 0){
+            if(radius == 0)
+            {
                 update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, neighborsType);
             }
-            else{
+            else
+            {
                 update_SOM<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
             }
 
@@ -366,7 +378,8 @@ int main(int argc, char **argv)
 
         // END OF EPOCH. UPDATING VALUES
         // computing accuracy as requested
-        if(!normalizedistance){
+        if(!normalizedistance)
+        {
         	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
             thrust::device_ptr<double> dptr(d_DistanceHistory);
             accuracy = thrust::reduce(dptr, dptr + nSamples);            

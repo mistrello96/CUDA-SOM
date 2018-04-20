@@ -42,13 +42,15 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
 
 // gaussian distance between two neurons
 __device__
-double gaussian(double distance, int radius){
+double gaussian(double distance, int radius)
+{
     return exp(- (double)(distance * distance)/(double)(2 * radius * radius));
 }
 
 // bubble distance between two neurons
 __device__
-int bubble(double distance, int radius){
+int bubble(double distance, int radius)
+{
     if (distance <= radius)
         return 1;
     return 0;
@@ -56,7 +58,8 @@ int bubble(double distance, int radius){
 
 // mexican hat distance between two neurons
 __device__
-double mexican_hat(double distance, int radius){
+double mexican_hat(double distance, int radius)
+{
     return ((1 - (double)(distance*distance)/(double)(radius*radius)) * gaussian(distance, radius));
 }
 	
@@ -94,7 +97,8 @@ int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
 }
 
 // run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous
-void run_benchmark(){
+void run_benchmark()
+{
     // dimension of the array
     int dimension=5000;
     // flag used to increase the dimension if necessary
@@ -119,7 +123,8 @@ void run_benchmark(){
         std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::now();
         // minimum search
         double BMU_distance =0;
-        for (int m = 0; m < dimension; m++){
+        for (int m = 0; m < dimension; m++)
+        {
             BMU_distance += host_array[m];
         }
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
@@ -136,9 +141,13 @@ void run_benchmark(){
         std::cout << "GPU reduce on " << dimension << " array of double; " << elapsedGPU << " nanoseconds to compute " << BMU_distance <<std::endl;
         // check the results and increment if necessary
         if(elapsedCPU < elapsedGPU)
+        {
             dimension = dimension * 2;
+        }
         else
+        {
             again = false;
+        }
 
     }
     std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_features * number_of_reads) is greater than " << dimension << "\n\n" << std::endl;

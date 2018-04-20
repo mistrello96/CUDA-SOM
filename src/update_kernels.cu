@@ -2,7 +2,8 @@
 __global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, char neighborsType)
 {
 	// update all features of the BMU
-    for (int i = BMUIndex * nElements, j=0; j < nElements; i++, j++){
+    for (int i = BMUIndex * nElements, j=0; j < nElements; i++, j++)
+    {
         k_Matrix[i] = k_Matrix[i] + lr * (k_Samples[samplesIndex + j] - k_Matrix[i]); 
     }
 }
@@ -19,7 +20,8 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
         //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is square
         int distance = sqrtf(((threadindex / nColumns) - (BMUIndex / nColumns)) * ((threadindex / nColumns) - (BMUIndex / nColumns)) + ((threadindex % nColumns) - (BMUIndex % nColumns)) * ((threadindex % nColumns) - (BMUIndex % nColumns)));
-        if (distance <= radius){
+        if (distance <= radius)
+        {
             double neigh = 0;
             // compute neigh param as requested
             switch (neighborsType)
@@ -48,7 +50,8 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
         //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is exagonal
         int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
-        if (distance <= radius){
+        if (distance <= radius)
+        {
             double neigh =0;
             // compute neigh param as requested
             switch (neighborsType)
