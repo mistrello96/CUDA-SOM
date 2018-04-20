@@ -55,8 +55,6 @@ int main(int argc, char **argv)
     double initialRadius = ai.radius_arg;
     // type of distance used
     char distanceType = ai.distance_arg[0];
-    // enable the normalization of the distance fuction
-    bool normalizeFlag = ai.normalize_flag;
     // type of neighbors function used
     char neighborsType = ai.neighbors_arg[0];
     // type of initialization
@@ -235,7 +233,7 @@ int main(int argc, char **argv)
     if(verbose | debug)
     {
         std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << radius << " initial radius, ";
-        std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << normalizeFlag << " normalized, " << neighborsType << " neighbors function, ";
+        std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << neighborsType << " neighbors function, ";
         std::cout << initializationType << " initialization teqnique, " << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
     
     }
@@ -278,26 +276,12 @@ int main(int argc, char **argv)
             // computing the Sample index for this iteration
             currentIndex = randIndexes[s]*nElements;
     
-		    // parallel search of BMU launch
-		    if (normalizeFlag)
+		    switch(distanceType)
             {
-		    	switch(distanceType)
-                {
-		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    	}
-		    }
-            else
-            {
-		    	switch(distanceType)
-                {
-		    		case 'e' : compute_distance_euclidean<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-				    case 't' : compute_distance_tanimoto<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    	}
+		    	case 'e' : compute_distance_euclidean<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 's' : compute_distance_sum_squares<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 'm' : compute_distance_manhattan<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+				case 't' : compute_distance_tanimoto<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    }
 
 		    cudaDeviceSynchronize();

@@ -74,6 +74,7 @@ __global__ void compute_distance_tanimoto(double* k_matrix, double* k_Samples, i
 	}
 }
 
+/*
 // kernel to find the distance of each neuron from the sample vector
 __global__ void compute_distance_euclidean_normalized(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
@@ -150,3 +151,4 @@ __global__ void compute_distance_tanimoto_normalized(double* k_matrix, double* k
 		k_distance[index] = (crossproduct / (norm1+norm2-crossproduct))/nElements;
 	}
 }
+*/
