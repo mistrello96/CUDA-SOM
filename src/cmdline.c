@@ -39,22 +39,24 @@ const char *gengetopt_args_info_help[] = {
   "  -i, --inputfile=STRING        PATH to the input file  (default=`./')",
   "  -x, --nRows=INT               allows to provide the number of rows in the\n                                  neuron's matrix  (default=`0')",
   "  -y, --nColumns=INT            allows to provide the number of columns in the\n                                  neuron's matrix  (default=`0')",
-  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate\n                                  (default=`-1')",
-  "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate\n                                  (default=`0')",
+  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate of the\n                                  training process  (default=`-1')",
+  "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate of the\n                                  training process  (default=`0')",
   "  -n, --iteration=INT           number of times the dataset is presented to the\n                                  SOM  (default=`-1')",
-  "  -d, --debug                   enables advanced debug prints  (default=off)",
   "  -v, --verbose                 enables debug print  (default=off)",
-  "      --savedistances           save the distances between reads and final SOM\n                                  in a file  (default=off)",
-  "      --saveall                 save the input and output SOM in files, save\n                                  the distances between reads and final SOM in\n                                  a file  (default=off)",
+  "  -d, --debug                   enables advanced debug prints  (default=off)",
+  "      --savedistances           save the distances between reads and final SOM\n                                  in a file called 'distances.out'\n                                  (default=off)",
+  "      --saveall                 save the input and output SOM in files(include\n                                  savedistances)  (default=off)",
   "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
   "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
   "      --normalize               Enable the normalization of the distance\n                                  function  (default=off)",
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
-  "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for random vector from the input file\n                                  (possible values=\"r\", \"c\" default=`c')",
-  "      --lattice=STRING          allows to choose what tipy of lattice is used.\n                                  Use s for square lattice or e for exagonal\n                                  lattice  (possible values=\"s\", \"e\"\n                                  default=`e')",
+  "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for picking random vectors from the\n                                  input file  (possible values=\"r\", \"c\"\n                                  default=`c')",
+  "      --lattice=STRING          allows to choose what tipe of lattice is used\n                                  for the SOM representation. Use s for square\n                                  lattice or e for exagonal lattice  (possible\n                                  values=\"s\", \"e\" default=`e')",
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
-  "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and the radius. Use l for learning rate,\n                                  r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
+  "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and/or the radius. Use l for learning\n                                  rate, r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
   "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
+  "      --forceGPU                Runs all possible computation on GPU. Use only\n                                  if your input file is big enought(use the\n                                  benchmark funtion to find out the minimum\n                                  file size)  (default=off)",
+  "      --threadsperblock=INT     allows to provide the number of threads per\n                                  block  (default=`64')",
   "  -b, --benchmark               Run a benchmark to find out the minimum\n                                  dimension of the input file to make GPU\n                                  computation advantageous  (default=off)",
     0
 };
@@ -96,8 +98,8 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->initial_learning_rate_given = 0 ;
   args_info->final_learning_rate_given = 0 ;
   args_info->iteration_given = 0 ;
-  args_info->debug_given = 0 ;
   args_info->verbose_given = 0 ;
+  args_info->debug_given = 0 ;
   args_info->savedistances_given = 0 ;
   args_info->saveall_given = 0 ;
   args_info->radius_given = 0 ;
@@ -109,6 +111,8 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->randomize_given = 0 ;
   args_info->exponential_given = 0 ;
   args_info->normalizedistance_given = 0 ;
+  args_info->forceGPU_given = 0 ;
+  args_info->threadsperblock_given = 0 ;
   args_info->benchmark_given = 0 ;
 }
 
@@ -128,8 +132,8 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->final_learning_rate_orig = NULL;
   args_info->iteration_arg = -1;
   args_info->iteration_orig = NULL;
-  args_info->debug_flag = 0;
   args_info->verbose_flag = 0;
+  args_info->debug_flag = 0;
   args_info->savedistances_flag = 0;
   args_info->saveall_flag = 0;
   args_info->radius_arg = 0;
@@ -147,6 +151,9 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->exponential_arg = gengetopt_strdup ("n");
   args_info->exponential_orig = NULL;
   args_info->normalizedistance_flag = 0;
+  args_info->forceGPU_flag = 0;
+  args_info->threadsperblock_arg = 64;
+  args_info->threadsperblock_orig = NULL;
   args_info->benchmark_flag = 0;
   
 }
@@ -164,8 +171,8 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->initial_learning_rate_help = gengetopt_args_info_help[5] ;
   args_info->final_learning_rate_help = gengetopt_args_info_help[6] ;
   args_info->iteration_help = gengetopt_args_info_help[7] ;
-  args_info->debug_help = gengetopt_args_info_help[8] ;
-  args_info->verbose_help = gengetopt_args_info_help[9] ;
+  args_info->verbose_help = gengetopt_args_info_help[8] ;
+  args_info->debug_help = gengetopt_args_info_help[9] ;
   args_info->savedistances_help = gengetopt_args_info_help[10] ;
   args_info->saveall_help = gengetopt_args_info_help[11] ;
   args_info->radius_help = gengetopt_args_info_help[12] ;
@@ -177,7 +184,9 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->randomize_help = gengetopt_args_info_help[18] ;
   args_info->exponential_help = gengetopt_args_info_help[19] ;
   args_info->normalizedistance_help = gengetopt_args_info_help[20] ;
-  args_info->benchmark_help = gengetopt_args_info_help[21] ;
+  args_info->forceGPU_help = gengetopt_args_info_help[21] ;
+  args_info->threadsperblock_help = gengetopt_args_info_help[22] ;
+  args_info->benchmark_help = gengetopt_args_info_help[23] ;
   
 }
 
@@ -279,6 +288,7 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->lattice_orig));
   free_string_field (&(args_info->exponential_arg));
   free_string_field (&(args_info->exponential_orig));
+  free_string_field (&(args_info->threadsperblock_orig));
   
   
 
@@ -366,10 +376,10 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "final_learning_rate", args_info->final_learning_rate_orig, 0);
   if (args_info->iteration_given)
     write_into_file(outfile, "iteration", args_info->iteration_orig, 0);
-  if (args_info->debug_given)
-    write_into_file(outfile, "debug", 0, 0 );
   if (args_info->verbose_given)
     write_into_file(outfile, "verbose", 0, 0 );
+  if (args_info->debug_given)
+    write_into_file(outfile, "debug", 0, 0 );
   if (args_info->savedistances_given)
     write_into_file(outfile, "savedistances", 0, 0 );
   if (args_info->saveall_given)
@@ -392,6 +402,10 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "exponential", args_info->exponential_orig, cmdline_parser_exponential_values);
   if (args_info->normalizedistance_given)
     write_into_file(outfile, "normalizedistance", 0, 0 );
+  if (args_info->forceGPU_given)
+    write_into_file(outfile, "forceGPU", 0, 0 );
+  if (args_info->threadsperblock_given)
+    write_into_file(outfile, "threadsperblock", args_info->threadsperblock_orig, 0);
   if (args_info->benchmark_given)
     write_into_file(outfile, "benchmark", 0, 0 );
   
@@ -671,8 +685,8 @@ cmdline_parser_internal (
         { "initial_learning_rate",	1, NULL, 's' },
         { "final_learning_rate",	1, NULL, 'f' },
         { "iteration",	1, NULL, 'n' },
-        { "debug",	0, NULL, 'd' },
         { "verbose",	0, NULL, 'v' },
+        { "debug",	0, NULL, 'd' },
         { "savedistances",	0, NULL, 0 },
         { "saveall",	0, NULL, 0 },
         { "radius",	1, NULL, 'r' },
@@ -684,11 +698,13 @@ cmdline_parser_internal (
         { "randomize",	0, NULL, 0 },
         { "exponential",	1, NULL, 0 },
         { "normalizedistance",	0, NULL, 0 },
+        { "forceGPU",	0, NULL, 0 },
+        { "threadsperblock",	1, NULL, 0 },
         { "benchmark",	0, NULL, 'b' },
         { 0,  0, 0, 0 }
       };
 
-      c = getopt_long (argc, argv, "hVi:x:y:s:f:n:dvr:b", long_options, &option_index);
+      c = getopt_long (argc, argv, "hVi:x:y:s:f:n:vdr:b", long_options, &option_index);
 
       if (c == -1) break;	/* Exit from `while (1)' loop.  */
 
@@ -740,7 +756,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 's':	/* allows to provide initial learning rate.  */
+        case 's':	/* allows to provide initial learning rate of the training process.  */
         
         
           if (update_arg( (void *)&(args_info->initial_learning_rate_arg), 
@@ -752,7 +768,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'f':	/* allows to provide final learning rate.  */
+        case 'f':	/* allows to provide final learning rate of the training process.  */
         
         
           if (update_arg( (void *)&(args_info->final_learning_rate_arg), 
@@ -776,22 +792,22 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'd':	/* enables advanced debug prints.  */
-        
-        
-          if (update_arg((void *)&(args_info->debug_flag), 0, &(args_info->debug_given),
-              &(local_args_info.debug_given), optarg, 0, 0, ARG_FLAG,
-              check_ambiguity, override, 1, 0, "debug", 'd',
-              additional_error))
-            goto failure;
-        
-          break;
         case 'v':	/* enables debug print.  */
         
         
           if (update_arg((void *)&(args_info->verbose_flag), 0, &(args_info->verbose_given),
               &(local_args_info.verbose_given), optarg, 0, 0, ARG_FLAG,
               check_ambiguity, override, 1, 0, "verbose", 'v',
+              additional_error))
+            goto failure;
+        
+          break;
+        case 'd':	/* enables advanced debug prints.  */
+        
+        
+          if (update_arg((void *)&(args_info->debug_flag), 0, &(args_info->debug_given),
+              &(local_args_info.debug_given), optarg, 0, 0, ARG_FLAG,
+              check_ambiguity, override, 1, 0, "debug", 'd',
               additional_error))
             goto failure;
         
@@ -820,7 +836,7 @@ cmdline_parser_internal (
           break;
 
         case 0:	/* Long option with no short option */
-          /* save the distances between reads and final SOM in a file.  */
+          /* save the distances between reads and final SOM in a file called 'distances.out'.  */
           if (strcmp (long_options[option_index].name, "savedistances") == 0)
           {
           
@@ -832,7 +848,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* save the input and output SOM in files, save the distances between reads and final SOM in a file.  */
+          /* save the input and output SOM in files(include savedistances).  */
           else if (strcmp (long_options[option_index].name, "saveall") == 0)
           {
           
@@ -884,7 +900,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file.  */
+          /* allows to specify how initial weights are initialized. Use r for random initialization or c for picking random vectors from the input file.  */
           else if (strcmp (long_options[option_index].name, "initialization") == 0)
           {
           
@@ -898,7 +914,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice.  */
+          /* allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice.  */
           else if (strcmp (long_options[option_index].name, "lattice") == 0)
           {
           
@@ -924,7 +940,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both.  */
+          /* enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both.  */
           else if (strcmp (long_options[option_index].name, "exponential") == 0)
           {
           
@@ -946,6 +962,32 @@ cmdline_parser_internal (
             if (update_arg((void *)&(args_info->normalizedistance_flag), 0, &(args_info->normalizedistance_given),
                 &(local_args_info.normalizedistance_given), optarg, 0, 0, ARG_FLAG,
                 check_ambiguity, override, 1, 0, "normalizedistance", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size).  */
+          else if (strcmp (long_options[option_index].name, "forceGPU") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->forceGPU_flag), 0, &(args_info->forceGPU_given),
+                &(local_args_info.forceGPU_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "forceGPU", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* allows to provide the number of threads per block.  */
+          else if (strcmp (long_options[option_index].name, "threadsperblock") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->threadsperblock_arg), 
+                 &(args_info->threadsperblock_orig), &(args_info->threadsperblock_given),
+                &(local_args_info.threadsperblock_given), optarg, 0, "64", ARG_INT,
+                check_ambiguity, override, 0, 0,
+                "threadsperblock", '-',
                 additional_error))
               goto failure;
           

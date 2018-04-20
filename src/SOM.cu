@@ -60,6 +60,8 @@ int main(int argc, char **argv)
     char neighborsType = ai.neighbors_arg[0];
     // type of initialization
     char initializationType = ai.initialization_arg[0];
+    // number of threads per block 
+    int tps = ai.threadsperblock_arg;
     // type of lacttice used
     char lattice = ai.lattice_arg[0];
     // exponential decay for radius and lr
@@ -68,6 +70,8 @@ int main(int argc, char **argv)
     bool randomizeDataset = ai.randomize_flag;
     // normalize the mean distance of each iteration
     bool normalizedistance = ai.normalizedistance_flag;
+    // flag to move all computation on GPU
+    bool forceGPU = ai.forceGPU_flag;
     // counter for times of Samples vector is presented to the SOM
     int nIter = 0;
     // declaration of some usefull variables
@@ -151,7 +155,7 @@ int main(int argc, char **argv)
     totalLength = nRows * nColumns * nElements;
     
     // number of block used in the computation
-    nblocks = (nNeurons / 64) + 1;
+    nblocks = (nNeurons / tps) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535)
@@ -273,28 +277,36 @@ int main(int argc, char **argv)
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 't' : compute_distance_tanimoto_normalized<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
             else
             {
 		    	switch(distanceType)
                 {
-		    		case 'e' : compute_distance_euclidean<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 's' : compute_distance_sum_squares<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    		case 'm' : compute_distance_manhattan<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-				    case 't' : compute_distance_tanimoto<<<nblocks, 64>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'e' : compute_distance_euclidean<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 's' : compute_distance_sum_squares<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    		case 'm' : compute_distance_manhattan<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+				    case 't' : compute_distance_tanimoto<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	}
 		    }
 
 		    cudaDeviceSynchronize();
 
             // chosing between CPU and GPU to find BMU 
-            //TOFIX
-            if(nNeurons < 400000)
+            if(forceGPU)
+            {
+                // DEVICE IMPLEMENTATION TO FIND BMU
+                thrust::device_ptr<double> dptr2(d_Samples);
+                // extract the minimum
+                thrust::device_ptr<double> dresptr2 = thrust::min_element(dptr2, dptr2 + nNeurons);
+                BMU_distance = dresptr2[0];
+                BMU_index = dresptr2 - dptr2;
+            }
+            else
             {
                 // HOST IMPLEMENTATION TO FIND BMU
                 // copy the distance array back to host
@@ -309,16 +321,8 @@ int main(int argc, char **argv)
                     }
                 }
             }
-            else
-            {
-                // DEVICE IMPLEMENTATION TO FIND BMU
-                thrust::device_ptr<double> dptr2(d_Samples);
-                // extract the minimum
-                thrust::device_ptr<double> dresptr2 = thrust::min_element(dptr2, dptr2 + nNeurons);
-                BMU_distance = dresptr2[0];
-                BMU_index = dresptr2 - dptr2;
-            }
 
+            // if last iteration and requesterd, save to file distances
             if (nIter == (maxnIter-1) && (savedistances || saveall))
             {
                 myfile << "The minimum distance of the "<< currentIndex << " read is " << BMU_distance << " at position " << BMU_index << "\n";
@@ -353,7 +357,7 @@ int main(int argc, char **argv)
                 update_BMU<<<1, 1>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, neighborsType);
             }
             else{
-                update_SOM<<<nblocks, 64>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                update_SOM<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
             }
 
             cudaDeviceSynchronize();      

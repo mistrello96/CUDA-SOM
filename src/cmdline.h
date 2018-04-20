@@ -31,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "0.5"
+#define CMDLINE_PARSER_VERSION "0.9"
 #endif
 
 /** @brief Where the command line options are stored */
@@ -48,23 +48,23 @@ struct gengetopt_args_info
   int nColumns_arg;	/**< @brief allows to provide the number of columns in the neuron's matrix (default='0').  */
   char * nColumns_orig;	/**< @brief allows to provide the number of columns in the neuron's matrix original value given at command line.  */
   const char *nColumns_help; /**< @brief allows to provide the number of columns in the neuron's matrix help description.  */
-  double initial_learning_rate_arg;	/**< @brief allows to provide initial learning rate (default='-1').  */
-  char * initial_learning_rate_orig;	/**< @brief allows to provide initial learning rate original value given at command line.  */
-  const char *initial_learning_rate_help; /**< @brief allows to provide initial learning rate help description.  */
-  double final_learning_rate_arg;	/**< @brief allows to provide final learning rate (default='0').  */
-  char * final_learning_rate_orig;	/**< @brief allows to provide final learning rate original value given at command line.  */
-  const char *final_learning_rate_help; /**< @brief allows to provide final learning rate help description.  */
+  double initial_learning_rate_arg;	/**< @brief allows to provide initial learning rate of the training process (default='-1').  */
+  char * initial_learning_rate_orig;	/**< @brief allows to provide initial learning rate of the training process original value given at command line.  */
+  const char *initial_learning_rate_help; /**< @brief allows to provide initial learning rate of the training process help description.  */
+  double final_learning_rate_arg;	/**< @brief allows to provide final learning rate of the training process (default='0').  */
+  char * final_learning_rate_orig;	/**< @brief allows to provide final learning rate of the training process original value given at command line.  */
+  const char *final_learning_rate_help; /**< @brief allows to provide final learning rate of the training process help description.  */
   int iteration_arg;	/**< @brief number of times the dataset is presented to the SOM (default='-1').  */
   char * iteration_orig;	/**< @brief number of times the dataset is presented to the SOM original value given at command line.  */
   const char *iteration_help; /**< @brief number of times the dataset is presented to the SOM help description.  */
-  int debug_flag;	/**< @brief enables advanced debug prints (default=off).  */
-  const char *debug_help; /**< @brief enables advanced debug prints help description.  */
   int verbose_flag;	/**< @brief enables debug print (default=off).  */
   const char *verbose_help; /**< @brief enables debug print help description.  */
-  int savedistances_flag;	/**< @brief save the distances between reads and final SOM in a file (default=off).  */
-  const char *savedistances_help; /**< @brief save the distances between reads and final SOM in a file help description.  */
-  int saveall_flag;	/**< @brief save the input and output SOM in files, save the distances between reads and final SOM in a file (default=off).  */
-  const char *saveall_help; /**< @brief save the input and output SOM in files, save the distances between reads and final SOM in a file help description.  */
+  int debug_flag;	/**< @brief enables advanced debug prints (default=off).  */
+  const char *debug_help; /**< @brief enables advanced debug prints help description.  */
+  int savedistances_flag;	/**< @brief save the distances between reads and final SOM in a file called 'distances.out' (default=off).  */
+  const char *savedistances_help; /**< @brief save the distances between reads and final SOM in a file called 'distances.out' help description.  */
+  int saveall_flag;	/**< @brief save the input and output SOM in files(include savedistances) (default=off).  */
+  const char *saveall_help; /**< @brief save the input and output SOM in files(include savedistances) help description.  */
   int radius_arg;	/**< @brief allows to chose the initial radius of the updating function (default='0').  */
   char * radius_orig;	/**< @brief allows to chose the initial radius of the updating function original value given at command line.  */
   const char *radius_help; /**< @brief allows to chose the initial radius of the updating function help description.  */
@@ -76,19 +76,24 @@ struct gengetopt_args_info
   char * neighbors_arg;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat (default='g').  */
   char * neighbors_orig;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat original value given at command line.  */
   const char *neighbors_help; /**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat help description.  */
-  char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file (default='c').  */
-  char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file original value given at command line.  */
-  const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for random vector from the input file help description.  */
-  char * lattice_arg;	/**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice (default='e').  */
-  char * lattice_orig;	/**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice original value given at command line.  */
-  const char *lattice_help; /**< @brief allows to choose what tipy of lattice is used. Use s for square lattice or e for exagonal lattice help description.  */
+  char * initialization_arg;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for picking random vectors from the input file (default='c').  */
+  char * initialization_orig;	/**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for picking random vectors from the input file original value given at command line.  */
+  const char *initialization_help; /**< @brief allows to specify how initial weights are initialized. Use r for random initialization or c for picking random vectors from the input file help description.  */
+  char * lattice_arg;	/**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice (default='e').  */
+  char * lattice_orig;	/**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice original value given at command line.  */
+  const char *lattice_help; /**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */
   const char *randomize_help; /**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. help description.  */
-  char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both (default='n').  */
-  char * exponential_orig;	/**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both original value given at command line.  */
-  const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and the radius. Use l for learning rate, r for radius or b for both help description.  */
+  char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both (default='n').  */
+  char * exponential_orig;	/**< @brief enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both original value given at command line.  */
+  const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both help description.  */
   int normalizedistance_flag;	/**< @brief enables the normalized mean distance of the iteration (default=off).  */
   const char *normalizedistance_help; /**< @brief enables the normalized mean distance of the iteration help description.  */
+  int forceGPU_flag;	/**< @brief Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size) (default=off).  */
+  const char *forceGPU_help; /**< @brief Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size) help description.  */
+  int threadsperblock_arg;	/**< @brief allows to provide the number of threads per block (default='64').  */
+  char * threadsperblock_orig;	/**< @brief allows to provide the number of threads per block original value given at command line.  */
+  const char *threadsperblock_help; /**< @brief allows to provide the number of threads per block help description.  */
   int benchmark_flag;	/**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous (default=off).  */
   const char *benchmark_help; /**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous help description.  */
   
@@ -100,8 +105,8 @@ struct gengetopt_args_info
   unsigned int initial_learning_rate_given ;	/**< @brief Whether initial_learning_rate was given.  */
   unsigned int final_learning_rate_given ;	/**< @brief Whether final_learning_rate was given.  */
   unsigned int iteration_given ;	/**< @brief Whether iteration was given.  */
-  unsigned int debug_given ;	/**< @brief Whether debug was given.  */
   unsigned int verbose_given ;	/**< @brief Whether verbose was given.  */
+  unsigned int debug_given ;	/**< @brief Whether debug was given.  */
   unsigned int savedistances_given ;	/**< @brief Whether savedistances was given.  */
   unsigned int saveall_given ;	/**< @brief Whether saveall was given.  */
   unsigned int radius_given ;	/**< @brief Whether radius was given.  */
@@ -113,6 +118,8 @@ struct gengetopt_args_info
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
   unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
   unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
+  unsigned int forceGPU_given ;	/**< @brief Whether forceGPU was given.  */
+  unsigned int threadsperblock_given ;	/**< @brief Whether threadsperblock was given.  */
   unsigned int benchmark_given ;	/**< @brief Whether benchmark was given.  */
 
 } ;
