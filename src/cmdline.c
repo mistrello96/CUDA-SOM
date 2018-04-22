@@ -46,9 +46,9 @@ const char *gengetopt_args_info_help[] = {
   "  -d, --debug                   enables advanced debug prints  (default=off)",
   "      --savedistances           save the distances between reads and final SOM\n                                  in a file called 'distances.out'\n                                  (default=off)",
   "      --saveall                 save the input and output SOM in files(include\n                                  savedistances)  (default=off)",
+  "      --savepath=STRING         PATH to where the output files will be saved\n                                  (default=`./')",
   "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
   "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
-  "      --normalize               Enable the normalization of the distance\n                                  function  (default=off)",
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
   "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for picking random vectors from the\n                                  input file  (possible values=\"r\", \"c\"\n                                  default=`c')",
   "      --lattice=STRING          allows to choose what tipe of lattice is used\n                                  for the SOM representation. Use s for square\n                                  lattice or e for exagonal lattice  (possible\n                                  values=\"s\", \"e\" default=`e')",
@@ -57,6 +57,7 @@ const char *gengetopt_args_info_help[] = {
   "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
   "      --forceGPU                Runs all possible computation on GPU. Use only\n                                  if your input file is big enought(use the\n                                  benchmark funtion to find out the minimum\n                                  file size)  (default=off)",
   "      --threadsperblock=INT     allows to provide the number of threads per\n                                  block  (default=`64')",
+  "      --GPUIndex=INT            allows to specify the device id of the GPU used\n                                  for the computation  (default=`0')",
   "  -b, --benchmark               Run a benchmark to find out the minimum\n                                  dimension of the input file to make GPU\n                                  computation advantageous  (default=off)",
     0
 };
@@ -102,9 +103,9 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->debug_given = 0 ;
   args_info->savedistances_given = 0 ;
   args_info->saveall_given = 0 ;
+  args_info->savepath_given = 0 ;
   args_info->radius_given = 0 ;
   args_info->distance_given = 0 ;
-  args_info->normalize_given = 0 ;
   args_info->neighbors_given = 0 ;
   args_info->initialization_given = 0 ;
   args_info->lattice_given = 0 ;
@@ -113,6 +114,7 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->normalizedistance_given = 0 ;
   args_info->forceGPU_given = 0 ;
   args_info->threadsperblock_given = 0 ;
+  args_info->GPUIndex_given = 0 ;
   args_info->benchmark_given = 0 ;
 }
 
@@ -136,11 +138,12 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->debug_flag = 0;
   args_info->savedistances_flag = 0;
   args_info->saveall_flag = 0;
+  args_info->savepath_arg = gengetopt_strdup ("./");
+  args_info->savepath_orig = NULL;
   args_info->radius_arg = 0;
   args_info->radius_orig = NULL;
   args_info->distance_arg = gengetopt_strdup ("e");
   args_info->distance_orig = NULL;
-  args_info->normalize_flag = 0;
   args_info->neighbors_arg = gengetopt_strdup ("g");
   args_info->neighbors_orig = NULL;
   args_info->initialization_arg = gengetopt_strdup ("c");
@@ -154,6 +157,8 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->forceGPU_flag = 0;
   args_info->threadsperblock_arg = 64;
   args_info->threadsperblock_orig = NULL;
+  args_info->GPUIndex_arg = 0;
+  args_info->GPUIndex_orig = NULL;
   args_info->benchmark_flag = 0;
   
 }
@@ -175,9 +180,9 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->debug_help = gengetopt_args_info_help[9] ;
   args_info->savedistances_help = gengetopt_args_info_help[10] ;
   args_info->saveall_help = gengetopt_args_info_help[11] ;
-  args_info->radius_help = gengetopt_args_info_help[12] ;
-  args_info->distance_help = gengetopt_args_info_help[13] ;
-  args_info->normalize_help = gengetopt_args_info_help[14] ;
+  args_info->savepath_help = gengetopt_args_info_help[12] ;
+  args_info->radius_help = gengetopt_args_info_help[13] ;
+  args_info->distance_help = gengetopt_args_info_help[14] ;
   args_info->neighbors_help = gengetopt_args_info_help[15] ;
   args_info->initialization_help = gengetopt_args_info_help[16] ;
   args_info->lattice_help = gengetopt_args_info_help[17] ;
@@ -186,7 +191,8 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->normalizedistance_help = gengetopt_args_info_help[20] ;
   args_info->forceGPU_help = gengetopt_args_info_help[21] ;
   args_info->threadsperblock_help = gengetopt_args_info_help[22] ;
-  args_info->benchmark_help = gengetopt_args_info_help[23] ;
+  args_info->GPUIndex_help = gengetopt_args_info_help[23] ;
+  args_info->benchmark_help = gengetopt_args_info_help[24] ;
   
 }
 
@@ -277,6 +283,8 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->initial_learning_rate_orig));
   free_string_field (&(args_info->final_learning_rate_orig));
   free_string_field (&(args_info->iteration_orig));
+  free_string_field (&(args_info->savepath_arg));
+  free_string_field (&(args_info->savepath_orig));
   free_string_field (&(args_info->radius_orig));
   free_string_field (&(args_info->distance_arg));
   free_string_field (&(args_info->distance_orig));
@@ -289,6 +297,7 @@ cmdline_parser_release (struct gengetopt_args_info *args_info)
   free_string_field (&(args_info->exponential_arg));
   free_string_field (&(args_info->exponential_orig));
   free_string_field (&(args_info->threadsperblock_orig));
+  free_string_field (&(args_info->GPUIndex_orig));
   
   
 
@@ -384,12 +393,12 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "savedistances", 0, 0 );
   if (args_info->saveall_given)
     write_into_file(outfile, "saveall", 0, 0 );
+  if (args_info->savepath_given)
+    write_into_file(outfile, "savepath", args_info->savepath_orig, 0);
   if (args_info->radius_given)
     write_into_file(outfile, "radius", args_info->radius_orig, 0);
   if (args_info->distance_given)
     write_into_file(outfile, "distance", args_info->distance_orig, cmdline_parser_distance_values);
-  if (args_info->normalize_given)
-    write_into_file(outfile, "normalize", 0, 0 );
   if (args_info->neighbors_given)
     write_into_file(outfile, "neighbors", args_info->neighbors_orig, cmdline_parser_neighbors_values);
   if (args_info->initialization_given)
@@ -406,6 +415,8 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "forceGPU", 0, 0 );
   if (args_info->threadsperblock_given)
     write_into_file(outfile, "threadsperblock", args_info->threadsperblock_orig, 0);
+  if (args_info->GPUIndex_given)
+    write_into_file(outfile, "GPUIndex", args_info->GPUIndex_orig, 0);
   if (args_info->benchmark_given)
     write_into_file(outfile, "benchmark", 0, 0 );
   
@@ -689,9 +700,9 @@ cmdline_parser_internal (
         { "debug",	0, NULL, 'd' },
         { "savedistances",	0, NULL, 0 },
         { "saveall",	0, NULL, 0 },
+        { "savepath",	1, NULL, 0 },
         { "radius",	1, NULL, 'r' },
         { "distance",	1, NULL, 0 },
-        { "normalize",	0, NULL, 0 },
         { "neighbors",	1, NULL, 0 },
         { "initialization",	1, NULL, 0 },
         { "lattice",	1, NULL, 0 },
@@ -700,6 +711,7 @@ cmdline_parser_internal (
         { "normalizedistance",	0, NULL, 0 },
         { "forceGPU",	0, NULL, 0 },
         { "threadsperblock",	1, NULL, 0 },
+        { "GPUIndex",	1, NULL, 0 },
         { "benchmark",	0, NULL, 'b' },
         { 0,  0, 0, 0 }
       };
@@ -860,6 +872,20 @@ cmdline_parser_internal (
               goto failure;
           
           }
+          /* PATH to where the output files will be saved.  */
+          else if (strcmp (long_options[option_index].name, "savepath") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->savepath_arg), 
+                 &(args_info->savepath_orig), &(args_info->savepath_given),
+                &(local_args_info.savepath_given), optarg, 0, "./", ARG_STRING,
+                check_ambiguity, override, 0, 0,
+                "savepath", '-',
+                additional_error))
+              goto failure;
+          
+          }
           /* allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto.  */
           else if (strcmp (long_options[option_index].name, "distance") == 0)
           {
@@ -870,18 +896,6 @@ cmdline_parser_internal (
                 &(local_args_info.distance_given), optarg, cmdline_parser_distance_values, "e", ARG_STRING,
                 check_ambiguity, override, 0, 0,
                 "distance", '-',
-                additional_error))
-              goto failure;
-          
-          }
-          /* Enable the normalization of the distance function.  */
-          else if (strcmp (long_options[option_index].name, "normalize") == 0)
-          {
-          
-          
-            if (update_arg((void *)&(args_info->normalize_flag), 0, &(args_info->normalize_given),
-                &(local_args_info.normalize_given), optarg, 0, 0, ARG_FLAG,
-                check_ambiguity, override, 1, 0, "normalize", '-',
                 additional_error))
               goto failure;
           
@@ -988,6 +1002,20 @@ cmdline_parser_internal (
                 &(local_args_info.threadsperblock_given), optarg, 0, "64", ARG_INT,
                 check_ambiguity, override, 0, 0,
                 "threadsperblock", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* allows to specify the device id of the GPU used for the computation.  */
+          else if (strcmp (long_options[option_index].name, "GPUIndex") == 0)
+          {
+          
+          
+            if (update_arg( (void *)&(args_info->GPUIndex_arg), 
+                 &(args_info->GPUIndex_orig), &(args_info->GPUIndex_given),
+                &(local_args_info.GPUIndex_given), optarg, 0, "0", ARG_INT,
+                check_ambiguity, override, 0, 0,
+                "GPUIndex", '-',
                 additional_error))
               goto failure;
           

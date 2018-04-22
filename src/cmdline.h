@@ -65,14 +65,15 @@ struct gengetopt_args_info
   const char *savedistances_help; /**< @brief save the distances between reads and final SOM in a file called 'distances.out' help description.  */
   int saveall_flag;	/**< @brief save the input and output SOM in files(include savedistances) (default=off).  */
   const char *saveall_help; /**< @brief save the input and output SOM in files(include savedistances) help description.  */
+  char * savepath_arg;	/**< @brief PATH to where the output files will be saved (default='./').  */
+  char * savepath_orig;	/**< @brief PATH to where the output files will be saved original value given at command line.  */
+  const char *savepath_help; /**< @brief PATH to where the output files will be saved help description.  */
   int radius_arg;	/**< @brief allows to chose the initial radius of the updating function (default='0').  */
   char * radius_orig;	/**< @brief allows to chose the initial radius of the updating function original value given at command line.  */
   const char *radius_help; /**< @brief allows to chose the initial radius of the updating function help description.  */
   char * distance_arg;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto (default='e').  */
   char * distance_orig;	/**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto original value given at command line.  */
   const char *distance_help; /**< @brief allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto help description.  */
-  int normalize_flag;	/**< @brief Enable the normalization of the distance function (default=off).  */
-  const char *normalize_help; /**< @brief Enable the normalization of the distance function help description.  */
   char * neighbors_arg;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat (default='g').  */
   char * neighbors_orig;	/**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat original value given at command line.  */
   const char *neighbors_help; /**< @brief allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat help description.  */
@@ -94,6 +95,9 @@ struct gengetopt_args_info
   int threadsperblock_arg;	/**< @brief allows to provide the number of threads per block (default='64').  */
   char * threadsperblock_orig;	/**< @brief allows to provide the number of threads per block original value given at command line.  */
   const char *threadsperblock_help; /**< @brief allows to provide the number of threads per block help description.  */
+  int GPUIndex_arg;	/**< @brief allows to specify the device id of the GPU used for the computation (default='0').  */
+  char * GPUIndex_orig;	/**< @brief allows to specify the device id of the GPU used for the computation original value given at command line.  */
+  const char *GPUIndex_help; /**< @brief allows to specify the device id of the GPU used for the computation help description.  */
   int benchmark_flag;	/**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous (default=off).  */
   const char *benchmark_help; /**< @brief Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous help description.  */
   
@@ -109,9 +113,9 @@ struct gengetopt_args_info
   unsigned int debug_given ;	/**< @brief Whether debug was given.  */
   unsigned int savedistances_given ;	/**< @brief Whether savedistances was given.  */
   unsigned int saveall_given ;	/**< @brief Whether saveall was given.  */
+  unsigned int savepath_given ;	/**< @brief Whether savepath was given.  */
   unsigned int radius_given ;	/**< @brief Whether radius was given.  */
   unsigned int distance_given ;	/**< @brief Whether distance was given.  */
-  unsigned int normalize_given ;	/**< @brief Whether normalize was given.  */
   unsigned int neighbors_given ;	/**< @brief Whether neighbors was given.  */
   unsigned int initialization_given ;	/**< @brief Whether initialization was given.  */
   unsigned int lattice_given ;	/**< @brief Whether lattice was given.  */
@@ -120,6 +124,7 @@ struct gengetopt_args_info
   unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
   unsigned int forceGPU_given ;	/**< @brief Whether forceGPU was given.  */
   unsigned int threadsperblock_given ;	/**< @brief Whether threadsperblock was given.  */
+  unsigned int GPUIndex_given ;	/**< @brief Whether GPUIndex was given.  */
   unsigned int benchmark_given ;	/**< @brief Whether benchmark was given.  */
 
 } ;

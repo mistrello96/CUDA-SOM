@@ -14,6 +14,7 @@ option "verbose" v "enables debug print" flag off
 option "debug" d "enables advanced debug prints" flag off
 option "savedistances" - "save the distances between reads and final SOM in a file called 'distances.out'" flag off
 option "saveall" - "save the input and output SOM in files(include savedistances)" flag off
+option "savepath" - "PATH to where the output files will be saved" string optional default="./"
 option "radius" r "allows to chose the initial radius of the updating function" int optional default= "0"
 option "distance" - "allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto" string optional default="e" values="e","s","m","t"
 option "neighbors" - "allows to specify the neighbors function used in the learning process. Use g for gaussian, b for bubble or m for mexican hat" string optional default="g" values="b","g","m"
@@ -24,4 +25,5 @@ option "exponential" - "enables the exponential decay of the learning rate and/o
 option "normalizedistance" - "enables the normalized mean distance of the iteration" flag off
 option "forceGPU" - "Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size)" flag off
 option "threadsperblock" - "allows to provide the number of threads per block" int optional default="64"
+option "GPUIndex" - "allows to specify the device id of the GPU used for the computation" int optional default="0"
 option "benchmark" b "Run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous" flag off

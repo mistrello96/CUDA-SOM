@@ -41,6 +41,8 @@ int main(int argc, char **argv)
     bool saveall = ai.saveall_flag;
     // save distances to file
     bool savedistances = ai.savedistances_flag;
+    // PATH to the saving folder
+    std::string savePath = ai.savepath_arg;
     // number of rows in the martix
     int nRows = ai.nRows_arg;
     // number of column in the martix
@@ -71,6 +73,8 @@ int main(int argc, char **argv)
     bool normalizedistance = ai.normalizedistance_flag;
     // flag to move all computation on GPU
     bool forceGPU = ai.forceGPU_flag;
+    // device id used for computation
+    int deviceIndex = ai.GPUIndex_arg;
     // counter for times of Samples vector is presented to the SOM
     int nIter = 0;
     // declaration of some usefull variables
@@ -104,6 +108,18 @@ int main(int argc, char **argv)
         std::cout << "./a.out: '--iteration' ('-n') option required " << std::endl;
         exit(-1);
 
+    }
+    // checking other params
+    int devicesCount;
+    cudaGetDeviceCount(&devicesCount);
+    if(deviceIndex < devicesCount)
+    {
+        cudaSetDevice(deviceIndex);
+    }
+    else
+    {
+        std::cout << "Device not avaiable" << std::endl;
+        exit(-1);        
     }
 
     // READ THE INPUT FILE
@@ -221,7 +237,7 @@ int main(int argc, char **argv)
     // save the initial SOM to file
     if (debug | saveall)
     {
-        saveSOMtoFile("initialSOM.out", h_Matrix, nRows, nColumns, nElements);
+        saveSOMtoFile(savePath + "/initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
     
 	// inizializing actual values of lr, radius and accuracy
@@ -266,7 +282,7 @@ int main(int argc, char **argv)
         std::ofstream myfile;
         if(nIter == (maxnIter-1) && (savedistances || saveall))
         {   
-            myfile.open("distances.out");
+            myfile.open(savePath + "/distances.out");
         }
             
 
@@ -402,7 +418,7 @@ int main(int argc, char **argv)
     // save trainde SOM to file
     if (debug | saveall)
     {
-        saveSOMtoFile("outputSOM.out", h_Matrix, nRows, nColumns, nElements);
+        saveSOMtoFile(savePath + "/outputSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
 
 	//freeing all allocated memory

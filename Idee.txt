@@ -1,7 +1,6 @@
 TODO:
 
 - Toroidale (iniziato per la rettangolare, da testare)
-- specificare id gpu
 
 
 
