@@ -1,0 +1,12 @@
+RISULTATI TESTING GPU
+Leucemia, 100 iterazioni, 0.9 secondi
+Leucemia, 500 iterazioni, 3.3 secondi
+Leucemia, 1000 iterazioni, 6.3 secondi
+Leucemia, 5000 iterazioni, 30 secondi
+Melanoma, 100 iterazioni, 6.5 secondi
+Melanoma, 500 iterazioni, 31.3 secondi
+Melanoma, 1000 iterazioni, 63 secondi
+Melanoma, 5000 iterazioni, 308 secondi
+Big Data, 100 iterazioni, 409 secondi
+Big Data, 500 iterazioni, 2100 secondi
+Fibroid, 100 iterazioni, 1550 secondi
