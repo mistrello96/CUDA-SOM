@@ -46,8 +46,8 @@ get_best_k_wss <- function(seqdata) {
 #setwd("C:\\Users\\aresio\\Documents\\PythonCode\\clustering")
 
 # read and format files
-input_file = "bigData.txt" # dati raw
-test_name = "bigData"
+input_file = "Fibroid.txt" # dati raw
+test_name = "Fibroid"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
 seqdata <- as.matrix(seqdata_original)
 #best_clustering <- get_best_k(seqdata);
@@ -58,7 +58,7 @@ seqdata <- as.matrix(seqdata_original)
   # main plot
   D <- optimal_som(seqdata);
   #debug(supersom);
-  system.time(som_model <- supersom(seqdata, rlen=100, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores = 1))
+  system.time(som_model <- supersom(seqdata, rlen=100, radius=23, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean"))
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
  # cluster = hclust(object.distances(som_model, "codes"))
@@ -97,5 +97,5 @@ seqdata <- as.matrix(seqdata_original)
 
 # further tests
 #plot(som_model, type="mapping", shape="straight", main=paste("Mapping - ", test_name))
-plot(om_model, type="changes")
+plot(som_model, type="changes")
 #plot(som_model, type="count",  shape="straight", main=paste("Counts - ", test_name))
