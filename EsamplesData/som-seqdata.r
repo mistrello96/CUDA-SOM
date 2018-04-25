@@ -46,7 +46,7 @@ get_best_k_wss <- function(seqdata) {
 #setwd("C:\\Users\\aresio\\Documents\\PythonCode\\clustering")
 
 # read and format files
-input_file = "Cells.txt" # dati raw
+input_file = "LimitR.txt" # dati raw
 test_name = "Fibroid"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
 seqdata <- as.matrix(seqdata_original)

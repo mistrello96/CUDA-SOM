@@ -2,7 +2,7 @@ TODO:
 
 - Toroidale (iniziato per la rettangolare, da testare)
 
-
+NB, implementazione esistente supporta un massimo di 10000000 di elementi(reads*features);
 
 STRINGA DI COMPILAZIONE:
 
