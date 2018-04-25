@@ -4,6 +4,8 @@ TODO:
 
 NB, implementazione esistente supporta un massimo di 10000000 di elementi(reads*features);
 
+GPU influente nel clock più che nel numero di cores(1050ti batte titan z)
+
 STRINGA DI COMPILAZIONE:
 
 nvcc -std=c++11 -Xptxas= -O3 --use_fast_math -gencode arch=compute_30,code=sm_30 -gencode arch=compute_35,code=sm_35 -gencode arch=compute_50,code=sm_50 -gencode arch=compute_52,code=sm_52 -gencode arch=compute_60,code=sm_60 -gencode arch=compute_61,code=sm_61 ./src/SOM.cu ./src/cmdline.c 

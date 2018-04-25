@@ -1,4 +1,4 @@
-RISULTATI TESTING GPU
+RISULTATI TESTING GPU(Titan Z, cpu 4790k a 4.4 GHZ)
 Leucemia, 100 iterazioni, 0.9 secondi -- 0.124
 Leucemia, 500 iterazioni, 3.3 secondi -- 0.103
 Leucemia, 1000 iterazioni, 6.3 secondi -- 0.224
