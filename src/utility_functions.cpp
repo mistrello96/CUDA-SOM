@@ -64,36 +64,26 @@ double mexican_hat(double distance, int radius)
 }
 	
  __device__ 
-int ComputeDistanceHexGrid(int ax, int ay, int bx, int by)
+int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
 {
-    // compute distance as we would on a normal grid
-    int xdist = ax - bx;
-    int ydist = ay - by;
+    int du = x2 - x1;
+    int dv = (y2 + x2 / 2) - (y1 + x1 / 2);
+    if((du >= 0 && dv >= 0) || (du < 0 && dv < 0))
+        return max(abs(du), abs(dv));
+    else
+        return abs(du) + abs(dv);
+}
 
-    // compensate for grid deformation
-    // grid is stretched along (-n, n) line so points along that line havea distance of 2 between them instead of 1
-
-    // to calculate the shortest path, we decompose it into one diagonal movement(shortcut and one straight movement along an axis
-
-    int lesserCoord = abs(xdist) < abs(ydist) ? abs(xdist) : abs(ydist);
-    int diagx = (xdist < 0) ? -lesserCoord : lesserCoord; // keep the sign 
-    int diagy = (ydist < 0) ? -lesserCoord : lesserCoord; // keep the sign
-
-    // one of x or y should always be 0 because we are calculating a straight line along one of the axis
-    int strx = xdist - diagx;
-    int stry = ydist - diagy;
-
-    // calculate distance
-    int straightDistance = abs(strx) + abs(stry);
-    int diagonalDistance = abs(diagx);
-
-    // if we are traveling diagonally along the stretch deformation we double the diagonal distance
-    if ( (diagx > 0 && diagy < 0) || (diagx < 0 && diagy > 0) )
-    {
-        diagonalDistance *= 2;
-    }
-
-    return straightDistance + diagonalDistance;
+//TODO
+ __device__ 
+int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2)
+{
+    int du = x2 - x1;
+    int dv = (y2 + x2 / 2) - (y1 + x1 / 2);
+    if((du >= 0 && dv >= 0) || (du < 0 && dv < 0))
+        return max(abs(du), abs(dv));
+    else
+        return abs(du) + abs(dv);
 }
 
 // run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous

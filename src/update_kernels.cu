@@ -77,10 +77,6 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
-        //int x = threadindex / nColumns;
-        //int y = threadindex % nColumns;
-        //int BMU_x = BMUIndex / nColumns;
-        //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is exagonal
         int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
         if (distance <= radius)
