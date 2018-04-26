@@ -1,6 +1,6 @@
 TODO:
 
-- Toroidale (iniziato per la rettangolare, da testare)
+- Toroidale (solo esagonale)
 
 NB, implementazione esistente supporta un massimo di 10000000 di elementi(reads*features);
 

@@ -66,24 +66,22 @@ double mexican_hat(double distance, int radius)
  __device__ 
 int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
 {
-    int du = x2 - x1;
-    int dv = (y2 + x2 / 2) - (y1 + x1 / 2);
-    if((du >= 0 && dv >= 0) || (du < 0 && dv < 0))
-        return max(abs(du), abs(dv));
-    else
-        return abs(du) + abs(dv);
+    x1 = x1 - y1 / 2;
+    x2 = x2 - y2 / 2;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    return max(max(abs(dx), abs(dy)), abs(dx+dy));
 }
 
 //TODO
  __device__ 
 int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2)
 {
-    int du = x2 - x1;
-    int dv = (y2 + x2 / 2) - (y1 + x1 / 2);
-    if((du >= 0 && dv >= 0) || (du < 0 && dv < 0))
-        return max(abs(du), abs(dv));
-    else
-        return abs(du) + abs(dv);
+    x1 = x1 - y1 / 2;
+    x2 = x2 - y2 / 2;
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    return max(max(abs(dx), abs(dy)), abs(dx+dy));
 }
 
 // run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous

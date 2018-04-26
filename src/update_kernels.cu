@@ -47,10 +47,10 @@ __global__ void update_SOM_toroidal(double* k_Matrix, double* k_Samples, double 
     if (threadindex < nNeuron){
         int X = abs((threadindex / nColumns) - (BMUIndex / nColumns));
         int Y = abs((threadindex % nColumns) - (BMUIndex % nColumns));
-        if (X > abs(threadindex / nColumns)+nColumns-(BMUIndex / nColumns))
-       		X =	abs(threadindex / nColumns)+nColumns-(BMUIndex / nColumns);
-       	if (Y > abs(threadindex % nColumns)+nRows-(BMUIndex % nColumns))
-       		Y = abs(threadindex % nColumns)+nRows-(BMUIndex % nColumns);
+        if (X > abs(threadindex / nColumns)+nRows-(BMUIndex / nColumns))
+       		X =	abs(threadindex / nColumns)+nRows-(BMUIndex / nColumns);
+       	if (Y > abs(threadindex % nColumns)+nColumns-(BMUIndex % nColumns))
+       		Y = abs(threadindex % nColumns)+nColumns-(BMUIndex % nColumns);
         // compute distance if lattice is square
         int distance = sqrtf((X * X) + (Y * Y));
         if (distance <= radius)
@@ -104,7 +104,7 @@ __global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
         // compute distance if lattice is exagonal
-        int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
+        int distance = ComputeDistanceHexGridToroidal(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
         if (distance <= radius)
         {
             double neigh =0;

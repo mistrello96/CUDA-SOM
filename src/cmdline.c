@@ -52,6 +52,7 @@ const char *gengetopt_args_info_help[] = {
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
   "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for picking random vectors from the\n                                  input file  (possible values=\"r\", \"c\"\n                                  default=`c')",
   "      --lattice=STRING          allows to choose what tipe of lattice is used\n                                  for the SOM representation. Use s for square\n                                  lattice or e for exagonal lattice  (possible\n                                  values=\"s\", \"e\" default=`e')",
+  "      --toroidal                chose between planar topology and toroidal\n                                  topology for edges of the map  (default=off)",
   "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
   "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and/or the radius. Use l for learning\n                                  rate, r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
   "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
@@ -109,6 +110,7 @@ void clear_given (struct gengetopt_args_info *args_info)
   args_info->neighbors_given = 0 ;
   args_info->initialization_given = 0 ;
   args_info->lattice_given = 0 ;
+  args_info->toroidal_given = 0 ;
   args_info->randomize_given = 0 ;
   args_info->exponential_given = 0 ;
   args_info->normalizedistance_given = 0 ;
@@ -150,6 +152,7 @@ void clear_args (struct gengetopt_args_info *args_info)
   args_info->initialization_orig = NULL;
   args_info->lattice_arg = gengetopt_strdup ("e");
   args_info->lattice_orig = NULL;
+  args_info->toroidal_flag = 0;
   args_info->randomize_flag = 1;
   args_info->exponential_arg = gengetopt_strdup ("n");
   args_info->exponential_orig = NULL;
@@ -186,13 +189,14 @@ void init_args_info(struct gengetopt_args_info *args_info)
   args_info->neighbors_help = gengetopt_args_info_help[15] ;
   args_info->initialization_help = gengetopt_args_info_help[16] ;
   args_info->lattice_help = gengetopt_args_info_help[17] ;
-  args_info->randomize_help = gengetopt_args_info_help[18] ;
-  args_info->exponential_help = gengetopt_args_info_help[19] ;
-  args_info->normalizedistance_help = gengetopt_args_info_help[20] ;
-  args_info->forceGPU_help = gengetopt_args_info_help[21] ;
-  args_info->threadsperblock_help = gengetopt_args_info_help[22] ;
-  args_info->GPUIndex_help = gengetopt_args_info_help[23] ;
-  args_info->benchmark_help = gengetopt_args_info_help[24] ;
+  args_info->toroidal_help = gengetopt_args_info_help[18] ;
+  args_info->randomize_help = gengetopt_args_info_help[19] ;
+  args_info->exponential_help = gengetopt_args_info_help[20] ;
+  args_info->normalizedistance_help = gengetopt_args_info_help[21] ;
+  args_info->forceGPU_help = gengetopt_args_info_help[22] ;
+  args_info->threadsperblock_help = gengetopt_args_info_help[23] ;
+  args_info->GPUIndex_help = gengetopt_args_info_help[24] ;
+  args_info->benchmark_help = gengetopt_args_info_help[25] ;
   
 }
 
@@ -405,6 +409,8 @@ cmdline_parser_dump(FILE *outfile, struct gengetopt_args_info *args_info)
     write_into_file(outfile, "initialization", args_info->initialization_orig, cmdline_parser_initialization_values);
   if (args_info->lattice_given)
     write_into_file(outfile, "lattice", args_info->lattice_orig, cmdline_parser_lattice_values);
+  if (args_info->toroidal_given)
+    write_into_file(outfile, "toroidal", 0, 0 );
   if (args_info->randomize_given)
     write_into_file(outfile, "randomize", 0, 0 );
   if (args_info->exponential_given)
@@ -706,6 +712,7 @@ cmdline_parser_internal (
         { "neighbors",	1, NULL, 0 },
         { "initialization",	1, NULL, 0 },
         { "lattice",	1, NULL, 0 },
+        { "toroidal",	0, NULL, 0 },
         { "randomize",	0, NULL, 0 },
         { "exponential",	1, NULL, 0 },
         { "normalizedistance",	0, NULL, 0 },
@@ -938,6 +945,18 @@ cmdline_parser_internal (
                 &(local_args_info.lattice_given), optarg, cmdline_parser_lattice_values, "e", ARG_STRING,
                 check_ambiguity, override, 0, 0,
                 "lattice", '-',
+                additional_error))
+              goto failure;
+          
+          }
+          /* chose between planar topology and toroidal topology for edges of the map.  */
+          else if (strcmp (long_options[option_index].name, "toroidal") == 0)
+          {
+          
+          
+            if (update_arg((void *)&(args_info->toroidal_flag), 0, &(args_info->toroidal_given),
+                &(local_args_info.toroidal_given), optarg, 0, 0, ARG_FLAG,
+                check_ambiguity, override, 1, 0, "toroidal", '-',
                 additional_error))
               goto failure;
           

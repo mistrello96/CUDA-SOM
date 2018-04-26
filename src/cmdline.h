@@ -83,6 +83,8 @@ struct gengetopt_args_info
   char * lattice_arg;	/**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice (default='e').  */
   char * lattice_orig;	/**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice original value given at command line.  */
   const char *lattice_help; /**< @brief allows to choose what tipe of lattice is used for the SOM representation. Use s for square lattice or e for exagonal lattice help description.  */
+  int toroidal_flag;	/**< @brief chose between planar topology and toroidal topology for edges of the map (default=off).  */
+  const char *toroidal_help; /**< @brief chose between planar topology and toroidal topology for edges of the map help description.  */
   int randomize_flag;	/**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. (default=on).  */
   const char *randomize_help; /**< @brief enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled. help description.  */
   char * exponential_arg;	/**< @brief enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both (default='n').  */
@@ -119,6 +121,7 @@ struct gengetopt_args_info
   unsigned int neighbors_given ;	/**< @brief Whether neighbors was given.  */
   unsigned int initialization_given ;	/**< @brief Whether initialization was given.  */
   unsigned int lattice_given ;	/**< @brief Whether lattice was given.  */
+  unsigned int toroidal_given ;	/**< @brief Whether toroidal was given.  */
   unsigned int randomize_given ;	/**< @brief Whether randomize was given.  */
   unsigned int exponential_given ;	/**< @brief Whether exponential was given.  */
   unsigned int normalizedistance_given ;	/**< @brief Whether normalizedistance was given.  */
