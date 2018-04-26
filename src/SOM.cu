@@ -71,6 +71,8 @@ int main(int argc, char **argv)
     bool randomizeDataset = ai.randomize_flag;
     // normalize the mean distance of each iteration
     bool normalizedistance = ai.normalizedistance_flag;
+    // toroidal topology flag
+    bool toroidal = ai.toroidal_flag;
     // flag to move all computation on GPU
     bool forceGPU = ai.forceGPU_flag;
     // device id used for computation
@@ -369,7 +371,20 @@ int main(int argc, char **argv)
             }
             else
             {
-                update_SOM<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                if (toroidal)
+                {
+                    if(lattice == 's')
+                        update_SOM_toroidal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                    else
+                        update_SOM_exagonal_toroidal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                }
+                else
+                {
+                    if(lattice == 's')
+                        update_SOM<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                    else
+                        update_SOM_exagonal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                }
             }
 
             cudaDeviceSynchronize();      

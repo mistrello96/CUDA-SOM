@@ -47,7 +47,7 @@ get_best_k_wss <- function(seqdata) {
 
 # read and format files
 input_file = "LimitR.txt" # dati raw
-test_name = "Fibroid"
+test_name = "TestLimite"
 seqdata_original <- read.csv(input_file, sep="\t", dec=".", header=FALSE)
 seqdata <- as.matrix(seqdata_original)
 #best_clustering <- get_best_k(seqdata);
@@ -58,7 +58,7 @@ seqdata <- as.matrix(seqdata_original)
   # main plot
   D <- optimal_som(seqdata);
   #debug(supersom);
-  system.time(som_model <- supersom(seqdata, rlen=10, radius=30, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores=1))
+  system.time(som_model <- supersom(seqdata, rlen=100, radius=41, alpha=c(0.1, 0.001), grid=somgrid(D,D,"hexagonal",toroidal = F),keep.data=T, dist.fcts="euclidean", cores=1))
   coolBlueHotRed <- function(n, alpha = 1) {rainbow(n, end=4/6, alpha=alpha)[n:1]}
   plot(som_model, type="dist.neighbours",  shape="straight", main=paste("Neighbours distances - ", test_name), palette.name = coolBlueHotRed)
  # cluster = hclust(object.distances(som_model, "codes"))

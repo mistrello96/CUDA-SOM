@@ -97,3 +97,29 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
         }
     }
 }
+
+__global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron, char neighborsType)
+{
+    // compute neuron's index
+    int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
+    if (threadindex < nNeuron){
+        // compute distance if lattice is exagonal
+        int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
+        if (distance <= radius)
+        {
+            double neigh =0;
+            // compute neigh param as requested
+            switch (neighborsType)
+            {
+                case 'g' : neigh = gaussian(distance, radius); break;
+                case 'b' : neigh = bubble(distance, radius); break;
+                case 'm' : neigh = mexican_hat(distance, radius); break;
+            }
+            // update all features of the neuron
+            for (int i = threadindex * nElements, j=0; j < nElements; i++,j++)
+            {
+                k_Matrix[i] = k_Matrix[i] + neigh * lr * (k_Samples[samplesIndex + j] - k_Matrix[i]);
+            }
+        }
+    }
+}
