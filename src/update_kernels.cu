@@ -45,6 +45,7 @@ __global__ void update_SOM_toroidal(double* k_Matrix, double* k_Samples, double 
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
+
         int X = abs((threadindex / nColumns) - (BMUIndex / nColumns));
         int Y = abs((threadindex % nColumns) - (BMUIndex % nColumns));
         if (X > abs(threadindex / nColumns)+nRows-(BMUIndex / nColumns))
@@ -52,7 +53,7 @@ __global__ void update_SOM_toroidal(double* k_Matrix, double* k_Samples, double 
        	if (Y > abs(threadindex % nColumns)+nColumns-(BMUIndex % nColumns))
        		Y = abs(threadindex % nColumns)+nColumns-(BMUIndex % nColumns);
         // compute distance if lattice is square
-        int distance = sqrtf((X * X) + (Y * Y));
+        int distance = ComputeDistanceToroidal(threadindex / nColumns, threadindex % nColumns, BMUIndex / nColumns, BMUIndex % nColumns, nRows, nColumns);
         if (distance <= radius)
         {
             double neigh = 0;
