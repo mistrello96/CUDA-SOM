@@ -63,6 +63,7 @@ double mexican_hat(double distance, int radius)
     return ((1 - (double)(distance*distance)/(double)(radius*radius)) * gaussian(distance, radius));
 }
 
+// compute distance between two neurons on a square toroidal map
 __device__ int ComputeDistanceToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns){
     int a = max(x1, x2);
     int b = min(x1,x2);
@@ -72,7 +73,8 @@ __device__ int ComputeDistanceToroidal(int x1, int y1, int x2, int y2, int nRows
     int y = min(c-d, d + nColumns - c);
     return sqrtf(x*x + y*y);
 }
-	
+
+// compute exagonal distance between two neurons	
  __device__ 
 int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
 {
@@ -83,6 +85,7 @@ int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
     return max(max(abs(dx), abs(dy)), abs(dx+dy));
 }
 
+// compute distance between two neurons on a exagonal toroidal map
 //TODO
  __device__ 
 int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2)

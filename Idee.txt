@@ -2,7 +2,7 @@ TODO:
 
 - Toroidale (solo esagonale)
 
-NB, implementazione esistente supporta un massimo di 10000000 di elementi(reads*features);
+NB, implementazione esistente supporta un massimo di 10'000'000 di elementi(reads*features);
 
 GPU influente nel clock più che nel numero di cores(1050ti batte titan z)
 
@@ -16,3 +16,5 @@ nvcc -std=c++11 -Xptxas= -O3 --use_fast_math -gencode arch=compute_61,code=sm_61
 nvcc -std=c++11 -Xptxas= -O3 --use_fast_math -gencode arch=compute_35,code=sm_35 ./src/SOM.cu ./src/cmdline.c
 
 --ptxas-options=-v
+
+
