@@ -17,13 +17,13 @@
 
 int main(int argc, char **argv)
 {
-	// reading passed params
+	// reading passed parameters
 	gengetopt_args_info ai;
     if (cmdline_parser (argc, argv, &ai) != 0)
     {
         exit(1);
     }
-    // checking if benchmark mode is set
+    // checking if benchmark mode is set. If so, launch benchmark function and terminate the program
     if(ai.benchmark_flag)
     {
         run_benchmark();
@@ -33,15 +33,15 @@ int main(int argc, char **argv)
 	// INIZIALIZING VARIABLES WITH DEFAULT VALUES
 	// path of the input file
 	std::string filePath = ai.inputfile_arg;
-	// verbose flag
+	// verbose
     bool verbose = ai.verbose_flag;
-    // advanced debug flag
+    // advanced debug
     bool debug = ai.debug_flag;
     // save SOM to file
     bool saveall = ai.saveall_flag;
     // save distances to file
     bool savedistances = ai.savedistances_flag;
-    // PATH to the saving folder
+    // PATH to the folder where saved file will be placed
     std::string savePath = ai.savepath_arg;
     // number of rows in the martix
     int nRows = ai.nRows_arg;
@@ -51,67 +51,72 @@ int main(int argc, char **argv)
     double ilr = ai.initial_learning_rate_arg;
     // final learning rate
     double flr = ai.final_learning_rate_arg;
-    // max number of iteration
+    // number of iteration(Epochs)
     int maxnIter = ai.iteration_arg;
-    // Initial radius of the update
+    // initial radius for the update function
     double initialRadius = ai.radius_arg;
-    // type of distance used
+    // type of distance
     char distanceType = ai.distance_arg[0];
-    // type of neighbors function used
+    // type of neighbors function
     char neighborsType = ai.neighbors_arg[0];
     // type of initialization
     char initializationType = ai.initialization_arg[0];
     // number of threads per block 
-    int tps = ai.threadsperblock_arg;
-    // type of lacttice used
+    int tpb = ai.threadsperblock_arg;
+    // type of lattice
     char lattice = ai.lattice_arg[0];
-    // exponential decay for radius and lr
+    // exponential decay for radius and/or lr
     char exponential = ai.exponential_arg[0];
-    // dataset presentation methon
+    // dataset presentation method
     bool randomizeDataset = ai.randomize_flag;
-    // normalize the mean distance of each iteration
+    // normalization of the mean distance of each iteration(epoch)
     bool normalizedistance = ai.normalizedistance_flag;
-    // toroidal topology flag
+    // toroidal topology
     bool toroidal = ai.toroidal_flag;
-    // flag to move all computation on GPU
+    // move all computation on GPU
     bool forceGPU = ai.forceGPU_flag;
     // device id used for computation
     int deviceIndex = ai.GPUIndex_arg;
-    // counter for times of Samples vector is presented to the SOM
+    // counter of epochs/iterations
     int nIter = 0;
-    // declaration of some usefull variables
+    
+    // DECLARATION OF USEFULL VARIABLES
+    // min and max values of neurons(used for random initialization)
     double min_neuronValue, max_neuronValue;
-    // number of lines in the input file
+    // number of lines/samples in the input file
     int nSamples;
     // total number of neurons in the SOM
     int nNeurons;
-    // total length of the matrix vector
+    // total length of the matrix vector (nNeurons*nElements)
     int totalLength;
-    // number of features per read
+    // number of features in each sample
     int nElements;
-    // number of blocks that needs to be launched
+    // number of blocks that needs to be launched on the GPU
     int nblocks;
-    // actual learning rate
+    // learning rate of the iteration
     double lr;
-    // actual radius
+    // radius of the iteration
     double radius;
-    // actual accuracy
+    // accuracy of the iteration
 	double accuracy;
-	// index of the Samples picked for the iteration
+	// index of the sample picked for the iteration
     int currentIndex;
-    // BMU distance
+    // BMU distance to the sample
     double BMU_distance;
     // BMU index
     unsigned int BMU_index;
+    // file used to save distances of samples to their BMU on the last epoch
+    std::ofstream distancesfile;
+
     //checking the requested params
     if(ilr == -1 || maxnIter == -1)
     {
         std::cout << "./a.out: '--initial_learning_rate' ('-s') option required" << std::endl;
         std::cout << "./a.out: '--iteration' ('-n') option required " << std::endl;
         exit(-1);
-
     }
-    // checking other params
+
+    // checking device requested. If abaiable, set the requested device
     int devicesCount;
     cudaGetDeviceCount(&devicesCount);
     if(deviceIndex < devicesCount)
@@ -126,13 +131,13 @@ int main(int argc, char **argv)
 
     // READ THE INPUT FILE
     // vector of samples used to train the SOM
-    std::vector <double> Samples;
-    // retrive the number of features for each read
-    nElements = readSamplesfromFile(Samples, filePath);
+    std::vector <double> samples;
+    // retrive the number of features for each sample
+    nElements = readSamplesfromFile(samples, filePath);
     // device copy of samples
     double *d_Samples;
-    cudaMalloc((void**)&d_Samples, sizeof(double) * Samples.size());
-    cudaMemcpy(d_Samples, &Samples[0], sizeof(double) * Samples.size(), cudaMemcpyHostToDevice);
+    cudaMalloc((void**)&d_Samples, sizeof(double) * samples.size());
+    cudaMemcpy(d_Samples, &samples[0], sizeof(double) * samples.size(), cudaMemcpyHostToDevice);
 
 
     // EXTRACTING THE MIN/MAX FROM SAMPLES(only used for random initialization)
@@ -141,18 +146,18 @@ int main(int argc, char **argv)
 	    // creating the thrust vector
 	    thrust::device_ptr<double> dptr(d_Samples);
 	    // extract the minimum
-	    thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + Samples.size());
+	    thrust::device_ptr<double> dresptr = thrust::min_element(dptr, dptr + samples.size());
 	    min_neuronValue = dresptr[0];
 	    // extract maximum
-	    dresptr = thrust::max_element(dptr, dptr + Samples.size());
+	    dresptr = thrust::max_element(dptr, dptr + samples.size());
 	    max_neuronValue = dresptr[0];
 	}
 
     // COMPUTE VALUES FOR THE SOM INITIALIZATION
     // retrive the number of samples
-    nSamples = Samples.size() / nElements;
+    nSamples = samples.size() / nElements;
 
-    // estimate the neurons number if not given
+    // estimate the neurons number if not given(using heuristic)
     if (nRows ==0 | nColumns == 0)
     {
     	int tmp = 5*(pow(nSamples, 0.54321));
@@ -172,7 +177,7 @@ int main(int argc, char **argv)
     totalLength = nRows * nColumns * nElements;
     
     // number of block used in the computation
-    nblocks = (nNeurons / tps) + 1;
+    nblocks = (nNeurons / tpb) + 1;
 
     // CHECKING COMPUTABILITY ON CUDA
     if (nblocks >= 65535)
@@ -182,18 +187,18 @@ int main(int argc, char **argv)
     }
 
     // CHECKING PARAMS COMPATIBILITY
-    if(normalizedistance && ((distanceType=='t') || (distanceType=='m')))
+    if(normalizedistance && (distanceType=='t'))
     {
-        std::cout << "NormalizeDistance option not avaiable with Manhattan or Tanimoto Distance" << std::endl;
+        std::cout << "NormalizeDistance option not avaiable with Tanimoto Distance" << std::endl;
         exit(-1);
     }
 
     // ALLOCATION OF THE STRUCTURES
     // host SOM representation(linearized matrix)
     double *h_Matrix = (double *)malloc(sizeof(double) * totalLength);
-    // host distance array, store each neuron's distance, uset to search BMU
+    // host distance array, store each neuron's distance, used to search BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
-    // host distance history array,store BMU distance for each read of the iteration, used to compute accuracy
+    // host distance history array, store BMU distance for each sample of the iteration, used to compute accuracy
     double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
     // device variables
     double *d_Matrix; 
@@ -208,7 +213,7 @@ int main(int argc, char **argv)
     // generating random seed
     std::random_device rd;
     std::mt19937 e2(rd());
-    // random values initializatoin between min and max values inluded in reads
+    // random values initializatoin between min and max values inluded in samples
     if (initializationType == 'r')
     {
         // uniform distribution of values
@@ -218,7 +223,7 @@ int main(int argc, char **argv)
 	    	h_Matrix[i] = dist(e2); 
 	    }
     }
-    // initialization with random reads choosen from the file passed
+    // initialization with random samples choosen from the file passed
     else
     {   
         // uniform distribution of indexes
@@ -228,7 +233,7 @@ int main(int argc, char **argv)
 	        int r = dist(e2);
 	        for (int k = i * nElements, j = 0; j < nElements; k++, j++)
 	        {
-	             h_Matrix[k] = Samples[r*nElements + j];
+	             h_Matrix[k] = samples[r*nElements + j];
 	        }
 	    }
 	}
@@ -242,7 +247,7 @@ int main(int argc, char **argv)
         saveSOMtoFile(savePath + "/initialSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
     
-	// inizializing actual values of lr, radius and accuracy
+	// inizializing values of lr, radius and accuracy for the first iteration
     lr = ilr;
     radius = initialRadius;
 	accuracy = DBL_MAX;
@@ -250,13 +255,15 @@ int main(int argc, char **argv)
     // debug print
     if(verbose | debug)
     {
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << nElements << " features fot each read, " << ilr << " initial learning rate, " << flr << " final learning rate, " << radius << " initial radius, ";
-        std::cout << maxnIter << " max total iteration, " << distanceType << " distance type, " << neighborsType << " neighbors function, ";
-        std::cout << initializationType << " initialization teqnique, " << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
-    
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " 
+        << nElements << " features fot each sample, " << ilr << " initial learning rate, " << flr << " final learning rate, "
+        << radius << " initial radius, " << maxnIter << " max total iteration, " << distanceType << " distance type, " 
+        << neighborsType << " neighbors function, " << initializationType << " initialization teqnique, " 
+        << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " 
+        << nSamples << " sample in the input file, " << nblocks << " blocks will be launched on the GPU" << std::endl;
     }
 
-    // initializing indexes, used to shuffle the Samples vector at each new iteration
+    // initializing indexes array, used to shuffle the samples vector at each new iteration
     int* randIndexes = new int[nSamples];
     for (int i = 0; i < nSamples; i++)
     {
@@ -264,7 +271,7 @@ int main(int argc, char **argv)
     }
 
 
-    // ITERATE UNTILL ACCURACY IS REACHED OR ITERATION ARE FINISHED
+    // ITERATE UNTILL MAXNITER IS REACHED
     while(nIter < maxnIter)
     {
     	// randomize indexes of samples if required
@@ -280,35 +287,35 @@ int main(int argc, char **argv)
             std::cout << "Radius of this iteration is " << radius << std::endl;
         }
 
-        // open file used for saving distances of reads at last iteration
-        std::ofstream myfile;
+        // open file used for saving distances of samples at last iteration
         if(nIter == (maxnIter-1) && (savedistances || saveall))
         {   
-            myfile.open(savePath + "/distances.out");
+            distancesfile.open(savePath + "/distances.out");
         }
             
 
-        // ITERATE ON EACH SAMPLE TO FIND BMU
+        // ITERATE ON EACH SAMPLE TO FIND CORRESPONDING BMU
 	    for(int s=0; s < nSamples ; s++)
         {
-            // computing the Sample index for this iteration
+            // computing the sample index for this iteration
             currentIndex = randIndexes[s]*nElements;
-    
+    		
+    		// device computation of distance between neurons and sample
 		    switch(distanceType)
             {
-		    	case 'e' : compute_distance_euclidean<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    	case 's' : compute_distance_sum_squares<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-		    	case 'm' : compute_distance_manhattan<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
-				case 't' : compute_distance_tanimoto<<<nblocks, tps>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 'e' : compute_distance_euclidean<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 's' : compute_distance_sum_squares<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 'm' : compute_distance_manhattan<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+				case 't' : compute_distance_tanimoto<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    }
 
 		    cudaDeviceSynchronize();
 
-            // chosing between CPU and GPU to find BMU 
+            // chosing between CPU and GPU to find BMU(CPU used by default, since the nNeurons array is not so big)
             if(forceGPU)
             {
                 // DEVICE IMPLEMENTATION TO FIND BMU
-                thrust::device_ptr<double> dptr2(d_Samples);
+                thrust::device_ptr<double> dptr2(d_Distance);
                 // extract the minimum
                 thrust::device_ptr<double> dresptr2 = thrust::min_element(dptr2, dptr2 + nNeurons);
                 BMU_distance = dresptr2[0];
@@ -332,10 +339,16 @@ int main(int argc, char **argv)
                 }
             }
 
+            // debug
+		    if(debug)
+            {
+			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
+            }
+
             // if last iteration and requesterd, save to file distances
             if (nIter == (maxnIter-1) && (savedistances || saveall))
             {
-                myfile << "The minimum distance of the "<< currentIndex << " read is " << BMU_distance << " at position " << BMU_index << "\n";
+                distancesfile << "The minimum distance of the "<< currentIndex << " sample is " << BMU_distance << " at position " << BMU_index << "\n";
             }
 
             // compute BMU distance as requested and save in the history array
@@ -349,17 +362,11 @@ int main(int argc, char **argv)
                 {
                     h_DistanceHistory[randIndexes[s]] = BMU_distance;
                 }
-                else if (distanceType=='e')
+                else if (distanceType=='e' | distanceType=='m')
                 {
                     BMU_distance = (BMU_distance) * (BMU_distance);
                     h_DistanceHistory[s] = BMU_distance;
                 }
-            }
-
-			// debug
-		    if(debug)
-            {
-			   std::cout << "The minimum distance is " << BMU_distance << " at position " << BMU_index << std::endl;
             }
 
 
@@ -374,16 +381,16 @@ int main(int argc, char **argv)
                 if (toroidal)
                 {
                     if(lattice == 's')
-                        update_SOM_toroidal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nRows, nColumns, radius, nNeurons, neighborsType);
+                        update_SOM_toroidal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nRows, nColumns, radius, nNeurons, neighborsType);
                     else
-                        update_SOM_exagonal_toroidal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                        update_SOM_exagonal_toroidal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
                 }
                 else
                 {
                     if(lattice == 's')
-                        update_SOM<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                        update_SOM<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
                     else
-                        update_SOM_exagonal<<<nblocks, tps>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                        update_SOM_exagonal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
                 }
             }
 

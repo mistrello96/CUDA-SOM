@@ -23,7 +23,7 @@ option "lattice" - "allows to choose what tipe of lattice is used for the SOM re
 option "toroidal" - "chose between planar topology and toroidal topology for edges of the SOM" flag off
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM(each epoch), all entrys are shuffled." flag on
 option "exponential" - "enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both" string optional default="n" values="n","l","r","b"
-option "normalizedistance" - "enables the normalized mean distance" flag off
+option "normalizedistance" - "enables the normalized mean distance. Not avaiable if Tanimoto distance is selected" flag off
 option "forceGPU" - "Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size)" flag off
 option "threadsperblock" - "allows to provide the number of threads per block" int optional default="64"
 option "GPUIndex" - "allows to specify the device id of the GPU used for the computation" int optional default="0"

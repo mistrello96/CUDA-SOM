@@ -37,25 +37,25 @@ const char *gengetopt_args_info_help[] = {
   "  -h, --help                    Print help and exit",
   "  -V, --version                 Print version and exit",
   "  -i, --inputfile=STRING        PATH to the input file  (default=`./')",
-  "  -x, --nRows=INT               allows to provide the number of rows in the\n                                  neuron's matrix  (default=`0')",
-  "  -y, --nColumns=INT            allows to provide the number of columns in the\n                                  neuron's matrix  (default=`0')",
-  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate of the\n                                  training process  (default=`-1')",
-  "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate of the\n                                  training process  (default=`0')",
+  "  -x, --nRows=INT               allows to provide the number of rows of the\n                                  neuron matrix  (default=`0')",
+  "  -y, --nColumns=INT            allows to provide the number of columns of the\n                                  neuron matrix  (default=`0')",
+  "  -s, --initial_learning_rate=DOUBLE\n                                allows to provide initial learning rate for the\n                                  training process  (default=`-1')",
+  "  -f, --final_learning_rate=DOUBLE\n                                allows to provide final learning rate for the\n                                  training process  (default=`0')",
   "  -n, --iteration=INT           number of times the dataset is presented to the\n                                  SOM  (default=`-1')",
   "  -v, --verbose                 enables debug print  (default=off)",
   "  -d, --debug                   enables advanced debug prints  (default=off)",
   "      --savedistances           save the distances between reads and final SOM\n                                  in a file called 'distances.out'\n                                  (default=off)",
-  "      --saveall                 save the input and output SOM in files(include\n                                  savedistances)  (default=off)",
-  "      --savepath=STRING         PATH to where the output files will be saved\n                                  (default=`./')",
-  "  -r, --radius=INT              allows to chose the initial radius of the\n                                  updating function  (default=`0')",
-  "      --distance=STRING         allows to chose different types of distance\n                                  function. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
+  "      --saveall                 save the input and output SOM in files. Save\n                                  also the distances between reads and final\n                                  SOM in a file called 'distances.out'\n                                  (default=off)",
+  "      --savepath=STRING         PATH to where saved files will be saved\n                                  (default=`./')",
+  "  -r, --radius=INT              allows to chose the initial radius used by the\n                                  updating function  (default=`0')",
+  "      --distance=STRING         allows to chose different types of distance\n                                  functions. Use e for euclidean, s for sum of\n                                  sqares, m for manhattan or t for tanimoto\n                                  (possible values=\"e\", \"s\", \"m\", \"t\"\n                                  default=`e')",
   "      --neighbors=STRING        allows to specify the neighbors function used\n                                  in the learning process. Use g for gaussian,\n                                  b for bubble or m for mexican hat  (possible\n                                  values=\"b\", \"g\", \"m\" default=`g')",
-  "      --initialization=STRING   allows to specify how initial weights are\n                                  initialized. Use r for random initialization\n                                  or c for picking random vectors from the\n                                  input file  (possible values=\"r\", \"c\"\n                                  default=`c')",
+  "      --initialization=STRING   allows to specify how initial weights of the\n                                  SOM are initialized. Use r for random\n                                  initialization or c for picking random\n                                  vectors from the input file  (possible\n                                  values=\"r\", \"c\" default=`c')",
   "      --lattice=STRING          allows to choose what tipe of lattice is used\n                                  for the SOM representation. Use s for square\n                                  lattice or e for exagonal lattice  (possible\n                                  values=\"s\", \"e\" default=`e')",
-  "      --toroidal                chose between planar topology and toroidal\n                                  topology for edges of the map  (default=off)",
-  "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM, all\n                                  entrys are shuffled.  (default=on)",
+  "      --toroidal                chose between planar topology and toroidal\n                                  topology for edges of the SOM  (default=off)",
+  "      --randomize               enables the randomization of the dataset.\n                                  Before presentig the dataset to the SOM(each\n                                  epoch), all entrys are shuffled.\n                                  (default=on)",
   "      --exponential=STRING      enables the exponential decay of the learning\n                                  rate and/or the radius. Use l for learning\n                                  rate, r for radius or b for both  (possible\n                                  values=\"n\", \"l\", \"r\", \"b\"\n                                  default=`n')",
-  "      --normalizedistance       enables the normalized mean distance of the\n                                  iteration  (default=off)",
+  "      --normalizedistance       enables the normalized mean distance. Not\n                                  avaiable if Tanimoto distance is selected\n                                  (default=off)",
   "      --forceGPU                Runs all possible computation on GPU. Use only\n                                  if your input file is big enought(use the\n                                  benchmark funtion to find out the minimum\n                                  file size)  (default=off)",
   "      --threadsperblock=INT     allows to provide the number of threads per\n                                  block  (default=`64')",
   "      --GPUIndex=INT            allows to specify the device id of the GPU used\n                                  for the computation  (default=`0')",
@@ -751,7 +751,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'x':	/* allows to provide the number of rows in the neuron's matrix.  */
+        case 'x':	/* allows to provide the number of rows of the neuron matrix.  */
         
         
           if (update_arg( (void *)&(args_info->nRows_arg), 
@@ -763,7 +763,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'y':	/* allows to provide the number of columns in the neuron's matrix.  */
+        case 'y':	/* allows to provide the number of columns of the neuron matrix.  */
         
         
           if (update_arg( (void *)&(args_info->nColumns_arg), 
@@ -775,7 +775,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 's':	/* allows to provide initial learning rate of the training process.  */
+        case 's':	/* allows to provide initial learning rate for the training process.  */
         
         
           if (update_arg( (void *)&(args_info->initial_learning_rate_arg), 
@@ -787,7 +787,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'f':	/* allows to provide final learning rate of the training process.  */
+        case 'f':	/* allows to provide final learning rate for the training process.  */
         
         
           if (update_arg( (void *)&(args_info->final_learning_rate_arg), 
@@ -831,7 +831,7 @@ cmdline_parser_internal (
             goto failure;
         
           break;
-        case 'r':	/* allows to chose the initial radius of the updating function.  */
+        case 'r':	/* allows to chose the initial radius used by the updating function.  */
         
         
           if (update_arg( (void *)&(args_info->radius_arg), 
@@ -867,7 +867,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* save the input and output SOM in files(include savedistances).  */
+          /* save the input and output SOM in files. Save also the distances between reads and final SOM in a file called 'distances.out'.  */
           else if (strcmp (long_options[option_index].name, "saveall") == 0)
           {
           
@@ -879,7 +879,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* PATH to where the output files will be saved.  */
+          /* PATH to where saved files will be saved.  */
           else if (strcmp (long_options[option_index].name, "savepath") == 0)
           {
           
@@ -893,7 +893,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to chose different types of distance function. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto.  */
+          /* allows to chose different types of distance functions. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto.  */
           else if (strcmp (long_options[option_index].name, "distance") == 0)
           {
           
@@ -921,7 +921,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* allows to specify how initial weights are initialized. Use r for random initialization or c for picking random vectors from the input file.  */
+          /* allows to specify how initial weights of the SOM are initialized. Use r for random initialization or c for picking random vectors from the input file.  */
           else if (strcmp (long_options[option_index].name, "initialization") == 0)
           {
           
@@ -949,7 +949,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* chose between planar topology and toroidal topology for edges of the map.  */
+          /* chose between planar topology and toroidal topology for edges of the SOM.  */
           else if (strcmp (long_options[option_index].name, "toroidal") == 0)
           {
           
@@ -961,7 +961,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* enables the randomization of the dataset. Before presentig the dataset to the SOM, all entrys are shuffled..  */
+          /* enables the randomization of the dataset. Before presentig the dataset to the SOM(each epoch), all entrys are shuffled..  */
           else if (strcmp (long_options[option_index].name, "randomize") == 0)
           {
           
@@ -987,7 +987,7 @@ cmdline_parser_internal (
               goto failure;
           
           }
-          /* enables the normalized mean distance of the iteration.  */
+          /* enables the normalized mean distance. Not avaiable if Tanimoto distance is selected.  */
           else if (strcmp (long_options[option_index].name, "normalizedistance") == 0)
           {
           
