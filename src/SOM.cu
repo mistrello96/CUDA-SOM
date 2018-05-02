@@ -351,7 +351,7 @@ int main(int argc, char **argv)
                 distancesfile << "The minimum distance of the "<< currentIndex << " sample is " << BMU_distance << " at position " << BMU_index << "\n";
             }
 
-            // compute BMU distance as required and save it in the history array
+            // compute BMU distance history as required and save it in the history array
             if(!normalizedistance)
             {
                 h_DistanceHistory[randIndexes[s]] = BMU_distance;
