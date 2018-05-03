@@ -88,13 +88,69 @@ int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
 // compute distance between two neurons on a exagonal toroidal map
 //TODO
  __device__ 
-int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2)
-{
-    x1 = x1 - y1 / 2;
-    x2 = x2 - y2 / 2;
-    int dx = x2 - x1;
-    int dy = y2 - y1;
-    return max(max(abs(dx), abs(dy)), abs(dx+dy));
+int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns){
+    if(x1 < x2)
+    {
+        if(y1 < y2)
+        {
+            int res = ComputeDistanceHexGrid(x1,y1,x2,y2);
+            int tmp = ComputeDistanceHexGrid(x1,y1,x2-nRows,y2);
+            if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1,x2,y2-nColumns);
+             if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1,x2-nRows,y2-nColumns);
+             if (res > tmp)
+                res = tmp;
+            return res;
+        }
+        else
+        {
+            int res = ComputeDistanceHexGrid(x1,y1,x2,y2);
+            int tmp = ComputeDistanceHexGrid(x1,y1,x2-nRows,y2);
+            if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1-nColumns,x2,y2);
+             if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1-nColumns,x2-nRows,y2);
+             if (res > tmp)
+                res = tmp;
+            return res;
+            }
+    }
+    else
+    {
+        if(y1 < y2)
+        {
+            int res = ComputeDistanceHexGrid(x1,y1,x2,y2);
+            int tmp = ComputeDistanceHexGrid(x1-nRows,y1,x2,y2);
+            if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1,x2,y2-nColumns);
+             if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1-nRows,y1,x2,y2-nColumns);
+             if (res > tmp)
+                res = tmp;
+            return res;
+            }
+        else
+        {
+            int res = ComputeDistanceHexGrid(x1,y1,x2,y2);
+            int tmp = ComputeDistanceHexGrid(x1-nRows,y1,x2,y2);
+            if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1,y1-nColumns,x2,y2);
+             if (res > tmp)
+                res = tmp;
+             tmp = ComputeDistanceHexGrid(x1-nRows,y1-nColumns,x2,y2);
+             if (res > tmp)
+                res = tmp;
+            return res;
+        }
+    }
 }
 
 // run a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous

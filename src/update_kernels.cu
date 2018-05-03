@@ -92,13 +92,13 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
     }
 }
 
-__global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron, char neighborsType)
+__global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nRows, int nColumns, int radius, int nNeuron, char neighborsType)
 {
     // compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
         // call function to compute distance in a toroidal exagonal map
-        int distance = ComputeDistanceHexGridToroidal(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
+        int distance = ComputeDistanceHexGridToroidal(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns, nRows, nColumns);
         if (distance <= radius)
         {
             double neigh =0;

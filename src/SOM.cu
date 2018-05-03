@@ -383,7 +383,7 @@ int main(int argc, char **argv)
                     if(lattice == 's')
                         update_SOM_toroidal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nRows, nColumns, radius, nNeurons, neighborsType);
                     else
-                        update_SOM_exagonal_toroidal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nColumns, radius, nNeurons, neighborsType);
+                        update_SOM_exagonal_toroidal<<<nblocks, tpb>>>(d_Matrix, d_Samples, lr, currentIndex, nElements, BMU_index, nRows, nColumns, radius, nNeurons, neighborsType);
                 }
                 else
                 {
