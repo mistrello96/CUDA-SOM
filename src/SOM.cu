@@ -303,8 +303,8 @@ int main(int argc, char **argv)
     		// device computation of distance between neurons and sample
 		    switch(distanceType)
             {
-		    	case 'e' :
-		    	case 's' : compute_distance<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 'e' : compute_distance_euclidean<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
+		    	case 's' : compute_distance_sum_squares<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    	case 'm' : compute_distance_manhattan<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 				case 't' : compute_distance_tanimoto<<<nblocks, tpb>>>(d_Matrix, d_Samples, currentIndex, d_Distance, nNeurons, nElements); break;
 		    }
@@ -320,10 +320,6 @@ int main(int argc, char **argv)
                 thrust::device_ptr<double> dresptr2 = thrust::min_element(dptr2, dptr2 + nNeurons);
                 BMU_distance = dresptr2[0];
                 BMU_index = dresptr2 - dptr2;
-                // distinction between euclidean and sum of square distance
-                if (distanceType == 'e')
-                	BMU_distance = sqrt(BMU_distance);
-
             }
             else
             {
@@ -341,9 +337,6 @@ int main(int argc, char **argv)
                         BMU_index = m;
                     }
                 }
-                // distinction between euclidean and sum of square distance
-                if (distanceType == 'e')
-                	BMU_distance = sqrt(BMU_distance);
             }
 
             // debug
