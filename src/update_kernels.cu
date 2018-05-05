@@ -1,5 +1,5 @@
 // kernel to update SOM after the BMU has been found. Called only if radius of the update is 0, so only BMU will be updated
-__global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, char neighborsType)
+__global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex)
 {
 	// update all features of the BMU
     for (int i = BMUIndex * nElements, j=0; j < nElements; i++, j++)
@@ -14,10 +14,6 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
     if (threadindex < nNeuron){
-        //int x = threadindex / nColumns;
-        //int y = threadindex % nColumns;
-        //int BMU_x = BMUIndex / nColumns;
-        //int BMU_y = (BMUIndex % nColumns);
         // compute distance if lattice is square
         int distance = sqrtf(((threadindex / nColumns) - (BMUIndex / nColumns)) * ((threadindex / nColumns) - (BMUIndex / nColumns)) + ((threadindex % nColumns) - (BMUIndex % nColumns)) * ((threadindex % nColumns) - (BMUIndex % nColumns)));
         if (distance <= radius)

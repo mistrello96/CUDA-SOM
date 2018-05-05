@@ -44,7 +44,7 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
 __device__
 double gaussian(double distance, int radius)
 {
-    return exp(- (double)(distance * distance)/(double)(2 * radius * radius));
+    return exp(- (distance * distance)/(2 * radius * radius));
 }
 
 // bubble distance between two neurons
@@ -60,15 +60,14 @@ int bubble(double distance, int radius)
 __device__
 double mexican_hat(double distance, int radius)
 {
-    return ((1 - (double)(distance*distance)/(double)(radius*radius)) * gaussian(distance, radius));
+    return ((1 - (distance*distance)/(radius*radius)) * gaussian(distance, radius));
 }
 
 // compute distance between two neurons on a square toroidal map
 __device__ int ComputeDistanceToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns){
-    int a = max(x1, x2);
-    int b = min(x1,x2);
-    int c = max(y1,y2);
-    int d = min(y1,y2);
+    int a,b,c,d;
+	(x1>x2) ? (a = x1, b = x2) : (a = x2, b = x1);
+	(y1>y2) ? (c = y1, d = y2) : (c = y2, d = y1);
     int x = min(a-b, b + nRows - a);
     int y = min(c-d, d + nColumns - c);
     return sqrtf(x*x + y*y);

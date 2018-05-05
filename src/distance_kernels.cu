@@ -1,4 +1,4 @@
-__global__ void compute_distance_euclidean(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
+__global__ void compute_distance(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {
 	// getting the index of the thread
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
@@ -13,24 +13,6 @@ __global__ void compute_distance_euclidean(double* k_matrix, double* k_Samples, 
 
 		// save the distance of the neuron in distance vector
 		k_distance[index] = sqrt(tmp);
-	}
-}
-
-__global__ void compute_distance_sum_squares(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
-{
-	// getting the index of the thread
-	int index = threadIdx.x + blockDim.x * blockIdx.x;
-	if (index < nNeuron)
-	{
-		// tmp will store the distances of the neuron's component
-		double tmp = 0;
-		for(int i = 0; i < nElements; i++)
-		{
-			tmp = tmp + (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]) * (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]);
-		}
-
-		// save the distance of the neuron in distance vector
-		k_distance[index] = tmp;
 	}
 }
 
