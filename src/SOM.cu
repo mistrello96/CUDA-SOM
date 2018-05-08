@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     // host array of the distances, it stores each neuron distance from the sample, used to search BMU
     double *h_Distance = (double *) malloc(sizeof(double) * nNeurons);
     // host distance history array, it stores BMU distance for each sample of the iteration, used to compute accuracy
-    double* h_DistanceHistory = (double *)malloc(sizeof(double) * nSamples);
+    double h_DistanceHistory = 0;
     // device variables
     double *d_Matrix; 
     double *d_Distance;
@@ -354,18 +354,18 @@ int main(int argc, char **argv)
             // compute BMU distance history as required and save it in the history array
             if(!normalizedistance)
             {
-                h_DistanceHistory[randIndexes[s]] = BMU_distance;
+                h_DistanceHistory += BMU_distance;
             }
             else
             {
                 if(distanceType=='s')
                 {
-                    h_DistanceHistory[randIndexes[s]] = BMU_distance;
+                    h_DistanceHistory += BMU_distance;
                 }
                 else if (distanceType=='e' | distanceType=='m')
                 {
                     BMU_distance = (BMU_distance) * (BMU_distance);
-                    h_DistanceHistory[s] = BMU_distance;
+                    h_DistanceHistory += BMU_distance;
                 }
             }
 
@@ -402,15 +402,13 @@ int main(int argc, char **argv)
         // computing accuracy as required
         if(!normalizedistance)
         {
-        	cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
-            thrust::device_ptr<double> dptr(d_DistanceHistory);
-            accuracy = thrust::reduce(dptr, dptr + nSamples);            
+            accuracy = h_DistanceHistory;
+            h_DistanceHistory = 0;            
         }
         else
         {
-            cudaMemcpy(d_DistanceHistory, h_DistanceHistory, sizeof(double) * nSamples, cudaMemcpyHostToDevice);
-            thrust::device_ptr<double> dptr(d_DistanceHistory);
-            accuracy = sqrt(thrust::reduce(dptr, dptr + nSamples) / nElements) / nSamples;  
+            accuracy = sqrt(h_DistanceHistory / nElements) / nSamples;
+            h_DistanceHistory = 0;  
         }
 
         // debug print
@@ -451,6 +449,5 @@ int main(int argc, char **argv)
     free(h_Matrix);
     free(h_Distance);
     free(randIndexes);
-    free(h_DistanceHistory);
 
 }
