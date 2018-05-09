@@ -29,7 +29,8 @@ int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 }
 
 // same the SOM to a file. First two lines are nRows and Ncolumns. Neurons are \n separated, features are \t separated
-void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements){
+void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements)
+{
     std::ofstream myfile;
     myfile.open (filePath.c_str());
     myfile << "nRows \n" << nRows << "\n" << "nColumns \n" << nColumns << "\n";
@@ -64,7 +65,8 @@ double mexican_hat(double distance, int radius)
 }
 
 // compute distance between two neurons on a square toroidal map
-__device__ int ComputeDistanceToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns){
+__device__ int ComputeDistanceToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns)
+{
     int a,b,c,d;
 	(x1>x2) ? (a = x1, b = x2) : (a = x2, b = x1);
 	(y1>y2) ? (c = y1, d = y2) : (c = y2, d = y1);
@@ -87,7 +89,8 @@ int ComputeDistanceHexGrid(int x1, int y1, int x2, int y2)
 // compute distance between two neurons on a exagonal toroidal map
 //TODO
  __device__ 
-int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns){
+int ComputeDistanceHexGridToroidal(int x1, int y1, int x2, int y2, int nRows, int nColumns)
+{
     if(x1 < x2)
     {
         if(y1 < y2)
