@@ -8,11 +8,9 @@
 #include <chrono>
 
 #include "utility_functions.cpp"
-#include "distance_kernels.cpp"
-#include "update_kernels.cpp"
+#include "distance_functions.cpp"
+#include "update_functions.cpp"
 #include "cmdline.h"
-
-
 
 int main(int argc, char **argv)
 {
@@ -106,8 +104,12 @@ int main(int argc, char **argv)
     std::vector <double> samples;
     // retrive the number of features in each sample
     nElements = readSamplesfromFile(samples, filePath);
+
+    // COMPUTE VALUES FOR THE SOM INITIALIZATION
+    // retrive the number of samples
     nSamples = samples.size() / nElements;
     double *h_Samples = (double *)malloc(sizeof(double) * samples.size());
+    // copy from vector to array
     for (int i = 0; i < samples.size(); i++)
     {
         h_Samples[i] = samples[i];
@@ -119,10 +121,6 @@ int main(int argc, char **argv)
         min_neuronValue = *std::min_element(h_Samples, h_Samples + samples.size());
         max_neuronValue = *std::max_element(h_Samples, h_Samples + samples.size());
 	}
-
-    // COMPUTE VALUES FOR THE SOM INITIALIZATION
-    // retrive the number of samples
-
 
     // estimate the neuron number if not given(using heuristic)
     if (nRows ==0 | nColumns == 0)
@@ -203,12 +201,7 @@ int main(int argc, char **argv)
     // debug print
     if(verbose | debug)
     {
-        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " 
-        << nElements << " features fot each sample, " << ilr << " initial learning rate, " << flr << " final learning rate, "
-        << radius << " initial radius, " << maxnIter << " max total iteration, " << distanceType << " distance type, " 
-        << neighborsType << " neighbors function, " << initializationType << " initialization teqnique, " 
-        << lattice << " lacttice, " << exponential << " type of decay, " << randomizeDataset << " randomized input, " 
-        << nSamples << " sample in the input file, " << std::endl;
+        std::cout << "Running the program with " << nRows  << " rows, " << nColumns << " columns, " << nNeurons << " neurons, " << radius << " initial radius, "<< std::endl;
     }
 
     // initializing index array, used to shuffle the sample vector at each new iteration
@@ -248,7 +241,7 @@ int main(int argc, char **argv)
             // computing the sample index for ongoing iteration
             currentIndex = randIndexes[s]*nElements;
     		
-    		// device computation of distance between neurons and sample
+    		// computation of distance between neurons and sample
 		    switch(distanceType)
             {
 		    	case 'e' : compute_distance_euclidean(h_Matrix, h_Samples, currentIndex, h_Distance, nNeurons, nElements); break;
@@ -301,7 +294,7 @@ int main(int argc, char **argv)
 
 
             // UPDATE THE NEIGHBORS
-            // call the kernel function to update the device SOM
+            // call the function to update the SOM
             if(radius == 0)
             {
                 update_BMU(h_Matrix, h_Samples, lr, currentIndex, nElements, BMU_index);
