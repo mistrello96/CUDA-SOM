@@ -1,8 +1,8 @@
-NB, implementazione esistente(R) supporta un massimo di 10'000'000 di elementi(reads*features);
+NB, implementazione esistente(R) supporta un massimo di 10'000'000 di elementi(reads*features)(macchina da 8 giga di ram). Gestione della memoria orribille;
 
 GPU influente nel clock più che nel numero di cores(1050ti batte titan z / x)
 
-Sullo stesso file, lo speed up non dipende dalle iterazioni, aumento lineare del tempo.
+Sullo stesso file, lo speed up non dipende dalle iterazioni.
 
 STRINGA DI COMPILAZIONE:
 

@@ -64,6 +64,7 @@ __global__ void update_SOM_toroidal(double* k_Matrix, double* k_Samples, double 
     }
 }
 
+// kernel to update a exagonal SOM after the BMU has been found. Called when radius is > 0, all the SOM neurons will be updated. 
 __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nColumns, int radius, int nNeuron, char neighborsType)
 {
 	// compute neuron's index
@@ -91,6 +92,7 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
     }
 }
 
+// kernel to update a exagonal toroidal SOM after the BMU has been found. Called when radius is > 0, all the SOM neurons will be updated. 
 __global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex, int nRows, int nColumns, int radius, int nNeuron, char neighborsType)
 {
     // compute neuron's index
