@@ -13,7 +13,8 @@ __global__ void update_SOM(double* k_Matrix, double* k_Samples, double lr, int s
 {
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
+    if (threadindex < nNeuron)
+    {
         // compute distance if lattice is square
         int distance = sqrtf(((threadindex / nColumns) - (BMUIndex / nColumns)) * ((threadindex / nColumns) - (BMUIndex / nColumns)) + ((threadindex % nColumns) - (BMUIndex % nColumns)) * ((threadindex % nColumns) - (BMUIndex % nColumns)));
         if (distance <= radius)
@@ -40,7 +41,8 @@ __global__ void update_SOM_toroidal(double* k_Matrix, double* k_Samples, double 
 {
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
+    if (threadindex < nNeuron)
+    {
         // call function to compute distance in a toroidal square map
         int distance = ComputeDistanceToroidal(threadindex / nColumns, threadindex % nColumns, BMUIndex / nColumns, BMUIndex % nColumns, nRows, nColumns);
         if (distance <= radius)
@@ -66,7 +68,8 @@ __global__ void update_SOM_exagonal(double* k_Matrix, double* k_Samples, double 
 {
 	// compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
+    if (threadindex < nNeuron)
+    {
         // call function to compute distance in a exagonal map
         int distance = ComputeDistanceHexGrid(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns);
         if (distance <= radius)
@@ -92,7 +95,8 @@ __global__ void update_SOM_exagonal_toroidal(double* k_Matrix, double* k_Samples
 {
     // compute neuron's index
     int threadindex = threadIdx.x + blockDim.x * blockIdx.x;
-    if (threadindex < nNeuron){
+    if (threadindex < nNeuron)
+    {
         // call function to compute distance in a toroidal exagonal map
         int distance = ComputeDistanceHexGridToroidal(BMUIndex / nColumns, BMUIndex % nColumns, threadindex / nColumns, threadindex % nColumns, nRows, nColumns);
         if (distance <= radius)

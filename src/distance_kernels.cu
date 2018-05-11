@@ -4,15 +4,18 @@ __global__ void compute_distance_euclidean(double* k_matrix, double* k_Samples, 
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nNeuron)
 	{
-		// tmp will store the distances of the neuron's component
-		double tmp = 0;
+		// tmpDistance will store the distances of the neuron's component
+		double tmpDistance = 0;
+		// elementDistance will store the distance of a single component
+		double elementDistance = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]) * (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]);
+			elementDistance = k_matrix[index * nElements+i] - k_Samples[currentIndex + i];
+			tmpDistance += elementDistance * elementDistance;
 		}
 
 		// save the distance of the neuron in distance vector
-		k_distance[index] = sqrt(tmp);
+		k_distance[index] = sqrt(tmpDistance);
 	}
 }
 
@@ -22,15 +25,18 @@ __global__ void compute_distance_sum_squares(double* k_matrix, double* k_Samples
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nNeuron)
 	{
-		// tmp will store the distances of the neuron's component
-		double tmp = 0;
+		// tmpDistance will store the distances of the neuron's component
+		double tmpDistance = 0;
+		// elementDistance will store the distance of a single component
+		double elementDistance = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]) * (k_matrix[index * nElements+i] - k_Samples[currentIndex + i]);
+			elementDistance = k_matrix[index * nElements+i] - k_Samples[currentIndex + i];
+			tmpDistance += elementDistance * elementDistance;
 		}
 
 		// save the distance of the neuron in distance vector
-		k_distance[index] = tmp;
+		k_distance[index] = tmpDistance;
 	}
 }
 
@@ -40,15 +46,15 @@ __global__ void compute_distance_manhattan(double* k_matrix, double* k_Samples, 
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nNeuron)
 	{
-		// tmp will store the distances of the neuron's component
-		double tmp = 0;
+		// tmpDistance will store the distances of the neuron's component
+		double tmpDistance = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			tmp = tmp + fabs(k_matrix[index * nElements+i] - k_Samples[currentIndex + i]);
+			tmpDistance += fabs(k_matrix[index * nElements+i] - k_Samples[currentIndex + i]);
 		}
 
 		// save the distance of the neuron in distance vector
-		k_distance[index] = tmp;
+		k_distance[index] = tmpDistance;
 	}
 }
 
@@ -63,9 +69,9 @@ __global__ void compute_distance_tanimoto(double* k_matrix, double* k_Samples, i
 		double norm2 = 0;
 		for(int i = 0; i < nElements; i++)
 		{
-			crossproduct = crossproduct + (k_matrix[index * nElements+i] * k_Samples[currentIndex + i]);
-			norm1 = norm1 + (k_matrix[index * nElements+i] * k_matrix[index * nElements+i]);
-			norm2 = norm2 + (k_Samples[currentIndex + i] * k_Samples[currentIndex + i]);
+			crossproduct += (k_matrix[index * nElements+i] * k_Samples[currentIndex + i]);
+			norm1 += (k_matrix[index * nElements+i] * k_matrix[index * nElements+i]);
+			norm2 += (k_Samples[currentIndex + i] * k_Samples[currentIndex + i]);
 
 		}
 		crossproduct = fabs(crossproduct);
