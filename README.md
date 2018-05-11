@@ -29,6 +29,7 @@ Here you can find some examples of the tool uses:
 1) The tool will use the file provided as input, will train for 1000 iteration with a  learning rate that 
 will linearly decay from 0.1 to 0.001. The distance between neurons and the input vector will be normalized. 
 The size of the SOM and the radius will be estimated runtime with heuristcs. Neurons will be represented by exagones.
+
 ./CUDA-SOM.out -i /folder/folder/inputfile.txt -n 1000 -s 0.1 -f 0.001 --normalizedistance
 
 2) The tool will use the file provided as input, will train for 5000 iteration with a learning rate that 
