@@ -1,3 +1,6 @@
+#include "update_kernels.h"
+#include "utility_functions.h"
+
 // kernel to update SOM after the BMU has been found. Called only if radius of the update is 0, so only BMU will be updated
 __global__ void update_BMU(double* k_Matrix, double* k_Samples, double lr, int samplesIndex, int nElements, int BMUIndex)
 {

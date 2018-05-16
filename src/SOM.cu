@@ -2,17 +2,15 @@
 #include <thrust/device_vector.h>
 #include <thrust/extrema.h>
 #include <unistd.h>
-#include <fstream>
-#include <sstream>
 #include <algorithm>
 #include <iostream>
 #include <random>
 #include <float.h>
-#include <chrono>
+#include <fstream>
 
-#include "utility_functions.cpp"
-#include "distance_kernels.cu"
-#include "update_kernels.cu"
+#include "utility_functions.h"
+#include "distance_kernels.h"
+#include "update_kernels.h"
 #include "cmdline.h"
 
 int main(int argc, char **argv)

@@ -1,3 +1,5 @@
+#include "distance_kernels.h"
+
 // kernel used to compute euclidean distance between each neuron and the selected sample
 __global__ void compute_distance_euclidean(double* k_matrix, double* k_Samples, int currentIndex, double* k_distance, int nNeuron, int nElements)
 {

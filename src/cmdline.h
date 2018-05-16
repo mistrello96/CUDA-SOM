@@ -31,7 +31,7 @@ extern "C" {
 
 #ifndef CMDLINE_PARSER_VERSION
 /** @brief the program version */
-#define CMDLINE_PARSER_VERSION "1.0"
+#define CMDLINE_PARSER_VERSION "1.1"
 #endif
 
 /** @brief Where the command line options are stored */
@@ -92,8 +92,8 @@ struct gengetopt_args_info
   const char *exponential_help; /**< @brief enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both help description.  */
   int normalizedistance_flag;	/**< @brief enables the normalized mean distance. Not avaiable if Tanimoto distance is selected (default=off).  */
   const char *normalizedistance_help; /**< @brief enables the normalized mean distance. Not avaiable if Tanimoto distance is selected help description.  */
-  int forceGPU_flag;	/**< @brief Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size) (default=off).  */
-  const char *forceGPU_help; /**< @brief Runs all possible computation on GPU. Use only if your input file is big enought(use the benchmark funtion to find out the minimum file size) help description.  */
+  int forceGPU_flag;	/**< @brief Runs all possible computation on GPU. Use only if the SOM number of neurons is is big enought(use the benchmark funtion to find out the minimum file size) (default=off).  */
+  const char *forceGPU_help; /**< @brief Runs all possible computation on GPU. Use only if the SOM number of neurons is is big enought(use the benchmark funtion to find out the minimum file size) help description.  */
   int threadsperblock_arg;	/**< @brief allows to provide the number of threads per block (default='64').  */
   char * threadsperblock_orig;	/**< @brief allows to provide the number of threads per block original value given at command line.  */
   const char *threadsperblock_help; /**< @brief allows to provide the number of threads per block help description.  */
