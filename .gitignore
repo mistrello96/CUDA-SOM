@@ -1,3 +1,4 @@
 *.out
 *.o
 build/
+1000000.txt
