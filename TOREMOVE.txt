@@ -1,4 +1,1 @@
--Xptxas= -O3 --use_fast_math -gencode arch=compute_61,code=sm_61
---ptxas-options=-v
-
-
+cmake .. -DCMAKE_CUDA_FLAGS="-Xptxas= -O3 --use_fast_math -gencode arch=compute_61,code=sm_61"
