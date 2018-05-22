@@ -8,7 +8,7 @@
 #include <thrust/device_vector.h>
 #include <thrust/extrema.h>
 
-// returns the number of features per line. Save reads in samples vector
+// returns the number of features per line. Save file in samples vector
 int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 {
 	int counter = 0;
@@ -218,5 +218,5 @@ void run_benchmark()
         }
 
     }
-    std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_features * number_of_reads) is greater than " << dimension << "\n\n" << std::endl;
+    std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_features * number_of_samples) is greater than " << dimension << "\n\n" << std::endl;
 }

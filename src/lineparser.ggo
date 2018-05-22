@@ -12,8 +12,8 @@ option "final_learning_rate" f "allows to provide the final learning rate for th
 option "iteration" n "number of times the dataset is presented to the SOM" int optional default = "-1"
 option "verbose" v "enables debug print" flag off
 option "debug" d "enables advanced debug prints" flag off
-option "savedistances" - "saves distances between reads and the final SOM in a file called 'distances.out'" flag off
-option "saveall" - "saves the input and output SOM in a file. It also saves distances between reads and the final SOM in a file called 'distances.out'" flag off
+option "savedistances" - "saves distances between samples and the final SOM in a file called 'distances.out'" flag off
+option "saveall" - "saves the input and output SOM in a file. It also saves distances between samples and the final SOM in a file called 'distances.out'" flag off
 option "savepath" - "PATH to saving folder" string optional default="./"
 option "radius" r "allows to choose the initial radius used by the updating function" int optional default= "0"
 option "distance" - "allows to choose different types of distance functions. Use e for euclidean, s for sum of sqares, m for manhattan or t for tanimoto" string optional default="e" values="e","s","m","t"

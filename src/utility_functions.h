@@ -4,7 +4,7 @@
 #include <vector>
 #include <iostream>
 
-// returns the number of features per line. Save reads in samples vector
+// returns the number of features per line. Save the file in samples vector
 int readSamplesfromFile(std::vector<double>& samples, std::string filePath);
 
 // same the SOM to a file. First two lines are nRows and Ncolumns. Neurons are \n separated, features are \t separated
