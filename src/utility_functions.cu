@@ -218,5 +218,5 @@ void run_benchmark()
         }
 
     }
-    std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_features * number_of_samples) is greater than " << dimension << "\n\n" << std::endl;
+    std::cout << "\n\nThe GPU computation is recommended on this system if (number_of_neurons * number_of_samples) is greater than " << dimension << "\n\n" << std::endl;
 }
