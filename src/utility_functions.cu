@@ -197,7 +197,7 @@ void run_benchmark()
         }
         std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
         auto elapsedCPU = std::chrono::duration_cast<std::chrono::nanoseconds>( end - start ).count();
-        std::cout << "CPU reduce on " << dimension << " array of double; " << elapsedCPU << " nanoseconds to compute " << BMU_distance <<std::endl;
+        std::cout << "CPU reduce on " << dimension << " array of double; " <<((double)elapsedCPU)/1000000 << " seconds to compute " << BMU_distance <<std::endl;
 
         // start GPU computation
         std::chrono::high_resolution_clock::time_point start2 = std::chrono::high_resolution_clock::now();
@@ -206,7 +206,7 @@ void run_benchmark()
 
         std::chrono::high_resolution_clock::time_point end2 = std::chrono::high_resolution_clock::now();
         auto elapsedGPU = (double)std::chrono::duration_cast<std::chrono::nanoseconds>( end2 - start2 ).count();
-        std::cout << "GPU reduce on " << dimension << " array of double; " << elapsedGPU << " nanoseconds to compute " << BMU_distance <<std::endl;
+        std::cout << "GPU reduce on " << dimension << " array of double; " << elapsedGPU/1000000 << " seconds to compute " << BMU_distance <<std::endl;
         // check the results and increment if necessary
         if(elapsedCPU < elapsedGPU)
         {
