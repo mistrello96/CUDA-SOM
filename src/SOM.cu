@@ -400,7 +400,7 @@ int main(int argc, char **argv)
         // computing accuracy as required
         if(!normalizedistance)
         {
-            accuracy = h_DistanceHistory;
+            accuracy = h_DistanceHistory / nSamples;
             h_DistanceHistory = 0;            
         }
         else
