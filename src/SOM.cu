@@ -436,6 +436,7 @@ int main(int argc, char **argv)
     // save trainde SOM to file
     if (debug | saveall)
     {
+    	cudaMemcpy(h_Matrix, d_Matrix, sizeof(double) * totalLength, cudaMemcpyDeviceToHost);
         saveSOMtoFile(savePath + "/outputSOM.out", h_Matrix, nRows, nColumns, nElements);
     }
 
