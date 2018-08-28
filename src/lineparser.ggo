@@ -4,6 +4,7 @@ purpose "Cuda implementation of Self Organizing Map"
 
 # Options
 
+option "learningmode" m "allows to choose between online training and batch training" string optional default = "o"
 option "inputfile" i "PATH to the input file" string optional default="./"
 option "nRows" x "allows to provide the number of rows of the neuron matrix" int optional default="0"
 option "nColumns" y "allows to provide the number of columns of the neuron matrix" int optional default="0"

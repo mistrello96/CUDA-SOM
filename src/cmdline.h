@@ -39,6 +39,9 @@ struct gengetopt_args_info
 {
   const char *help_help; /**< @brief Print help and exit help description.  */
   const char *version_help; /**< @brief Print version and exit help description.  */
+  char * learningmode_arg;	/**< @brief allows to choose between online training and batch training (default='o').  */
+  char * learningmode_orig;	/**< @brief allows to choose between online training and batch training original value given at command line.  */
+  const char *learningmode_help; /**< @brief allows to choose between online training and batch training help description.  */
   char * inputfile_arg;	/**< @brief PATH to the input file (default='./').  */
   char * inputfile_orig;	/**< @brief PATH to the input file original value given at command line.  */
   const char *inputfile_help; /**< @brief PATH to the input file help description.  */
@@ -61,10 +64,10 @@ struct gengetopt_args_info
   const char *verbose_help; /**< @brief enables debug print help description.  */
   int debug_flag;	/**< @brief enables advanced debug prints (default=off).  */
   const char *debug_help; /**< @brief enables advanced debug prints help description.  */
-  int savedistances_flag;	/**< @brief saves distances between reads and the final SOM in a file called 'distances.out' (default=off).  */
-  const char *savedistances_help; /**< @brief saves distances between reads and the final SOM in a file called 'distances.out' help description.  */
-  int saveall_flag;	/**< @brief saves the input and output SOM in a file. It also saves distances between reads and the final SOM in a file called 'distances.out' (default=off).  */
-  const char *saveall_help; /**< @brief saves the input and output SOM in a file. It also saves distances between reads and the final SOM in a file called 'distances.out' help description.  */
+  int savedistances_flag;	/**< @brief saves distances between samples and the final SOM in a file called 'distances.out' (default=off).  */
+  const char *savedistances_help; /**< @brief saves distances between samples and the final SOM in a file called 'distances.out' help description.  */
+  int saveall_flag;	/**< @brief saves the input and output SOM in a file. It also saves distances between samples and the final SOM in a file called 'distances.out' (default=off).  */
+  const char *saveall_help; /**< @brief saves the input and output SOM in a file. It also saves distances between samples and the final SOM in a file called 'distances.out' help description.  */
   char * savepath_arg;	/**< @brief PATH to saving folder (default='./').  */
   char * savepath_orig;	/**< @brief PATH to saving folder original value given at command line.  */
   const char *savepath_help; /**< @brief PATH to saving folder help description.  */
@@ -105,6 +108,7 @@ struct gengetopt_args_info
   
   unsigned int help_given ;	/**< @brief Whether help was given.  */
   unsigned int version_given ;	/**< @brief Whether version was given.  */
+  unsigned int learningmode_given ;	/**< @brief Whether learningmode was given.  */
   unsigned int inputfile_given ;	/**< @brief Whether inputfile was given.  */
   unsigned int nRows_given ;	/**< @brief Whether nRows was given.  */
   unsigned int nColumns_given ;	/**< @brief Whether nColumns was given.  */

@@ -33,6 +33,8 @@ add_executable(
 	${PROJECT_SOURCE_DIR}/cmdline.h
 	${PROJECT_SOURCE_DIR}/distance_kernels.cu
 	${PROJECT_SOURCE_DIR}/distance_kernels.h
+	${PROJECT_SOURCE_DIR}/batch_learning.cu
+	${PROJECT_SOURCE_DIR}/batch_learning.h
 	${PROJECT_SOURCE_DIR}/update_kernels.cu
 	${PROJECT_SOURCE_DIR}/update_kernels.h
 	${PROJECT_SOURCE_DIR}/utility_functions.cu
