@@ -1,6 +1,7 @@
 # CUDA-SOM
 A CUDA implementation of Self-Organizing Maps for unsupervised learning.
 The learning process is done by competitive learning between neurons of the SOM.
+It is possible to chose between online learning or batch learning
 The closest unit to the input vector is called Best Machine Unit (BMU) and its weigth vector is moved in the direction of the input vector.
 Also the neighbourhood of the BMU is moved in the same direction, but with lower magnitude, according to the distance from the BMU.
 This tool allows to specify lots of parameters used in the learning process, such as:
@@ -32,11 +33,10 @@ The size of the SOM and the radius of the updating function will be estimated ru
 
 ./CUDA-SOM.out -i /folder/folder/inputfile.txt -n 1000 -s 0.1 -f 0.001 --normalizedistance
 
-2) The tool will use the file provided as input, will train for 5000 iterations with a learning rate that 
-will linearly decay from 0.3 to 0.001. The size of the SOM is set to 200x200, the initial radius of the updating function (bubble)
+2) The tool will use the file provided as input, will train for 5000 iterations in batch mode. The size of the SOM is set to 200x200, the initial radius of the updating function (bubble)
 is set to 50, and will decrease exponentially. The distance between neurons and the input vector is computed 
 using the sum of squares distance. Once the SOM is trained, the distances between the input file and the SOM will be
 saved to a file. The GPU used for the computation will be the one with index 2; 96 threads per block will be launched.
 
-./CUDA-SOM.out -i /folder/folder/inputfile.txt -n 5000 -s 0.3 -f 0.001 -x 200 -y 200 --savedistances -r 50 --distance=s --neighbors=b --toroidal --exponential=r --GPUIndex=2 --threadsperblock=96
+./CUDA-SOM.out -i /folder/folder/inputfile.txt -n 5000 -m b -x 200 -y 200 --savedistances -r 50 --distance=s --neighbors=b --toroidal --exponential=r --GPUIndex=2 --threadsperblock=96
 
