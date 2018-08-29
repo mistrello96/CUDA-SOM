@@ -2,6 +2,27 @@
 #include "utility_functions.h"
 #include <stdio.h>
 
+#ifdef __CUDA_ARCH__
+	#if __CUDA_ARCH__ < 600
+	__device__ double atomicAdd(double* address, double val)
+	{
+	    unsigned long long int* address_as_ull =
+	                              (unsigned long long int*)address;
+	    unsigned long long int old = *address_as_ull, assumed;
+
+	    do {
+	        assumed = old;
+	        old = atomicCAS(address_as_ull, assumed,
+	                        __double_as_longlong(val +
+	                               __longlong_as_double(assumed)));
+
+	    // Note: uses integer comparison to avoid hang in case of NaN (since NaN != NaN)
+	    } while (assumed != old);
+
+	    return __longlong_as_double(old);
+	}
+	#endif
+#endif
 
 // kernel used to compute euclidean distance between each neuron and the selected sample
 __global__ void batch_compute_distance_euclidean(double* k_Matrix, double* k_Matrix_num, double* k_Matrix_denum, double* k_Samples, double* k_Distance, int * k_BMU, int nSamples, int nNeuron, int nElements, bool normalizedistance, char neighborsType, int nRows, int nColumns, bool toroidal, int radius, char lattice)
@@ -10,6 +31,7 @@ __global__ void batch_compute_distance_euclidean(double* k_Matrix, double* k_Mat
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nSamples)
 	{
+		// SEARCH OF BMU
 		int BMUindex = 0;
 		double BMUvalue = 1.79769e+308;
 		// scanning all neurons to find BMU
@@ -32,9 +54,8 @@ __global__ void batch_compute_distance_euclidean(double* k_Matrix, double* k_Mat
 			}
 			
 		}
-		// debug print
-		//printf(" Sample %d has BMU index is %d at distance %f \n", index, BMUindex, BMUvalue);
 
+		// SAVE BMU INFO IN THE ARRAY
 		k_BMU[index] = BMUindex;
 		if(!normalizedistance)
 		{
@@ -45,6 +66,7 @@ __global__ void batch_compute_distance_euclidean(double* k_Matrix, double* k_Mat
 			k_Distance[index] = BMUvalue * BMUvalue;
         }
 
+        // SAVE THE INFLUENCE OF THE SAMPLE ON THE NETWORK
 		if (radius == 0)
 		{
 		    for (int i = BMUindex * nElements, j=0; j < nElements; i++, j++)
@@ -172,6 +194,7 @@ __global__ void batch_compute_distance_sum_squares(double* k_Matrix, double* k_M
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nSamples)
 	{
+		// SEARCH OF BMU
 		int BMUindex = 0;
 		double BMUvalue = 1.79769e+308;
 		// scanning all neurons to find BMU
@@ -192,7 +215,8 @@ __global__ void batch_compute_distance_sum_squares(double* k_Matrix, double* k_M
 				BMUindex = i;
 			}
 		}
-		
+
+		// SAVE BMU INFO IN THE ARRAY
 		k_BMU[index] = BMUindex;
 		if(!normalizedistance)
 		{
@@ -203,6 +227,7 @@ __global__ void batch_compute_distance_sum_squares(double* k_Matrix, double* k_M
 			k_Distance[index] = BMUvalue * BMUvalue;
         }
 
+        // SAVE THE INFLUENCE OF THE SAMPLE ON THE NETWORK
 		if (radius == 0)
 		{
 		    for (int i = BMUindex * nElements, j=0; j < nElements; i++, j++)
@@ -330,6 +355,7 @@ __global__ void batch_compute_distance_manhattan(double* k_Matrix, double* k_Mat
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nSamples)
 	{
+		// SEARCH OF BMU
 		int BMUindex = 0;
 		double BMUvalue = 1.79769e+308;
 		// scanning all neurons to find BMU
@@ -347,6 +373,8 @@ __global__ void batch_compute_distance_manhattan(double* k_Matrix, double* k_Mat
 				BMUindex = i;
 			}
 		}
+
+		// SAVE BMU INFO IN THE ARRAY
 		k_BMU[index] = BMUindex;
 		if(!normalizedistance)
 		{
@@ -357,6 +385,7 @@ __global__ void batch_compute_distance_manhattan(double* k_Matrix, double* k_Mat
 			k_Distance[index] = BMUvalue * BMUvalue;
         }
 
+        // SAVE THE INFLUENCE OF THE SAMPLE ON THE NETWORK
 		if (radius == 0)
 		{
 		    for (int i = BMUindex * nElements, j=0; j < nElements; i++, j++)
@@ -484,6 +513,7 @@ __global__ void batch_compute_distance_tanimoto(double* k_Matrix, double* k_Matr
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nSamples)
 	{
+		// SEARCH OF BMU
 		int BMUindex = 0;
 		double BMUvalue = 1.79769e+308;
 		// scanning all neurons to find BMU
@@ -505,6 +535,8 @@ __global__ void batch_compute_distance_tanimoto(double* k_Matrix, double* k_Matr
 				BMUindex = i;
 			}
 		}
+
+		// SAVE BMU INFO IN THE ARRAY
 		k_BMU[index] = BMUindex;
 		if(!normalizedistance)
 		{
@@ -515,6 +547,7 @@ __global__ void batch_compute_distance_tanimoto(double* k_Matrix, double* k_Matr
 			k_Distance[index] = BMUvalue * BMUvalue;
         }
 
+        // SAVE THE INFLUENCE OF THE SAMPLE ON THE NETWORK
 		if (radius == 0)
 		{
 		    for (int i = BMUindex * nElements, j=0; j < nElements; i++, j++)
@@ -641,9 +674,11 @@ __global__ void batch_update(double* k_Matrix, double* k_Matrix_num, double* k_M
 	int index = threadIdx.x + blockDim.x * blockIdx.x;
 	if (index < nNeuron)
 	{
+		// store the influence of the divisor
 		double tmp = k_Matrix_denum[index];
 		if (tmp != 0)
 		{
+			// save to the matrix the new neuron
 			for (int i = 0; i < nElements; i++)
 			{
 				k_Matrix[index * nElements + i] = k_Matrix_num[index * nElements + i] / tmp;

@@ -475,8 +475,11 @@ void run_batch(gengetopt_args_info ai){
     int deviceIndex = ai.GPUIndex_arg;
     // counter of epochs/iterations
     int nIter = 0;
-    // flag to stop the learning process (used if radius reach 0)
+    // flag and counter to stop the learning process (used if radius reach 0)
     bool breakflag = false;
+    int breakcounter = 0;
+    // store the last mean distance
+    double lastaccuracy;
     
     // DECLARATION OF USEFULL VARIABLES
     // min and max values of neurons (used for random initialization)
@@ -663,13 +666,13 @@ void run_batch(gengetopt_args_info ai){
     }
 
     // ITERATE UNTILL MAXNITER IS REACHED
-    int zerocounter = 0;
     while(nIter < maxnIter)
     {
+    	// store the last mean accuracy (used to break the learning process)
     	if (radius == 0)
-    		zerocounter ++;
-    		if (zerocounter == 15)
-    			breakflag = true;
+    	{
+    		lastaccuracy = accuracy;
+    	}
 
         // debug print
         if (debug)
@@ -741,9 +744,22 @@ void run_batch(gengetopt_args_info ai){
         	radius = (int) (initialRadius * exp(-(double)nIter/(sqrt(maxnIter))));
         else
             radius = (int) (initialRadius - (initialRadius) * ((double)nIter/maxnIter));
-            	// if the radius is 0, all iteration produces the same result.
+
+        // if the treshold is reached, break the learning process
         if (breakflag)
         	break;
+
+        // if the radius is 0 and the accuracy is the same as the previous iteration, incremment the counter
+        if (accuracy == lastaccuracy)
+        {
+        	breakcounter ++;
+
+        	// if the counter reach the treshold, break the learning process at the next iteration
+        	if (breakcounter == 3)
+        	{
+        		breakflag = true;
+        	}
+        }        
 	}
 
 	std::cout << "\n\n TRAINING RESULTS \n" << std::endl;
