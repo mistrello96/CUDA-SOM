@@ -25,7 +25,7 @@ option "toroidal" - "allows to choose between planar topology and toroidal topol
 option "randomize" - "enables the randomization of the dataset. Before presentig the dataset to the SOM(each epoch), all entries are shuffled." flag on
 option "exponential" - "enables the exponential decay of the learning rate and/or the radius. Use l for learning rate, r for radius or b for both" string optional default="n" values="n","l","r","b"
 option "normalizedistance" - "enables the normalized mean distance. Not avaiable if Tanimoto distance is selected" flag off
-option "forceGPU" - "Runs all possible computation on GPU. Use only if the SOM number of neurons is is big enought(use the benchmark funtion to find out the minimum file size)" flag off
-option "threadsperblock" - "allows to provide the number of threads per block" int optional default="64"
+option "forceGPU" - "Runs all possible computation on GPU. Use only if the SOM number of neurons is is big enought(use the benchmark funtion to find out the minimum file size)" flag on
+option "threadsperblock" - "allows to provide the number of threads per block" int optional default="256"
 option "GPUIndex" - "allows to specify the device id of the GPU used for the computation" int optional default="0"
 option "benchmark" b "Runs a benchmark to find out the minimum dimension of the input file to make GPU computation advantageous" flag off
