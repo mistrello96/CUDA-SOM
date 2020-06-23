@@ -38,15 +38,18 @@ int readSamplesfromFile(std::vector<double>& samples, std::string filePath)
 	}
 }
 
-// same the SOM to a file. First two lines are nRows and Ncolumns. Neurons are \n separated, features are \t separated
+// same the SOM to a file. First two lines are nRows and nColumns. Neurons are \n separated, features are \t separated
 void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns, int nElements)
 {
     std::ofstream myfile;
     myfile.open (filePath.c_str());
-    myfile << "nRows \n" << nRows << "\n" << "nColumns \n" << nColumns << "\n";
-    for (int i = 0; i < nRows*nColumns*nElements; i++)
+    myfile << "nRows\t" << nRows << "\n" << "nColumns\t" << nColumns << "\n";
+    for (int i = 0; i < nRows*nColumns; i++)
     {
-        myfile << matrix[i] << "\n";  
+        for (int j = 0; i < nElements; j++){
+            myfile << matrix[i] << "\t";  
+        }
+        myfile << "\n";  
     }
     myfile.close();
 }
