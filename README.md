@@ -1,8 +1,7 @@
 # CUDA-SOM
 A CUDA implementation of Self-Organizing Maps for unsupervised learning.
-The learning process is done by competitive learning between neurons of the SOM.
-It is possible to chose between online learning or batch learning
-The closest unit to the input vector is called Best Machine Unit (BMU) and its weigth vector is moved in the direction of the input vector.
+The learning process is done by competitive learning between neurons of the SOM (it is possible to chose between online learning or batch learning).
+The closest unit to the input vector is called Best Matching Unit (BMU) and its weigth vector is moved in the direction of the input vector.
 Also the neighbourhood of the BMU is moved in the same direction, but with lower magnitude, according to the distance from the BMU.
 This tool allows to specify lots of parameters used in the learning process, such as:
 - Number of rows of the SOM
@@ -22,6 +21,8 @@ The tool also allows to change some CUDA related parameters, such as:
 - An option to move all possible computation on the GPU
 
 A small benchmark is also included to identify the minimum size of your input file to make GPU computation advantageous.
+
+The input samples must be provided in tab-separated format.
 
 For all the other functions, please refer to the help menu included in the tool
 --------------------------------------------------------
