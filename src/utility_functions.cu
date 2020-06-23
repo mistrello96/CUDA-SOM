@@ -47,7 +47,7 @@ void saveSOMtoFile(std::string filePath, double* matrix, int nRows, int nColumns
     for (int i = 0; i < nRows*nColumns; i++)
     {
         for (int j = 0; i < nElements; j++){
-            myfile << matrix[i] << "\t";  
+            myfile << matrix[i * nElements + j] << "\t";  
         }
         myfile << "\n";  
     }
