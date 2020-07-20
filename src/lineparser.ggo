@@ -1,4 +1,4 @@
-version "2.0"
+version "2.0.1"
 package "CudaSOM"
 purpose "Cuda implementation of Self Organizing Map"
 
